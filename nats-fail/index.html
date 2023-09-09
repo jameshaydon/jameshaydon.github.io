@@ -64,7 +64,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>25 minute read</span>
+    <span>28 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -86,14 +86,8 @@ of people.</p>
 <p>Flight Plan Reception Suite Automated (FPRSA-R) Sub-system Incident 28th August 2023
 <a href="https://publicapps.caa.co.uk/docs/33/NERL%20Major%20Incident%20Investigation%20Preliminary%20Report.pdf">pdf</a>.</p>
 </blockquote>
-<p><em>NATS</em> is a private company in the UK that is responsible for all of the UK's
-air-traffic control (ATC).</p>
-<blockquote>
-<p>As a public-private partnership the UK government holds 49% and a golden
-share, with 42% held by the Airline Group, 5% by NATS staff, and 4% by UK
-airport operator LHR Airports Ltd.[8][2]
-<a href="https://en.wikipedia.org/wiki/NATS_Holdings">wikipedia</a></p>
-</blockquote>
+<p><em>NATS</em> is a &quot;public-private&quot; company in the UK that is responsible for all of
+the UK's air-traffic control (ATC).</p>
 <blockquote>
 <p>Air Traffic Control (ATC) is the provision and operation of a safe system for
 controlling and monitoring aircraft.
@@ -101,10 +95,7 @@ controlling and monitoring aircraft.
 <p>aircraft [..] are required to file a flight plan.
 [..]</p>
 <p>ATC ensures that aircraft are safely separated laterally and vertically.</p>
-</blockquote>
-<p>Probably &quot;safely separated laterally <strong>OR</strong> vertically&quot; is more accurate.</p>
-<blockquote>
-<p>[..] they submit the plan into Eurocontrol’s Integrated Initial Flight Plan
+<p>[Airlines] they submit the plan into Eurocontrol’s Integrated Initial Flight Plan
 Processing System (IFPS).
 [..]</p>
 <p>If the submitted flight plan is accepted by IFPS, i.e. it is compliant with
@@ -133,16 +124,15 @@ flight data manually, directly into NAS using a manual input system.</p>
 <p>To summarise:</p>
 <ul>
 <li>Flight plans are first submitted to a European-wide authority <em>IFPS</em>.</li>
-<li>If they are accepted, the flight is cleared for takeoff.</li>
+<li>If a plan is accepted, the flight is cleared for takeoff.</li>
 <li><em>NATS</em> requires the flight plan be transfered to them at least 4 hours before
-the aircraft is due to enter UK airspace (We'll call this <code>T-4H</code>). This is
-supposed to give NATS a 4 hour window to be able to fix any problems in
-processing flight plans.</li>
+the aircraft is due to enter UK airspace. This is supposed to give NATS a 4
+hour window to be able to fix any problems in processing flight plans.</li>
 <li>It seems that there is also probably some process which <em>delays</em> flight-plans
-until <em>close</em> to the <code>T-4H</code> deadline (see below). This might be to avoid
-congesting the system with flight plans too early, or lots of plans that may
-later change. Still, this results in flight plans being received by NATS
-sometimes <em>hours</em> after the flight has taken off.</li>
+until <em>close</em> to the deadline (see below). This might be to avoid congesting
+the system with flight plans too early, or lots of plans that may later
+change. Still, this results in flight plans being received by NATS sometimes
+<em>hours</em> after the flight has taken off.</li>
 </ul>
 <blockquote>
 <p>The NATS ATC System was operating normally.
@@ -201,9 +191,9 @@ waypoints and other data.</p>
 <p>ADEXP looks like this:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>-TITLE IFPL
 </span><span>-BEGIN ADDR
-</span><span>-FAC LIIRZEZX
-</span><span>[...]
-</span><span>-FAC LYZZEBXX
+</span><span>  -FAC LIIRZEZX
+</span><span>  [...]
+</span><span>  -FAC LYZZEBXX
 </span><span>-END ADDR
 </span><span>-ADEP EDDF
 </span><span>-ADES LGTS
@@ -230,27 +220,27 @@ waypoints and other data.</p>
 </span><span>BABAG UN606 PEVAL DCT PETAK UL607 PINDO UM603 EDASI
 </span><span>-ALTRNT1 LBSF
 </span><span>-BEGIN RTEPTS
-</span><span>-PT -PTID EDDF -FL F004 -ETO 170729073000
-</span><span>-PT -PTID RID -FL F100 -ETO 170729073404
-</span><span>-PT -PTID ANEKI -FL F210 -ETO 170729073856
-</span><span>-PT -PTID NEKLO -FL F214 -ETO 170729073911
-</span><span>-PT -PTID BADLI -FL F248 -ETO 170729074118
-</span><span>-PT -PTID PABLA -FL F279 -ETO 170729074348
-</span><span>-PT -PTID HERBI -FL F308 -ETO 170729074624
-</span><span>-PT -PTID NATOR -FL F330 -ETO 170729074911
-</span><span>-PT -PTID TITIX -FL F330 -ETO 170729075154
-</span><span>-PT -PTID TRA -FL F330 -ETO 170729075323
-</span><span>-PT -PTID ARGAX -FL F330 -ETO 170729080055
-</span><span>-PT -PTID RESIA -FL F330 -ETO 170729080731
-</span><span>-PT -PTID UNTAD -FL F330 -ETO 170729081243
-</span><span>-PT -PTID DIKEM -FL F330 -ETO 170729081627
-</span><span>-PT -PTID ROKIB -FL F330 -ETO 170729081824
-</span><span>-PT -PTID BABAG -FL F330 -ETO 170729082816
-</span><span>-PT -PTID PEVAL -FL F330 -ETO 170729082916
-</span><span>-PT -PTID PETAK -FL F330 -ETO 170729091754
-</span><span>-PT -PTID PINDO -FL F330 -ETO 170729093322
-</span><span>-PT -PTID EDASI -FL F165 -ETO 170729094347
-</span><span>-PT -PTID LGTS -FL F000 -ETO 170729095713
+</span><span>  -PT -PTID EDDF -FL F004 -ETO 170729073000
+</span><span>  -PT -PTID RID -FL F100 -ETO 170729073404
+</span><span>  -PT -PTID ANEKI -FL F210 -ETO 170729073856
+</span><span>  -PT -PTID NEKLO -FL F214 -ETO 170729073911
+</span><span>  -PT -PTID BADLI -FL F248 -ETO 170729074118
+</span><span>  -PT -PTID PABLA -FL F279 -ETO 170729074348
+</span><span>  -PT -PTID HERBI -FL F308 -ETO 170729074624
+</span><span>  -PT -PTID NATOR -FL F330 -ETO 170729074911
+</span><span>  -PT -PTID TITIX -FL F330 -ETO 170729075154
+</span><span>  -PT -PTID TRA -FL F330 -ETO 170729075323
+</span><span>  -PT -PTID ARGAX -FL F330 -ETO 170729080055
+</span><span>  -PT -PTID RESIA -FL F330 -ETO 170729080731
+</span><span>  -PT -PTID UNTAD -FL F330 -ETO 170729081243
+</span><span>  -PT -PTID DIKEM -FL F330 -ETO 170729081627
+</span><span>  -PT -PTID ROKIB -FL F330 -ETO 170729081824
+</span><span>  -PT -PTID BABAG -FL F330 -ETO 170729082816
+</span><span>  -PT -PTID PEVAL -FL F330 -ETO 170729082916
+</span><span>  -PT -PTID PETAK -FL F330 -ETO 170729091754
+</span><span>  -PT -PTID PINDO -FL F330 -ETO 170729093322
+</span><span>  -PT -PTID EDASI -FL F165 -ETO 170729094347
+</span><span>  -PT -PTID LGTS -FL F000 -ETO 170729095713
 </span><span>-END RTEPTS
 </span><span>-SID ANEKI8L
 </span><span>-ATSRT Y163 ANEKI NATOR
@@ -274,27 +264,30 @@ waypoints and other data.</p>
 <p>(9 waypoints, 11 if you add the start and end waypoints)</p>
 <p>Visually, routes look like:
 <img src="https://jameshaydon.github.io/nats-fail/flight_plan.png" alt="some route" title="A flight plan route" /></p>
+<p>(You can play around with flight plans at
+<a href="https://flightplandatabase.com">flightplandatabase.com</a>, a website for people
+who like playing with flight simulators)</p>
 <p>The <code>ICAO</code> route contains waypoints, seperated by a &quot;known route segment&quot;, a bit
 like highways, but for planes. We can indent these to make it clearer:</p>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>N0417F330 : 417 knots, flight level 330
-</span><span>ANEKI8L 
-</span><span>ANEKI 
-</span><span>  Y163
-</span><span>NATOR
-</span><span>  UN850
-</span><span>TRA
-</span><span>  UP131
-</span><span>RESIA
-</span><span>  Q333
-</span><span>BABAG
-</span><span>  UN606
-</span><span>PEVAL
-</span><span>  DCT
-</span><span>PETAK
-</span><span>  UL607
-</span><span>PINDO
-</span><span>  UM603
-</span><span>EDASI
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>N0417F330
+</span><span>  ANEKI8L 
+</span><span>  ANEKI 
+</span><span>    Y163
+</span><span>  NATOR
+</span><span>    UN850
+</span><span>  TRA
+</span><span>    UP131
+</span><span>  RESIA
+</span><span>    Q333
+</span><span>  BABAG
+</span><span>    UN606
+</span><span>  PEVAL
+</span><span>    DCT
+</span><span>  PETAK
+</span><span>    UL607
+</span><span>  PINDO
+</span><span>    UM603
+</span><span>  EDASI
 </span></code></pre>
 <p>E.g. <code>ANEKI Y163 NATOR</code> means &quot;go from waypoint <code>ANEKI</code> to waypoint <code>NATOR</code> via
 the route <code>Y163</code>&quot;. <code>DCT</code> means &quot;direct&quot;.</p>
@@ -378,8 +371,8 @@ for the exit point from UK airspace in the waypoint data.</p>
 <p>Having completed those steps,</p>
 </blockquote>
 <p>One thing to note here is that the programming style seems very imperative. This
-part of the code succesfully identified an <code>entryPoint</code> and an <code>exitPoint</code>
-waypoint to UK airspace in the <code>ADEXP</code> waypoints.</p>
+part of the code succesfully identified <code>entry</code> and <code>exit</code> waypoints to UK
+airspace in the list of <code>ADEXP</code> waypoints.</p>
 <blockquote>
 <p>FPRSA-R then searches the ICAO4444 section of
 the ADEXP file.</p>
@@ -399,40 +392,39 @@ logic utilises the waypoints as detailed in the ADEXP file to search for the
 next nearest point beyond the UK exit point. This was also not present.</p>
 <p>The software therefore moved on to the next waypoint.</p>
 </blockquote>
-<p>OK, so I think this is what is going on. The ICAO route contains less waypoints
+<p>OK, so I think this is what is going on. The ICAO route contains fewer waypoints
 than the ADEXP data, because some of the waypoints are implicit in the
 route segment that is specified between waypoints. So the situation looked
 something like this:</p>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>           A       B        C         D              E           F
-</span><span>ICAO:  1------7--------2--------3-----------10--------------11-------13
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>           4       2        8         5              1           9
+</span><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U
 </span><span>
-</span><span>ADEXP: 1  12  7   11   2   5    3  8  9     10  4   6   7   11       13
+</span><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
 </span><span>                       UK  UK   UK UK UK    UK  UK
 </span></code></pre>
-<p>Here the ICAO route has waypoints (represented by numbers in this example)
-separated by known routes (letters). On the bottom we have the ADEXP waypoints,
-along with if they are in the UK or not.</p>
+<p>Here the ICAO route has waypoints (represented by capital letter) separated by
+known routes (numbers). On the bottom we have the ADEXP waypoints. The ADEXP waypoints that are located in the UK airspace are marked with <code>UK</code>.</p>
 <ul>
 <li>The software has identified:
 <ul>
-<li><code>entryPoint</code>: waypoint <code>2</code></li>
-<li><code>exitPoint</code>: waypoint <code>4</code>
+<li><code>entry</code>: waypoint <code>T</code></li>
+<li><code>exit</code>: waypoint <code>W</code>
 in the ADEXP waypoints.</li>
 </ul>
 </li>
-<li>The software finds waypoint <code>2</code> in the ICAO flight plan.</li>
-<li>The software <em>does not</em> find waypoint <code>4</code> in the ICAO flight plan.</li>
-<li>The software therefore takes the next waypoint in the ADEXP list, so <code>6</code>, and
+<li>The software finds waypoint <code>T</code> in the ICAO flight plan.</li>
+<li>The software <em>does not</em> find waypoint <code>W</code> in the ICAO flight plan.</li>
+<li>The software therefore takes the next waypoint in the ADEXP list, so <code>B</code>, and
 tries to find it too, and also does not find it.</li>
-<li>So it does this again, taking waypoint <code>7</code>, and it <em>does</em> find it, but at the
+<li>So it does this again, taking waypoint <code>Q</code>, and it <em>does</em> find it, but at the
 <em>start</em> of the ICAO flight plan, before the plane even enters the UK.</li>
 </ul>
 <blockquote>
 <p>This search was successful as a duplicate identifier appeared in the flight
 plan.</p>
 </blockquote>
-<p>What should the software have done? Well, <code>7</code> is clearly <em>not</em> the waypoint we
-are searching for, we are searching for waypoint <code>11</code>. It's important to note
+<p>What should the software have done? Well, <code>Q</code> is clearly <em>not</em> the waypoint we
+are searching for, we are searching for waypoint <code>Y</code>. It's important to note
 here that the algorithm is buggy; it is perfectly possibly to extract the UK
 portion of the flight plan from this data; see below.</p>
 <blockquote>
@@ -493,20 +485,50 @@ automatic processing of flight plans ceased and the 4 hour buffer to manual
 flight plan input commenced. The steps taken to restore the FPRSA-R sub-system
 are described in section 5 of this report.</p>
 </blockquote>
-<p>The 4 hours were not enough, from the description that follows it sounds like
-<em>all</em> engineers were called to help with the situation, and they all scratched
-their heads for hours until the manufacturer of the <code>FPRSA-R</code> system was
-eventually called. This is an Austrian company, <a href="https://en.wikipedia.org/wiki/Frequentis">Frequentis
-AG</a>, which supplied the <code>FPRSA-R</code> in
-2018.</p>
-<p>We can find a few job ads related to air traffic control systems at Frequenti AG
-at their <a href="https://jobs.frequentis.com/careers/SearchJobs/air?listFilterMode=1">careers
-page</a></p>
-<p>Programming languages used: <code>Ada</code>, <code>C++</code>, <code>Java</code>, <code>Python</code>, with <code>Java</code> being
+<p>Then support teams tried to fix things, but unfortunately it took longer than
+the 4 hours they had:</p>
+<blockquote>
+<p>The 1st Line support team were alerted to the incident through the C&amp;M systems
+that directly monitor operational systems as well as through direct feedback
+from the Operational teams using the FPRSA-R sub-system at the time. The
+initial response for the team followed standard recovery processes using the
+centralised C&amp;M systems to restart the sub-system. Following multiple attempts
+to restore the service, which were unsuccessful, the 2nd Line engineering team
+was mobilised and supported the on-site engineers remotely via video link.</p>
+</blockquote>
+<p><img src="https://jameshaydon.github.io/nats-fail/off-and-on-again.jpg" alt="have you tried turning it off and on again?" /></p>
+<blockquote>
+<p>The on-call teams working remotely with the on-site engineering teams followed
+a staged analysis, involving increasingly detailed procedures to attempt to
+resolve the issue, none of which were successful. As per standard escalation
+procedures, 2nd Line engineers were engaged to provide further access to
+advanced diagnostics and logging capabilities.</p>
+</blockquote>
+<p>It doesn't say how long it took, but the manufacturer of the <code>FPRSA-R</code> system was
+eventually called:</p>
+<blockquote>
+<p>Additional support was then requested from the Technical Design team and
+sub-system manufacturer as 1st and 2nd Line support had been unable to restore
+the service or identify the precise root cause, which was unusual. The
+manufacturer was able to offer further expertise including analysis of
+lower-level software logs which led to identification of the likely flight
+plan that had caused the software exception. Through understanding which
+flight plan had caused the incident the manufacturer was able to provide the
+precise sequence of actions necessary to recover the system in a controlled
+and safe manner.</p>
+</blockquote>
+<p>The system was eventually restored, but unfortunately the knock-on effects by
+that point were already disastrous.</p>
+<p>The manufacturer is an Austrian company, <a href="https://en.wikipedia.org/wiki/Frequentis">Frequentis
+AG</a>, which supplied the <code>FPRSA-R</code>
+in 2018. We can find a few job ads related to air traffic control systems at
+Frequenti AG at their <a href="https://jobs.frequentis.com/careers/SearchJobs/air?listFilterMode=1">careers
+page</a>
+Programming languages used: <code>Ada</code>, <code>C++</code>, <code>Java</code>, <code>Python</code>, with <code>Java</code> being
 the most common. Since <code>Ada</code> is the only language in this list that is &quot;safe&quot;
 enough for such a critical system, I'll assume it was coded in Ada.</p>
 <h2 id="thoughts">Thoughts</h2>
-<p>There are two major things that went wrong:</p>
+<p>Things that went wrong:</p>
 <ol>
 <li>The software that processes flight plans (<code>FPRSA-R</code>) was written in a buggy
 way.</li>
@@ -565,12 +587,12 @@ FPRSA-R to filter out any flight plans that fit the conditions that caused the
 incident.</p>
 </blockquote>
 <h2 id="the-system-is-not-properly-tested">The system is not properly tested</h2>
-<p>Apparently NATS and Frequentis have never heard of
+<p>It doesn't sound like NATS or Frequentis used any
 <a href="https://en.wikipedia.org/wiki/Fuzzing">fuzzing</a>, for example. By bombarding
 such a system with randomly generated flight plans, you can see if any unhandled
-exceptions are raised. By inspecting which flight plans cause problems, it would
-become apparent that those with duplicate waypoint identifiers in the ADEXP
-portion cannot be processed properly.</p>
+exceptions are raised. By inspecting which sorts of flight plans cause problems,
+it would become apparent that those with duplicate waypoint identifiers in the
+ADEXP portion cannot be processed properly.</p>
 <p>This allows one to detect &quot;1 in 15 million&quot; events ahead of time.</p>
 <h3 id="nats-was-not-prepared-for-fprsa-r-to-fail">NATS was not prepared for <code>FPRSA-R</code> to fail</h3>
 <p><code>FPRSA-R</code> is a critical subsystem of the UK's air traffic control
@@ -579,18 +601,16 @@ infrastructure. Indeed, if it goes down, chaoes ensues.</p>
 When the system failed:</p>
 <ul>
 <li>It wrote a message in a log file.</li>
-<li>After a while, <em>Frequentis</em> was called to help with accessing and decyphering
-the log file.</li>
-<li><em>Frequentis</em> engineers were able to identify which flight plan was causing a
-problem.</li>
+<li>It sounds like <em>Frequentis</em> were immediately able to locate this log file.</li>
+<li><em>Frequentis</em> engineers were able to identify, thanks to this log file, which
+flight plan was causing a problem.</li>
 </ul>
 <p>Presumably, the part of the log containing the the flight plan was right at the
 end of the log file, since flight plans are processed one at a time, and the
 system crashed immediately after trying to process the relevant flight plan.</p>
 <p>It seems odd that engineers were not able to access this log file, or that they
-didn't even think to access it. And once they did, it's odd that they couldn't
-work out which flight plan was relevant. Did it not appear in cleartext? In any
-case they were not prepared for <code>FPRSA-R</code> to crash.</p>
+didn't even think to access it. In any case they were not prepared for <code>FPRSA-R</code>
+to crash.</p>
 <p>In fact, as they acknowledge, a lot of this work can be automated:</p>
 <blockquote>
 <p>An operating instruction has been put in place to allow prompt recovery of the
@@ -621,112 +641,164 @@ system'</li>
 <p>So, how can we avoid this bug?</p>
 <p>Let's recap the problem. There are two sequences of waypoints:</p>
 <ul>
-<li>ADEXP: the full list of waypoints.</li>
-<li>ICAO: a subsequence of the ADEXP waypoints.</li>
+<li><code>ADEXP</code>: the full list of waypoints.</li>
+<li><code>ICAO</code>: a subsequence of the ADEXP waypoints.</li>
 </ul>
 <p>Becaause the ICAO plan doesn't need to include the waypoints at which it
-enters/exits an air traffic control region, we need to extract a segment of the
-ICAO flight plan that contains the UK portion. Of course, the whole ICAO flight
-plan satisfies this property, what we really want is the <em>smallest</em> such
-segment. It's interesting to note here that a flight could possibly enter UK
-airspace, and then exit it again, and enter it again. We'll ignore this, that
-is, we will just find a single contiguous segment that contains all UK portions
-of the flight, since this is what the original code seemed to do.</p>
-<p>First of all, I'm unsure why this task attempts to do this only using the ADEXP
-data, rather than consulting a database about how waypoints and flight segments
-intersect UK airspace. It seems strange, but lets move on.</p>
+enters/exits an air traffic control region, extracting the segment of the ICAO
+flight plan corresponding to the UK portion of the flight is not entirely
+trivial. Of course, if we take the entire ICAO flight plan, it already contains
+the UK portion, but what we really want is the <em>smallest</em> such segment. It's
+interesting to note here that a flight could possibly enter UK airspace, and
+then exit it again, and enter it again. We'll ignore this, that is, we will just
+find a single contiguous segment that contains all UK portions of the flight,
+since this is what the original code seemed to do.</p>
+<p>I'm unsure why this task attempts to do this only using the ADEXP data, rather
+than consulting a database about how waypoints and flight segments intersect UK
+airspace. It seems strange, but lets move on.</p>
 <p>Note that it is impossible to achieve this task with the ICAO flight plan alone
 (and no knowledge of routes), even if you know for each waypoint if it is in the
 UK or not. Indeed you could even be in a situation where <em>none</em> of the waypoints
 in the ICAO route are in the UK, for example when the flight plan clips a small
 portion of the UK between two of the ICAO waypoints.</p>
-<p>So we must use the ADEXP data, and the assumption here, I assume, is that the
-ADEXP data contains <em>all</em> the waypoints, and that furthermore, waypoint
-granularity is such that if <em>adjacent</em> waypoints both don't intersect UK
-airspace, then the segment between them doesn't either. With this in mind, we
-can now describe what we want to do:</p>
+<p>So this is why the ADEXP waypoint list is used, and the assumption here, I
+assume, is that the ADEXP list contains <em>all</em> the waypoints, and that
+furthermore, waypoint granularity is such that if <em>adjacent</em> waypoints both
+don't intersect UK airspace, then the segment between them doesn't either. With
+this in mind, we can now describe what we want to do:</p>
 <p><em>We want to find the smallest subsegment of the ICAO route which fully contains the UK portion(s) of the flight.</em></p>
-<p>Given a subsegment of the ICAO route, how do we know if it contains all the UK
-waypoints? What we do is work out all the ADEXP waypoints along this subsegment, and then check this contains all the UK waypoints. This is an important function, so let's name it:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">-- Given an ICAO subsgment, return the corresponding subsegment of the
-</span><span style="color:#65737e;">-- ADEXP waypoints.
-</span><span>fullAdexpSub icaoSub =
-</span><span>  minimalSub adexp (isSubsequenceOf icaoSub)
+<p>The mistake of the faulty algorithm described above is to try to work on both
+the ICAO data and the ADEXP data as they are, maintaining indexes into each of
+them. The first thing to do is to reconcile the data. So we create a
+datastructure of &quot;segments&quot;:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">data </span><span style="color:#d08770;">Seg</span><span> p r
+</span><span>  = </span><span style="color:#d08770;">Leg</span><span> p r (</span><span style="color:#d08770;">Seg</span><span> p r)
+</span><span>  | </span><span style="color:#d08770;">Triv</span><span> p
 </span></code></pre>
-<p>This specifies that the ADEXP subsegment corresponding to the ICAO one is that
-smallest subsegment of the full ADEXP list that contains the ICAO subsegment as
-a subsequence. This uses a function <code>minimalSub</code> which finds a minimal
-subsegment of a sequence that matches some property.</p>
-<p>Given this function, we can now work out if an ICAO subsegment fully contains the UK portion of the flight:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span>containsUKPortion icaoSub =
-</span><span>  </span><span style="color:#b48ead;">case</span><span> fullAdexpSub icaoSub </span><span style="color:#b48ead;">of
-</span><span>    </span><span style="color:#d08770;">Just</span><span> adexpSub -&gt; ukWaypoints </span><span style="color:#8fa1b3;">`</span><span>isSubsequenceOf</span><span style="color:#8fa1b3;">`</span><span> adexpSub
-</span><span>    </span><span style="color:#d08770;">Nothing </span><span>-&gt; </span><span style="color:#d08770;">False
-</span></code></pre>
-<p>This says that an ICAO subsegment fully contains the UK portion of a flight if
-the corresponding ADEXP subsegment contains all the UK wayspoints as a
-subsequence.</p>
-<p>Now we can get the sought after UK portion of the ICAO flight plan:</p>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>minimalSub icao containsUKPortion
-</span></code></pre>
-<p>That is, we want the minimal subsegment of the ICAO route which contains the UK portion.</p>
-<p>Putting it all together we get this function:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPortionOfICAO </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">a</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">a </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">a</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">a</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> [</span><span style="color:#bf616a;">a</span><span>]
-</span><span>ukPortionOfICAO inUK icao adexp = minimalSub icao containsUKPortion
-</span><span>  </span><span style="color:#b48ead;">where
-</span><span>    containsUKPortion icaoSub =
-</span><span>      </span><span style="color:#b48ead;">case</span><span> fullAdexpSub icaoSub </span><span style="color:#b48ead;">of
-</span><span>        </span><span style="color:#d08770;">Just</span><span> adexpSub -&gt; ukWaypoints </span><span style="color:#8fa1b3;">`</span><span>isSubsequenceOf</span><span style="color:#8fa1b3;">`</span><span> adexpSub
-</span><span>        </span><span style="color:#d08770;">Nothing </span><span>-&gt; </span><span style="color:#d08770;">False
+<p>We can now define all the sorts of flight plan data we will deal with:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">type </span><span style="color:#d08770;">ICAO</span><span>  p r = </span><span style="color:#d08770;">Seg</span><span> p r
+</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">ADEXP</span><span> p   = </span><span style="color:#d08770;">Seg</span><span> p [p]
+</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">Plan</span><span>  p r = </span><span style="color:#d08770;">Seg</span><span> p (</span><span style="color:#d08770;">Step</span><span> p r)
 </span><span>
-</span><span>    fullAdexpSub icaoSub = minimalSub adexp (isSubsequenceOf icaoSub)
+</span><span style="color:#b48ead;">data </span><span style="color:#d08770;">Step</span><span> p r = </span><span style="color:#d08770;">Step
+</span><span>  { route :: r,
+</span><span>    </span><span style="color:#8fa1b3;">through </span><span style="color:#b48ead;">::</span><span> [</span><span style="color:#bf616a;">p</span><span>]
+</span><span>  }
+</span><span>  </span><span style="color:#b48ead;">deriving</span><span> stock (</span><span style="color:#d08770;">Show</span><span>, </span><span style="color:#d08770;">Generic</span><span>)
+</span></code></pre>
+<p>Here <code>Plan</code> is our reconciled flight plan, it combined all the information form
+ICAO and ADEXP. We can project a <code>Plan</code> back down to <code>ICAO</code> or <code>ADEXP</code>:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">mapRoutes </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">r </span><span style="color:#b48ead;">-&gt; </span><span style="color:#bf616a;">r</span><span>&#39;) </span><span style="color:#b48ead;">-&gt; Seg </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Seg </span><span style="color:#bf616a;">p r</span><span>&#39;
+</span><span>mapRoutes _ (</span><span style="color:#d08770;">Triv</span><span> p) = </span><span style="color:#d08770;">Triv</span><span> p
+</span><span>mapRoutes f (</span><span style="color:#d08770;">Leg</span><span> p r rest) = </span><span style="color:#d08770;">Leg</span><span> p (f r) (mapRoutes f rest)
 </span><span>
-</span><span>    ukWaypoints = filter inUK adexp
+</span><span style="color:#8fa1b3;">projectIcao </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r
+</span><span>projectIcao = mapRoutes (.route)
+</span><span>
+</span><span style="color:#8fa1b3;">projectAdexp </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; ADEXP </span><span style="color:#bf616a;">p
+</span><span>projectAdexp = mapRoutes (.through)
+</span></code></pre>
+<p>Now we write our reconciliation function:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#b48ead;">Plan </span><span style="color:#bf616a;">p r</span><span>]
+</span><span>reconcile (</span><span style="color:#d08770;">Triv</span><span> p) [p&#39;] | p == p&#39; = [</span><span style="color:#d08770;">Triv</span><span> p]
+</span><span>reconcile (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps)
+</span><span>  | p == p&#39; =
+</span><span>      [ </span><span style="color:#d08770;">Leg</span><span> p </span><span style="color:#d08770;">Step</span><span> {route = r, through = skip} reco
+</span><span>        | (skip, todo) &lt;- splits ps,
+</span><span>          reco &lt;- reconcile rest todo ]
+</span><span>reconcile _ _ = </span><span style="color:#d08770;">[]
+</span></code></pre>
+<p>It takes an <code>ICAO</code> flight plan and an ADEXP list of waypoints, and produces all
+the possible reconciliations. This is because reconciliations are not
+necessarily unique, because waypoints can appear more than once. This happens
+<em>not only</em> when two distinct geographic locations share the same waypoint
+identifier, but also if you simply have an strange flight which revistis
+previous waypoints. By calculating all the possible reconciliations, we'll know
+if the data is ambiguous, and flag those for manual processing.</p>
+<p>Next we extract the UK portion of the flight plan. This is done in 3 steps:</p>
+<ol>
+<li>Remove all legs at the start which don't cross into UK airspace.</li>
+<li>Traverse the legs which are in UK airspace.</li>
+<li>Once the rest of the flight plan is never again in the UK, cut it short.</li>
+</ol>
+<p>Each function calls the next step in sequence.</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">-- Step 1
+</span><span style="color:#8fa1b3;">ukSegment </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r
+</span><span>ukSegment _ (</span><span style="color:#d08770;">Triv</span><span> point) = </span><span style="color:#d08770;">Triv</span><span> point
+</span><span>ukSegment uk seg@(</span><span style="color:#d08770;">Leg</span><span> p leg rest) =
+</span><span>  </span><span style="color:#b48ead;">if</span><span> not (uk p) &amp;&amp; not (any uk leg.through)
+</span><span>    </span><span style="color:#b48ead;">then</span><span> ukSegment uk rest
+</span><span>    </span><span style="color:#b48ead;">else</span><span> flyUK uk seg
+</span><span>
+</span><span style="color:#65737e;">-- Step 2
+</span><span style="color:#8fa1b3;">flyUK </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r
+</span><span>flyUK _ (</span><span style="color:#d08770;">Triv</span><span> end) = </span><span style="color:#d08770;">Triv</span><span> end
+</span><span>flyUK uk (</span><span style="color:#d08770;">Leg</span><span> p leg rest)
+</span><span>  | not (any uk (allPoints rest)) = </span><span style="color:#d08770;">Leg</span><span> p leg (afterUK rest)
+</span><span>  | otherwise = </span><span style="color:#d08770;">Leg</span><span> p leg (flyUK uk rest)
+</span><span>
+</span><span style="color:#65737e;">-- Step 3
+</span><span style="color:#8fa1b3;">afterUK </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r
+</span><span>afterUK seg = </span><span style="color:#d08770;">Triv</span><span> (start seg)
+</span></code></pre>
+<p>These use some small functions:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">allPoints </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>]
+</span><span>allPoints (</span><span style="color:#d08770;">Triv</span><span> p) = [p]
+</span><span>allPoints (</span><span style="color:#d08770;">Leg</span><span> p leg rest) = [p] ++ leg.through ++ allPoints rest
+</span><span>
+</span><span style="color:#8fa1b3;">start </span><span style="color:#b48ead;">:: Seg </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; </span><span style="color:#bf616a;">p
+</span><span>start (</span><span style="color:#d08770;">Triv</span><span> p) = p
+</span><span>start (</span><span style="color:#d08770;">Leg</span><span> p _ _) = p
+</span></code></pre>
+<p>Putting it all together, we get:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPortionOfICAO </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> (</span><span style="color:#b48ead;">Plan </span><span style="color:#bf616a;">p r</span><span>)
+</span><span>ukPortionOfICAO uk icao adexp = </span><span style="color:#b48ead;">case</span><span> reconcile icao adexp </span><span style="color:#b48ead;">of
+</span><span>  [plan] -&gt; </span><span style="color:#d08770;">Just</span><span> (ukSegment uk plan)
+</span><span>  _ -&gt; </span><span style="color:#d08770;">Nothing
 </span></code></pre>
 <p>Let's test it with our example:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">--            A       B        C         D              E           F
-</span><span style="color:#65737e;">-- ICAO:  1------7--------2--------3-----------10--------------11-------13
-</span><span style="color:#65737e;">--
-</span><span style="color:#65737e;">-- ADEXP: 1  12  7   11   2   5    3  8  9     10  4   6   7   11       13
-</span><span style="color:#65737e;">--                        UK  UK   UK UK UK    UK  UK
-</span><span style="color:#8fa1b3;">example </span><span style="color:#b48ead;">:: Maybe</span><span> [</span><span style="color:#b48ead;">Int</span><span>]
-</span><span>example = ukPortionOfICAO inUK icao adexp
-</span><span>  </span><span style="color:#b48ead;">where
-</span><span>    inUK i = i </span><span style="color:#8fa1b3;">`</span><span>elem</span><span style="color:#8fa1b3;">`</span><span> [</span><span style="color:#d08770;">2</span><span>, </span><span style="color:#d08770;">5</span><span>, </span><span style="color:#d08770;">3</span><span>, </span><span style="color:#d08770;">8</span><span>, </span><span style="color:#d08770;">9</span><span>, </span><span style="color:#d08770;">10</span><span>, </span><span style="color:#d08770;">4</span><span>]
-</span><span>    icao = [</span><span style="color:#d08770;">1</span><span>, </span><span style="color:#d08770;">7</span><span>, </span><span style="color:#d08770;">2</span><span>, </span><span style="color:#d08770;">3</span><span>, </span><span style="color:#d08770;">10</span><span>, </span><span style="color:#d08770;">11</span><span>, </span><span style="color:#d08770;">13</span><span>]
-</span><span>    adexp = [</span><span style="color:#d08770;">1</span><span>, </span><span style="color:#d08770;">12</span><span>, </span><span style="color:#d08770;">7</span><span>, </span><span style="color:#d08770;">11</span><span>, </span><span style="color:#d08770;">2</span><span>, </span><span style="color:#d08770;">5</span><span>, </span><span style="color:#d08770;">3</span><span>, </span><span style="color:#d08770;">8</span><span>, </span><span style="color:#d08770;">9</span><span>, </span><span style="color:#d08770;">10</span><span>, </span><span style="color:#d08770;">4</span><span>, </span><span style="color:#d08770;">6</span><span>, </span><span style="color:#d08770;">7</span><span>, </span><span style="color:#d08770;">11</span><span>, </span><span style="color:#d08770;">13</span><span>]
-</span></code></pre>
-<p>And try this at the REPL:</p>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>λ&gt; example
-</span><span>Just [2,3,10,11]
-</span></code></pre>
-<p>The code returns <code>[2, 3, 10, 11]</code>, which we can see is the correct result:</p>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>                                 UK portion of ICAO
-</span><span>                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-</span><span>           A       B        C         D              E           F
-</span><span>ICAO:  1------7--------2--------3-----------10--------------11-------13
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>           4       2        8         5              1           9
+</span><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U
 </span><span>
-</span><span>ADEXP: 1  12  7   11   2   5    3  8  9     10  4   6   7   11       13
+</span><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
 </span><span>                       UK  UK   UK UK UK    UK  UK
 </span></code></pre>
-<p>Crisis averted. The fact that there is a duplicate identifier in this case is
-immaterial, the correct sub-route is still well defined.</p>
-<p>For reference here are the helper functions used that were not defined above:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">smallestSegment </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">a</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> [[</span><span style="color:#bf616a;">a</span><span>]] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> [</span><span style="color:#bf616a;">a</span><span>]
-</span><span>smallestSegment = minimumBy isInfixOf
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span>inUK = (</span><span style="color:#8fa1b3;">`</span><span>elem</span><span style="color:#8fa1b3;">`</span><span> [&quot;</span><span style="color:#a3be8c;">T</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">A</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">O</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">E</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">X</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">P</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">W</span><span>&quot;])
+</span><span>icao = (&quot;</span><span style="color:#a3be8c;">F</span><span>&quot;, </span><span style="color:#d08770;">4</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">Q</span><span>&quot;, </span><span style="color:#d08770;">2</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">T</span><span>&quot;, </span><span style="color:#d08770;">8</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">O</span><span>&quot;, </span><span style="color:#d08770;">5</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">P</span><span>&quot;, </span><span style="color:#d08770;">1</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;, </span><span style="color:#d08770;">9</span><span>) ~&gt; </span><span style="color:#d08770;">Triv </span><span>&quot;</span><span style="color:#a3be8c;">U</span><span>&quot;
+</span><span>adexp = [&quot;</span><span style="color:#a3be8c;">F</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">S</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Q</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">C</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">T</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">A</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">O</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">E</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">X</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">P</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">W</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">B</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Q</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">U</span><span>&quot;]
 </span><span>
-</span><span style="color:#8fa1b3;">minimalSub </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">a</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> [</span><span style="color:#bf616a;">a</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> ([</span><span style="color:#bf616a;">a</span><span>] </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Maybe</span><span> [</span><span style="color:#bf616a;">a</span><span>]
-</span><span>minimalSub xs p =
-</span><span>  smallestSegment [s | s &lt;- subsegments xs, p s]
-</span><span>
-</span><span style="color:#8fa1b3;">minimumBy </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">a </span><span style="color:#b48ead;">-&gt; </span><span style="color:#bf616a;">a </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">a</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe </span><span style="color:#bf616a;">a
-</span><span>minimumBy lessOrEq xs = find (\x -&gt; all (lessOrEq x) xs) xs
-</span><span>
-</span><span style="color:#8fa1b3;">subsegments </span><span style="color:#b48ead;">::</span><span> [</span><span style="color:#bf616a;">a</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> [[</span><span style="color:#bf616a;">a</span><span>]]
-</span><span>subsegments xs = </span><span style="color:#d08770;">[] </span><span>: concatMap (filter (not . null) . tails) (inits xs)
+</span><span>infixr </span><span style="color:#d08770;">6 </span><span>~&gt;
+</span><span>(~&gt;) (p, r) = </span><span style="color:#d08770;">Leg</span><span> p r
 </span></code></pre>
-<p>In subsequent posts I will show how this implementation, and the faulty one
-could have been tested, verified, and optimized.</p>
+<p>And try this at the REPL:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>λ&gt; ukPortionOfICAO inUK icao adexp
+</span><span>Just (Leg &quot;T&quot; 8 (Leg &quot;O&quot; 5 (Leg &quot;P&quot; 1 (Triv &quot;Y&quot;))))
+</span></code></pre>
+<p>We can see is the correct result:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>                                 UK portion of ICAO
+</span><span>                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+</span><span>           4       2        8         5              1           9
+</span><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U
+</span><span>
+</span><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
+</span><span>                       UK  UK   UK UK UK    UK  UK
+</span></code></pre>
+<p>The waypoint <code>Q</code> is a duplicate in the ADEXP list, but the system still returns
+the correct portion of the ICAO flight path. Crisis averted! The fact that there
+is a duplicate identifier in this case is immaterial, the correct sub-route is
+still well defined.</p>
+<p>Is it fast enough to process flight plans? How large can flight plans get? Well
+here is a flight plan from London to Sydney that contains a total of 158
+waypoints, and about a third of them appear in the ICAO route: <img src="https://jameshaydon.github.io/nats-fail/london-sydney.png" alt="London to Sydney flight plan" /></p>
+<p>The function above returns it's result instantly on flight plans with 100s of millions of waypoints, so it should be fine.</p>
+<p>TODO:</p>
+<ul>
+<li>Note that the fact it searches linearly by waypoint identifier is scary,
+because duplicate identifiers existing on the globe is not the only reason a
+list can have the same element twice: it might be the <em>same</em> geographic point.
+E.g. a place that loops back onto itself. This may sound strange, but it's not
+inconceivable, e.g. military exercises, tours by plane, etc.</li>
+</ul>
 
     </div>
 
