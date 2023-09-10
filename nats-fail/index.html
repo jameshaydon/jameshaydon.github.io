@@ -633,6 +633,8 @@ it would become apparent that those with duplicate waypoint identifiers in the
 ADEXP portion cannot be processed properly.</p>
 <p>This allows one to detect &quot;1 in 15 million&quot; events ahead of time.</p>
 <h3 id="the-fprsa-r-system-has-bad-failure-modes">The <code>FPRSA-R</code> system has bad failure modes</h3>
+<p>All systems can malfunction, so the important thing is that they malfunction <em>in
+a good way</em>, and that those responsible are <em>prepared</em> for malfunctions.</p>
 <p>A single flight plan caused a problem, and the entire <code>FPRSA-R</code> system crashed,
 which means no flight plans are being processed at all. If there is a problem
 with a single flight plan, it should be moved to a separate, slower queue, for
@@ -643,16 +645,14 @@ already undertaken or in progress&quot;:</p>
 FPRSA-R to filter out any flight plans that fit the conditions that caused the
 incident.</p>
 </blockquote>
-<p>The system should be able to recover from an error processing a single flight
-plan, and just continue processing without it.</p>
 <p>Furthermore, when it does crash, it does so in an obscure way. This is a system
 which <em>processes flight plans</em>, yet the relevant flight plan was only found in
 &quot;lower-level software logs&quot;. If there is an error processing a flight plan,
 which brings down the whole system, a notification (including the flight plan)
 should immediately be sent to some monitoring team.</p>
-<p>NATS was also not prepared for an eventuality that the <code>FPRSA-R</code> system would
-fail. The 1st and 2nd Line support engineers were not able to locate, or did not
-think to check, the low level log files. This has been fixed:</p>
+<p>NATS was also not prepared for an <code>FPRSA-R</code> system failure. The 1st
+and 2nd Line support engineers were not able to locate, or did not think to
+check, the low level log files. This has been fixed:</p>
 <blockquote>
 <p>An operating instruction has been put in place to allow prompt recovery of the
 FPRSA-R sub-system if the same circumstances recur. Each of the technical
