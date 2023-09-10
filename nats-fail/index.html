@@ -64,7 +64,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>28 minute read</span>
+    <span>30 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -80,7 +80,8 @@ technical incident. The BBC reports that more than <a href="https://www.bbc.com/
 cancelled</a> and the cost has been estimated
 at over £100 million GBP. The incident probably affected hundreds of thousands
 of people.</p>
-<p>These are notes on my reading of:</p>
+<p>These are notes on my reading of the incident report:</p>
+<span id="continue-reading"></span>
 <blockquote>
 <p>NATS Major Incident Preliminary Report</p>
 <p>Flight Plan Reception Suite Automated (FPRSA-R) Sub-system Incident 28th August 2023
@@ -358,9 +359,6 @@ confusion latest standards state that such identical designators should be
 geographically widely spaced. In this specific event, both of the waypoints
 were located outside of the UK, one towards the beginning of the route and one
 towards the end; approximately 4000 nautical miles apart.</p>
-</blockquote>
-<p>😐. This is obviously not ideal.</p>
-<blockquote>
 <p>Once the ADEXP file had been received, the FPRSA-R software commenced
 searching for the UK airspace entry point in the waypoint information per the
 ADEXP flight plan, commencing at the first line of that waypoint data. FPRSA-R
@@ -520,13 +518,22 @@ and safe manner.</p>
 <p>The system was eventually restored, but unfortunately the knock-on effects by
 that point were already disastrous.</p>
 <p>The manufacturer is an Austrian company, <a href="https://en.wikipedia.org/wiki/Frequentis">Frequentis
-AG</a>, which supplied the <code>FPRSA-R</code>
-in 2018. We can find a few job ads related to air traffic control systems at
-Frequenti AG at their <a href="https://jobs.frequentis.com/careers/SearchJobs/air?listFilterMode=1">careers
+AG</a>:</p>
+<blockquote>
+<p>An FPRSA sub-system has existed in NATS for many years and in 2018 the
+previous FPRSA sub- system was replaced with new hardware and software
+manufactured by Frequentis AG, one of the leading global ATC System providers.
+The manufacturer’s ATC products are operating in approximately 150 countries
+and they hold a world-leading position in aeronautical information management
+(AIM) and message handling systems.</p>
+</blockquote>
+<p>The &quot;Nobody ever gets fired for hiring Accenture&quot; defence.</p>
+<p>We can find a few job ads related to air traffic control systems at Frequenti AG
+at their <a href="https://jobs.frequentis.com/careers/SearchJobs/air?listFilterMode=1">careers
 page</a>
 Programming languages used: <code>Ada</code>, <code>C++</code>, <code>Java</code>, <code>Python</code>, with <code>Java</code> being
-the most common. Since <code>Ada</code> is the only language in this list that is &quot;safe&quot;
-enough for such a critical system, I'll assume it was coded in Ada.</p>
+the most common. Any of these languages would explain the imperative nature of
+the faulty code, but Ada would at least be safer than the others in other ways.</p>
 <h2 id="thoughts">Thoughts</h2>
 <p>Things that went wrong:</p>
 <ol>
@@ -539,19 +546,46 @@ way.</li>
 </ol>
 <h3 id="the-software-was-buggy">The software was buggy</h3>
 <p>The software was incapable to extracting the UK portion of the ICAO flight plan,
-even though such a portion exists. I will delve more into this below, but to
-summarise:</p>
+even though such a portion exists. I will delve more into this
+below, but to summarise:</p>
 <ul>
-<li>The procedure was very imperative and fiddly, and failed for a silly reason.</li>
-<li>While it's true that waypoint markers are not globally unique, but this is a known
+<li>
+<p>The procedure was very imperative and fiddly, and failed for a silly reason.</p>
+</li>
+<li>
+<p>It's true that waypoint markers are not globally unique, but this is a known
 issue, so NATS should make sure their systems are robust enough to handle it.
 <em>All other air traffic control authories</em> have to deal with this, so NATS
-can't just sweep this under a rug and pretend it doesn't exist.</li>
-<li>The procedure extracts the UK portion of the flight plan by reconciling
-waypoints between the ICAO and ADEXP routes. It's unclear (to me) why it
-cannot just use route data from a database on the ICAO flight plan directly.
-For example, it could maintain a database of which triples <code>(a, r, b)</code>, where
-<code>a</code> and <code>b</code> are waypoints, and <code>r</code> is a route, intersect with UK airspace.</li>
+can't just sweep this under a rug and pretend it doesn't exist. NATs says the
+following about this in the report:</p>
+<blockquote>
+<p>Although there has been work by ICAO and other bodies to eradicate
+non-unique waypoint names there are duplicates around the world. In order to
+avoid confusion latest standards state that such identical designators
+should be geographically widely spaced. In this specific event, both of the
+waypoints were located outside of the UK, one towards the beginning of the
+route and one towards the end; approximately 4000 nautical miles apart.</p>
+</blockquote>
+<p>When wayspoints with the same name are wideley spaced, this makes flight plans
+unambiguous, because successive waypoints cannot be too far apart.</p>
+<blockquote>
+<p>The feasibility of working through the UK state with ICAO to remove the
+small number of duplicate waypoint names in the ICAO administered global
+dataset that relate to this incident.</p>
+</blockquote>
+<p>Waypoint names are clearly chosen to be short and snappy. Here's a sequence
+from some flight plan I found: <code>KOMAL</code>, <code>ATRAK</code>, <code>SORES</code>, <code>SAKTA</code>, <code>ALMIK</code>,
+<code>IGORO</code>, <code>ATMED</code>, etc. It's clear that the system has been designed so these
+names can be communicated quickly, e.g. over radio, and that pilots and
+air-traffic controllers can become familiar with those on the routes they
+usually fly. Furthermore chaning the name of a waypoint can by a scary
+operation. For this reason, including this suggestion in this report feels
+like it is trying to shift the blame.</p>
+<p>Furthermore, I don't see why a flight plan can't include the <em>same</em> geographic
+waypoint several times; for example for leasure flights, or military
+exercises, and it doesn't sound like the <code>FPRSA-R</code> algorithm would be very
+robust to that.</p>
+</li>
 </ul>
 <p>NATS officials are trying to spin this as:</p>
 <blockquote>
@@ -586,7 +620,7 @@ progress&quot;:</p>
 FPRSA-R to filter out any flight plans that fit the conditions that caused the
 incident.</p>
 </blockquote>
-<h2 id="the-system-is-not-properly-tested">The system is not properly tested</h2>
+<h3 id="the-system-is-not-properly-tested">The system is not properly tested</h3>
 <p>It doesn't sound like NATS or Frequentis used any
 <a href="https://en.wikipedia.org/wiki/Fuzzing">fuzzing</a>, for example. By bombarding
 such a system with randomly generated flight plans, you can see if any unhandled
@@ -624,13 +658,12 @@ somewhere far away. When the magic box stops working, they press the button many
 times, and eventually call the people who made the box. It's important to have
 expertise in all the system you manage.</p>
 <h3 id="exceptions-failure-modes-were-not-audited">Exceptions/failure modes were not audited.</h3>
-<p>The programming language used (let's presume Ada) can throw exceptions (most
-languages do). For such a critical system, all source-locations where exceptions
-are thrown should be audited. For each, the failure message (e.g. written to the
-log file) should include the ID of a <em>contingency plan</em>, any any relevant data.
-Operators can then look up the contingency plan in some handbook, and start
-fixing the problem immediately. In this case the plan would have been something
-like:</p>
+<p>The programming language used can throw exceptions (most languages do). For such
+a critical system, all source-locations where exceptions are thrown should be
+audited. For each, the failure message (e.g. written to the log file) should
+include the ID of a <em>contingency plan</em>, any any relevant data. Operators can
+then look up the contingency plan in some handbook, and start fixing the problem
+immediately. In this case the plan would have been something like:</p>
 <ul>
 <li>Remove the flight plan that cannot be processed from the message queue.</li>
 <li>Restart the <code>FPRSA-R</code> system.</li>
@@ -668,44 +701,48 @@ don't intersect UK airspace, then the segment between them doesn't either. With
 this in mind, we can now describe what we want to do:</p>
 <p><em>We want to find the smallest subsegment of the ICAO route which fully contains the UK portion(s) of the flight.</em></p>
 <p>The mistake of the faulty algorithm described above is to try to work on both
-the ICAO data and the ADEXP data as they are, maintaining indexes into each of
-them. The first thing to do is to reconcile the data. So we create a
-datastructure of &quot;segments&quot;:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">data </span><span style="color:#d08770;">Seg</span><span> p r
-</span><span>  = </span><span style="color:#d08770;">Leg</span><span> p r (</span><span style="color:#d08770;">Seg</span><span> p r)
-</span><span>  | </span><span style="color:#d08770;">Triv</span><span> p
+the ICAO data and the ADEXP data as they are, maintaining pointers into each of
+them, and updating them in an imperative style, with vague and wrong invariants
+in the background of the programmers mind. This is a recepe for bugs.</p>
+<p>The first thing to do is to reconcile the data. So we create a datastructure of
+&quot;segments&quot;:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">data </span><span style="color:#d08770;">Plan</span><span> p r
+</span><span>  = </span><span style="color:#d08770;">End</span><span> p
+</span><span>  | </span><span style="color:#d08770;">Leg</span><span> p r (</span><span style="color:#d08770;">Plan</span><span> p r)
 </span></code></pre>
 <p>We can now define all the sorts of flight plan data we will deal with:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">type </span><span style="color:#d08770;">ICAO</span><span>  p r = </span><span style="color:#d08770;">Seg</span><span> p r
-</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">ADEXP</span><span> p   = </span><span style="color:#d08770;">Seg</span><span> p [p]
-</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">Plan</span><span>  p r = </span><span style="color:#d08770;">Seg</span><span> p (</span><span style="color:#d08770;">Step</span><span> p r)
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">type </span><span style="color:#d08770;">ICAO</span><span>     p r = </span><span style="color:#d08770;">Plan</span><span> p r
+</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">ADEXP</span><span>    p   = </span><span style="color:#d08770;">Plan</span><span> p [p]
+</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">Combined</span><span> p r = </span><span style="color:#d08770;">Plan</span><span> p (</span><span style="color:#d08770;">Via</span><span> p r)
 </span><span>
-</span><span style="color:#b48ead;">data </span><span style="color:#d08770;">Step</span><span> p r = </span><span style="color:#d08770;">Step
-</span><span>  { route :: r,
+</span><span style="color:#b48ead;">data </span><span style="color:#d08770;">Via</span><span> p r = </span><span style="color:#d08770;">Via
+</span><span>  { route   :: r,
 </span><span>    </span><span style="color:#8fa1b3;">through </span><span style="color:#b48ead;">::</span><span> [</span><span style="color:#bf616a;">p</span><span>]
 </span><span>  }
-</span><span>  </span><span style="color:#b48ead;">deriving</span><span> stock (</span><span style="color:#d08770;">Show</span><span>, </span><span style="color:#d08770;">Generic</span><span>)
+</span><span>  </span><span style="color:#b48ead;">deriving</span><span> stock (</span><span style="color:#d08770;">Show</span><span>)
 </span></code></pre>
 <p>Here <code>Plan</code> is our reconciled flight plan, it combined all the information form
 ICAO and ADEXP. We can project a <code>Plan</code> back down to <code>ICAO</code> or <code>ADEXP</code>:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">mapRoutes </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">r </span><span style="color:#b48ead;">-&gt; </span><span style="color:#bf616a;">r</span><span>&#39;) </span><span style="color:#b48ead;">-&gt; Seg </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Seg </span><span style="color:#bf616a;">p r</span><span>&#39;
-</span><span>mapRoutes _ (</span><span style="color:#d08770;">Triv</span><span> p) = </span><span style="color:#d08770;">Triv</span><span> p
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">projectICAO </span><span style="color:#b48ead;">:: Combined </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r
+</span><span>projectICAO = mapRoutes (.route)
+</span><span>
+</span><span style="color:#8fa1b3;">projectADEXP </span><span style="color:#b48ead;">:: Combined </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; ADEXP </span><span style="color:#bf616a;">p
+</span><span>projectADEXP = mapRoutes (.through)
+</span><span>
+</span><span style="color:#8fa1b3;">mapRoutes </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">r </span><span style="color:#b48ead;">-&gt; </span><span style="color:#bf616a;">r</span><span>&#39;) </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r</span><span>&#39;
+</span><span>mapRoutes _ (</span><span style="color:#d08770;">End</span><span> p) = </span><span style="color:#d08770;">End</span><span> p
 </span><span>mapRoutes f (</span><span style="color:#d08770;">Leg</span><span> p r rest) = </span><span style="color:#d08770;">Leg</span><span> p (f r) (mapRoutes f rest)
-</span><span>
-</span><span style="color:#8fa1b3;">projectIcao </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r
-</span><span>projectIcao = mapRoutes (.route)
-</span><span>
-</span><span style="color:#8fa1b3;">projectAdexp </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; ADEXP </span><span style="color:#bf616a;">p
-</span><span>projectAdexp = mapRoutes (.through)
 </span></code></pre>
-<p>Now we write our reconciliation function:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#b48ead;">Plan </span><span style="color:#bf616a;">p r</span><span>]
-</span><span>reconcile (</span><span style="color:#d08770;">Triv</span><span> p) [p&#39;] | p == p&#39; = [</span><span style="color:#d08770;">Triv</span><span> p]
-</span><span>reconcile (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps)
-</span><span>  | p == p&#39; =
-</span><span>      [ </span><span style="color:#d08770;">Leg</span><span> p </span><span style="color:#d08770;">Step</span><span> {route = r, through = skip} reco
-</span><span>        | (skip, todo) &lt;- splits ps,
-</span><span>          reco &lt;- reconcile rest todo ]
+<p>Now we write our reconciliation function. To reconcile, the start and end points
+must match. When reconciling a leg of a flight plan, a certain amount of
+waypoints can be skipped, and the rest of them must reconcile with the rest of
+the flight plan:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>]
+</span><span>reconcile (</span><span style="color:#d08770;">End</span><span> p) [p&#39;]             | p == p&#39; = pure (</span><span style="color:#d08770;">End</span><span> p)
+</span><span>reconcile (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; = </span><span style="color:#b48ead;">do
+</span><span>  (through, restAdexp) &lt;- splits ps
+</span><span>  recoRest &lt;- reconcile rest restAdexp
+</span><span>  pure (</span><span style="color:#d08770;">Leg</span><span> p </span><span style="color:#d08770;">Via</span><span> {route = r, through} recoRest)
 </span><span>reconcile _ _ = </span><span style="color:#d08770;">[]
 </span></code></pre>
 <p>It takes an <code>ICAO</code> flight plan and an ADEXP list of waypoints, and produces all
@@ -721,40 +758,54 @@ if the data is ambiguous, and flag those for manual processing.</p>
 <li>Traverse the legs which are in UK airspace.</li>
 <li>Once the rest of the flight plan is never again in the UK, cut it short.</li>
 </ol>
-<p>Each function calls the next step in sequence.</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">-- Step 1
-</span><span style="color:#8fa1b3;">ukSegment </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r
-</span><span>ukSegment _ (</span><span style="color:#d08770;">Triv</span><span> point) = </span><span style="color:#d08770;">Triv</span><span> point
-</span><span>ukSegment uk seg@(</span><span style="color:#d08770;">Leg</span><span> p leg rest) =
-</span><span>  </span><span style="color:#b48ead;">if</span><span> not (uk p) &amp;&amp; not (any uk leg.through)
+<p>Each function calls the next step in sequence. Note that we return an
+<code>NonUkPlan</code> error when the system reaches the end of the plan without having
+found a UK part. By having a compiler which checks that patterns are covering,
+the possible failure modes arise naturally while coding.</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">-- Extract the UK part of the flight.
+</span><span style="color:#8fa1b3;">ukSegment </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Combined </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Either Err</span><span> (</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>)
+</span><span>ukSegment uk (</span><span style="color:#d08770;">End</span><span> p)
+</span><span>  | nonUkPlan uk (</span><span style="color:#d08770;">End</span><span> p) = </span><span style="color:#d08770;">Left NonUkPlan
+</span><span>  | otherwise = pure (</span><span style="color:#d08770;">End</span><span> p)
+</span><span>ukSegment uk plan@(</span><span style="color:#d08770;">Leg</span><span> _ _ rest) =
+</span><span>  </span><span style="color:#b48ead;">if</span><span> nonUkLeg uk plan
 </span><span>    </span><span style="color:#b48ead;">then</span><span> ukSegment uk rest
-</span><span>    </span><span style="color:#b48ead;">else</span><span> flyUK uk seg
+</span><span>    </span><span style="color:#b48ead;">else</span><span> pure (flyUK uk plan)
 </span><span>
-</span><span style="color:#65737e;">-- Step 2
-</span><span style="color:#8fa1b3;">flyUK </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r
-</span><span>flyUK _ (</span><span style="color:#d08770;">Triv</span><span> end) = </span><span style="color:#d08770;">Triv</span><span> end
-</span><span>flyUK uk (</span><span style="color:#d08770;">Leg</span><span> p leg rest)
-</span><span>  | not (any uk (allPoints rest)) = </span><span style="color:#d08770;">Leg</span><span> p leg (afterUK rest)
-</span><span>  | otherwise = </span><span style="color:#d08770;">Leg</span><span> p leg (flyUK uk rest)
+</span><span style="color:#65737e;">-- Fly the UK part of the flight.
+</span><span style="color:#8fa1b3;">flyUK </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Combined </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Combined </span><span style="color:#bf616a;">p r
+</span><span>flyUK _ (</span><span style="color:#d08770;">End</span><span> end) = </span><span style="color:#d08770;">End</span><span> end
+</span><span>flyUK uk (</span><span style="color:#d08770;">Leg</span><span> p v rest)
+</span><span>  | nonUkPlan uk rest = </span><span style="color:#d08770;">Leg</span><span> p v (afterUK rest)
+</span><span>  | otherwise = </span><span style="color:#d08770;">Leg</span><span> p v (flyUK uk rest)
 </span><span>
-</span><span style="color:#65737e;">-- Step 3
-</span><span style="color:#8fa1b3;">afterUK </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Plan </span><span style="color:#bf616a;">p r
-</span><span>afterUK seg = </span><span style="color:#d08770;">Triv</span><span> (start seg)
+</span><span style="color:#65737e;">-- Skip the rest of the flight.
+</span><span style="color:#8fa1b3;">afterUK </span><span style="color:#b48ead;">:: Combined </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Combined </span><span style="color:#bf616a;">p r
+</span><span>afterUK plan = </span><span style="color:#d08770;">End</span><span> (start plan)
 </span></code></pre>
 <p>These use some small functions:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">allPoints </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>]
-</span><span>allPoints (</span><span style="color:#d08770;">Triv</span><span> p) = [p]
-</span><span>allPoints (</span><span style="color:#d08770;">Leg</span><span> p leg rest) = [p] ++ leg.through ++ allPoints rest
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">-- The next leg of the journey doesn&#39;t fly through the UK.
+</span><span style="color:#8fa1b3;">nonUkLeg </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Combined </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Bool
+</span><span>nonUkLeg uk (</span><span style="color:#d08770;">End</span><span> p) = not (uk p)
+</span><span>nonUkLeg uk (</span><span style="color:#d08770;">Leg</span><span> p v _) = not (uk p) &amp;&amp; not (any uk v.through)
 </span><span>
-</span><span style="color:#8fa1b3;">start </span><span style="color:#b48ead;">:: Seg </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; </span><span style="color:#bf616a;">p
-</span><span>start (</span><span style="color:#d08770;">Triv</span><span> p) = p
+</span><span style="color:#65737e;">-- The whole plan isn&#39;t in the UK.
+</span><span style="color:#8fa1b3;">nonUkPlan </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">a </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Combined </span><span style="color:#bf616a;">a r </span><span style="color:#b48ead;">-&gt; Bool
+</span><span>nonUkPlan uk plan = all (nonUkLeg uk) (legs plan)
+</span><span>
+</span><span style="color:#8fa1b3;">legs </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#b48ead;">Plan </span><span style="color:#bf616a;">p r</span><span>]
+</span><span>legs (</span><span style="color:#d08770;">End</span><span> p) = [</span><span style="color:#d08770;">End</span><span> p]
+</span><span>legs plan@(</span><span style="color:#d08770;">Leg</span><span> _ _ rest) = plan : legs rest
+</span><span>
+</span><span style="color:#8fa1b3;">start </span><span style="color:#b48ead;">:: Plan </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; </span><span style="color:#bf616a;">p
+</span><span>start (</span><span style="color:#d08770;">End</span><span> p) = p
 </span><span>start (</span><span style="color:#d08770;">Leg</span><span> p _ _) = p
 </span></code></pre>
 <p>Putting it all together, we get:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPortionOfICAO </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> (</span><span style="color:#b48ead;">Plan </span><span style="color:#bf616a;">p r</span><span>)
-</span><span>ukPortionOfICAO uk icao adexp = </span><span style="color:#b48ead;">case</span><span> reconcile icao adexp </span><span style="color:#b48ead;">of
-</span><span>  [plan] -&gt; </span><span style="color:#d08770;">Just</span><span> (ukSegment uk plan)
-</span><span>  _ -&gt; </span><span style="color:#d08770;">Nothing
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPartOfICAO </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Either Err</span><span> (</span><span style="color:#b48ead;">ICAO </span><span style="color:#bf616a;">p r</span><span>)
+</span><span>ukPartOfICAO uk icao adexp = </span><span style="color:#b48ead;">case</span><span> reconcile icao adexp </span><span style="color:#b48ead;">of
+</span><span>  [plan] -&gt; projectICAO &lt;$&gt; ukSegment uk plan
+</span><span>  _ -&gt; </span><span style="color:#d08770;">Left CannotReconcileIcaoAdexp
 </span></code></pre>
 <p>Let's test it with our example:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>           4       2        8         5              1           9
@@ -772,7 +823,7 @@ if the data is ambiguous, and flag those for manual processing.</p>
 </span></code></pre>
 <p>And try this at the REPL:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>λ&gt; ukPortionOfICAO inUK icao adexp
-</span><span>Just (Leg &quot;T&quot; 8 (Leg &quot;O&quot; 5 (Leg &quot;P&quot; 1 (Triv &quot;Y&quot;))))
+</span><span>Right (Leg &quot;T&quot; 8 (Leg &quot;O&quot; 5 (Leg &quot;P&quot; 1 (End &quot;Y&quot;))))
 </span></code></pre>
 <p>We can see is the correct result:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>                                 UK portion of ICAO
@@ -787,18 +838,11 @@ if the data is ambiguous, and flag those for manual processing.</p>
 the correct portion of the ICAO flight path. Crisis averted! The fact that there
 is a duplicate identifier in this case is immaterial, the correct sub-route is
 still well defined.</p>
-<p>Is it fast enough to process flight plans? How large can flight plans get? Well
-here is a flight plan from London to Sydney that contains a total of 158
-waypoints, and about a third of them appear in the ICAO route: <img src="https://jameshaydon.github.io/nats-fail/london-sydney.png" alt="London to Sydney flight plan" /></p>
-<p>The function above returns it's result almost instantly on flight plans of that length.</p>
-<p>TODO:</p>
-<ul>
-<li>Note that the fact it searches linearly by waypoint identifier is scary,
-because duplicate identifiers existing on the globe is not the only reason a
-list can have the same element twice: it might be the <em>same</em> geographic point.
-E.g. a place that loops back onto itself. This may sound strange, but it's not
-inconceivable, e.g. military exercises, tours by plane, etc.</li>
-</ul>
+<p>How large can flight plans get? Well here is a flight plan from London to Sydney
+that contains a total of 158 waypoints, and about a third of them appear in the
+ICAO route:
+<img src="https://jameshaydon.github.io/nats-fail/london-sydney.png" alt="London to Sydney flight plan" /> 
+<code>ukPortionOfICAO</code> returns practically instantly for such a flight plan.</p>
 
     </div>
 
