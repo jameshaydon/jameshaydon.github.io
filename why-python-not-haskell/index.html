@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+
+    
+      
+      <meta name="description" content="I ask some people I know who like to program in Python why they choose Python over Haskell." />
+      
+    
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+    
+        
+                
+                    <header>
+                        <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                        
+                            <a itemprop="url"
+                               class=""
+                               href="https://jameshaydon.github.io">
+                                <span itemprop="name">Home</span></a>
+                        
+                            <a itemprop="url"
+                               class=""
+                               href="https://jameshaydon.github.io/papers">
+                                <span itemprop="name">Papers</span></a>
+                        
+                            <a itemprop="url"
+                               class=""
+                               href="https://github.com/jameshaydon/lawvere">
+                                <span itemprop="name">lawvere-lang</span></a>
+                        
+                        </nav>
+                    </header>
+                
+            
+    
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">Why (some) Python programmers don&#x27;t want Haskell</h1>
+        <span class="muted">
+    <svg class="icon i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>4 minute read</span>
+    <svg class="icon i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2023-07-16
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>A <a href="https://discourse.haskell.org/t/commercial-haskell-should-go-after-python-julia-not-rust/6964/2">Haskell discourse
+thread</a>
+asks why more Python developers couldn't instead be using Haskell.</p>
+<p>One of the points made in this thread, is that there is a sizeable class of Python programmers for which the trope &quot;Python programmers will be scared of monads!&quot; doesn't apply. I thought I would ask some of the people I know that use Python why they don't use Haskell.</p>
+<span id="continue-reading"></span>
+<p>Some notes about the demographic:</p>
+<ul>
+<li>These people all work as academic researchers in Computer Science, formal methods, ranging from very abstract to quite practical.</li>
+<li>Two of them know more about Category Theory and monads than the vast majority of Haskellers.</li>
+<li>They all would choose Python for their next project.</li>
+</ul>
+<p>These opinions are not my own.</p>
+<p>General themes:</p>
+<ul>
+<li>Haskell just isn't very well known.</li>
+<li>Python has so many libraries.</li>
+<li>Python has good, beginner friendly tooling.</li>
+<li>I am using Python and my collaborators are already using Python, would need a good reason to change.</li>
+<li>Students can pick up Python very quickly.</li>
+<li>With Python you (or a collaborator, or a student) can always &quot;muddle through&quot;. With Haskell you may just get stuck.</li>
+<li>Haskell seems &quot;locked down&quot; (types? purity is handcuffs? no imperative programming?)</li>
+<li>Unfamiliarity with functional programming.</li>
+<li>Haskell code in the wild looks very complicated compared to Python code in the wild.</li>
+</ul>
+<h2 id="subject-a">Subject A</h2>
+<blockquote>
+<p>I know nothing about Haskell despite it being in my list of things to look at for ages 😅😅😅
+But I think part of the answer is the same as &quot;why do you use this messaging app instead of that one&quot;: it's what the community uses.</p>
+</blockquote>
+<p>network effect?</p>
+<blockquote>
+<p>I think it's a big part. Another could be inertia : &quot;I'm in research/industry and I have a new project. I'm not going to change my workflow just for shits and giggles&quot;. So if a working professional has been using python, it's unlikely to change if they keep working in the same field. I think.</p>
+</blockquote>
+<blockquote>
+<p>But I'll tell you that : I think imperative is easier then functional, and I think many people agree. And the fact that if you want, you can do a bit of functional un python just sweetens the pot.</p>
+</blockquote>
+<p>Are you aware that you can program imperatively in Haskell? </p>
+<blockquote>
+<p>No, I wasn't aware.</p>
+</blockquote>
+<h2 id="subject-b">Subject B</h2>
+<blockquote>
+<p>I’m not a huge programmer but when I need to program something, I will most likely use python by default. The reasons:</p>
+<ul>
+<li>it takes me 5 mins to have an environment working in Python and I can focus on programming. It would take me days to make it work in Haskell. I guess the reason is I’ve never worked on a small project without fancy features from scratch in Haskell.</li>
+<li>I find functional languages hard to read. If I see a python program, in a few minutes I know what’s roughly the purpose, with functional languages I cannot (not just Haskell, but Scala too).</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Maybe I am biased in the sense that I’ve seen a lot of simple Python programs written by non-specialists, but only complex projects made by professionals in Haskell/Scala.
+Basically: I need newbies to write more Haskell programs</p>
+</blockquote>
+<h2 id="subject-c">Subject C</h2>
+<blockquote>
+<ul>
+<li>Everything just works: Installation, setting things up, getting general support.</li>
+<li>there's a library to do pretty much anything and a million people who have solutions for any one of your questions
+Numpy, scipy, pandas, geopandas, any tool API, ...</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Everything is available in Python. I can teach any student to write python in 15 minutes. 
+With Haskell/Scala/... it will take me days to get there and most likely I'll encounter an issue where I'll need something that's not available or very inconvenient</p>
+</blockquote>
+<blockquote>
+<p>Every programmer understands OO, I'd say &lt; 30% understand functional to a level where they can be proficient.</p>
+</blockquote>
+<blockquote>
+<p>In pretty much every (university) course I am aware of, people will learn procedural programming with OO as a next step.
+Functional, logic oriented, etc. are seen as special cases that are taught &quot;on demand&quot;. I'm aware that functional is now trending for web dev, but usually you get into it after learning the imperative styles.</p>
+</blockquote>
+<blockquote>
+<p>This also includes tutorials. There are lots of &quot;intermediate level&quot; people doing YouTube tutorials of certain intermediate level Python things. 
+(Function references, generators, lambda expressions, decorators)</p>
+</blockquote>
+<blockquote>
+<p>I'm yet to find any good video explaining currying or monads aimed at intermediate level programmers. It's either &quot;follow these steps exactly&quot; without proper explanation, or some deep dive stuff explaining the ins and outs using all the &quot;big words&quot;.</p>
+</blockquote>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by James Haydon
+                
+                
+                
+            </p>
+            
+            
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>

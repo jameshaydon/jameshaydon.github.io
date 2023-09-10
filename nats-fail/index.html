@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-      <!-- Enable responsiveness on mobile devices-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
     
       
@@ -75,27 +80,30 @@
 </span>
     </header>
     <div itemprop="articleBody">
-      <p>On 28 August 2023 <em>NATS</em>, the UKs air traffic control operator, suffered a major
-technical incident. The BBC reports that more than <a href="https://www.bbc.com/news/uk-66685349">2000 flights were
+      <p>On 28 August 2023 <em>NATS</em>, the UKs air traffic control operator, suffered a
+<strong>major</strong> technical incident. The BBC reports that more than <a href="https://www.bbc.com/news/uk-66685349">2000 flights were
 cancelled</a> and the cost has been estimated
-at over £100 million GBP. The incident probably affected hundreds of thousands
+at over <em>£100 million</em> GBP. The incident probably affected hundreds of thousands
 of people.</p>
 <p>These are notes on my reading of the incident report:</p>
 <span id="continue-reading"></span>
 <blockquote>
-<p>NATS Major Incident Preliminary Report</p>
-<p>Flight Plan Reception Suite Automated (FPRSA-R) Sub-system Incident 28th August 2023
+<p>NATS Major Incident Preliminary Report<br/>
+Flight Plan Reception Suite Automated (FPRSA-R) Sub-system Incident 28th August 2023 <br/>
 <a href="https://publicapps.caa.co.uk/docs/33/NERL%20Major%20Incident%20Investigation%20Preliminary%20Report.pdf">pdf</a>.</p>
 </blockquote>
 <p><em>NATS</em> is a &quot;public-private&quot; company in the UK that is responsible for all of
-the UK's air-traffic control (ATC).</p>
+the UK's air-traffic control:</p>
 <blockquote>
 <p>Air Traffic Control (ATC) is the provision and operation of a safe system for
 controlling and monitoring aircraft.
-[..]</p>
-<p>aircraft [..] are required to file a flight plan.
-[..]</p>
-<p>ATC ensures that aircraft are safely separated laterally and vertically.</p>
+[..] <br/>
+aircraft [..] are required to file a flight plan.
+[..] <br/>
+ATC ensures that aircraft are safely separated laterally and vertically.</p>
+</blockquote>
+<h2 id="what-went-wrong">What went wrong</h2>
+<blockquote>
 <p>[Airlines] they submit the plan into Eurocontrol’s Integrated Initial Flight Plan
 Processing System (IFPS).
 [..]</p>
@@ -169,11 +177,13 @@ roughly:</p>
 <p>The route part (in this example: <code>N0440F310 SSOXS5 SSOXS DCT BUZRD DCT SEY DCT HTO J174 ORF J121 CHS EESNT LUNNI1</code>) encodes an overall speed (here <code>N0440</code>
 meaning <code>440 knots</code>), an overall altitude (here <code>FL310</code> which means &quot;Flight
 Level 310&quot; which means <code>10 × 100 ft</code> (can also be in <code>km</code>)), and a sequence of
-waypoints (referenced by name).</p>
+waypoints (referenced by name) separated by a description of how to get from the
+previous waypoint to the next one, usually by referencing a &quot;known route&quot; by
+name.</p>
 <blockquote>
 <p>The flight plan was accepted by IFPS
-[..]</p>
-<p>the aircraft was cleared to depart at 04:00.
+[..] <br/>
+the aircraft was cleared to depart at 04:00.
 [..]</p>
 <p>At 08:32 the flight plan was received by NATS’ FPRSA-R sub-system from
 Eurocontrol’s IFPS system. This is consistent with the 4 hour rule mentioned
@@ -268,8 +278,8 @@ waypoints and other data.</p>
 <p>(You can play around with flight plans at
 <a href="https://flightplandatabase.com">flightplandatabase.com</a>, a website for people
 who like playing with flight simulators)</p>
-<p>The <code>ICAO</code> route contains waypoints, seperated by a &quot;known route segment&quot;, a bit
-like highways, but for planes. We can indent these to make it clearer:</p>
+<p>We can indent the &quot;route&quot; parts between the waypoints in the ICAO plan to make
+things clearer:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>N0417F330
 </span><span>  ANEKI8L 
 </span><span>  ANEKI 
@@ -364,13 +374,19 @@ searching for the UK airspace entry point in the waypoint information per the
 ADEXP flight plan, commencing at the first line of that waypoint data. FPRSA-R
 was able to specifically identify the character string as it appeared in the
 ADEXP flight plan text.</p>
+</blockquote>
+<p>This description implies that the flight plan is not parsed into a
+data-structure according to its spec. Instead the system is using string search
+and other manipulations to try and extract the UK portion of the flight plan
+directly. That's <strong><em>quite shocking</em></strong>. The programming style also seems to be
+very imperative.</p>
+<blockquote>
 <p>Having correctly identified the entry point, the software moved on to search
 for the exit point from UK airspace in the waypoint data.</p>
 <p>Having completed those steps,</p>
 </blockquote>
-<p>One thing to note here is that the programming style seems very imperative. This
-part of the code succesfully identified <code>entry</code> and <code>exit</code> waypoints to UK
-airspace in the list of <code>ADEXP</code> waypoints.</p>
+<p>This part of the code identified <code>entry</code> and <code>exit</code> waypoints to UK airspace in
+the list of <code>ADEXP</code> waypoints.</p>
 <blockquote>
 <p>FPRSA-R then searches the ICAO4444 section of
 the ADEXP file.</p>
@@ -390,18 +406,17 @@ logic utilises the waypoints as detailed in the ADEXP file to search for the
 next nearest point beyond the UK exit point. This was also not present.</p>
 <p>The software therefore moved on to the next waypoint.</p>
 </blockquote>
-<p>OK, so I think this is what is going on. The ICAO route contains fewer waypoints
-than the ADEXP data, because some of the waypoints are implicit in the
-route segment that is specified between waypoints. So the situation looked
-something like this:</p>
+<p>OK, so I think this is what is going on, the situation looked something like
+this:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>           4       2        8         5              1           9
 </span><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U
 </span><span>
 </span><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
 </span><span>                       UK  UK   UK UK UK    UK  UK
 </span></code></pre>
-<p>Here the ICAO route has waypoints (represented by capital letter) separated by
-known routes (numbers). On the bottom we have the ADEXP waypoints. The ADEXP waypoints that are located in the UK airspace are marked with <code>UK</code>.</p>
+<p>Here the ICAO route has waypoints (represented by capital letters) separated by
+known routes (numbers). On the bottom we have the ADEXP waypoints. The ADEXP
+waypoints that are located in the UK airspace are marked with <code>UK</code>.</p>
 <ul>
 <li>The software has identified:
 <ul>
@@ -441,8 +456,9 @@ route.</p>
 means that in the event they cannot proceed in a demonstrably safe manner,
 they will move into a state that requires manual intervention.</p>
 </blockquote>
-<p>&quot;Demonstably safe&quot; 🤨 --- the code is clearly, demonstrably, <em>unsafe</em>: A portion
-of the code contains bugs in identifying the UK portion of an ICAO flight plan.</p>
+<p>&quot;Demonstably safe&quot; 🤨 --- the code was clearly, demonstrably, <em>unsafe</em>: A portion
+of the code wrongly identified entry/exit points to the UK airspace in flight
+plans.</p>
 <blockquote>
 <p>In this case the software within the FPRSA-R subsystem was unable to establish
 a reasonable course of action that would preserve safety and so raised a
@@ -566,7 +582,7 @@ should be geographically widely spaced. In this specific event, both of the
 waypoints were located outside of the UK, one towards the beginning of the
 route and one towards the end; approximately 4000 nautical miles apart.</p>
 </blockquote>
-<p>When wayspoints with the same name are wideley spaced, this makes flight plans
+<p>When waypoints with the same name are wideley spaced, this makes flight plans
 unambiguous, because successive waypoints cannot be too far apart.</p>
 <blockquote>
 <p>The feasibility of working through the UK state with ICAO to remove the
@@ -620,7 +636,7 @@ progress&quot;:</p>
 FPRSA-R to filter out any flight plans that fit the conditions that caused the
 incident.</p>
 </blockquote>
-<h3 id="the-system-is-not-properly-tested">The system is not properly tested</h3>
+<h3 id="the-system-was-poorly-tested">The system was poorly tested</h3>
 <p>It doesn't sound like NATS or Frequentis used any
 <a href="https://en.wikipedia.org/wiki/Fuzzing">fuzzing</a>, for example. By bombarding
 such a system with randomly generated flight plans, you can see if any unhandled
@@ -677,7 +693,7 @@ system'</li>
 <li><code>ADEXP</code>: the full list of waypoints.</li>
 <li><code>ICAO</code>: a subsequence of the ADEXP waypoints.</li>
 </ul>
-<p>Becaause the ICAO plan doesn't need to include the waypoints at which it
+<p>Because the ICAO plan doesn't need to include the waypoints at which it
 enters/exits an air traffic control region, extracting the segment of the ICAO
 flight plan corresponding to the UK portion of the flight is not entirely
 trivial. Of course, if we take the entire ICAO flight plan, it already contains
@@ -697,19 +713,18 @@ portion of the UK between two of the ICAO waypoints.</p>
 <p>So this is why the ADEXP waypoint list is used, and the assumption here, I
 assume, is that the ADEXP list contains <em>all</em> the waypoints, and that
 furthermore, waypoint granularity is such that if <em>adjacent</em> waypoints both
-don't intersect UK airspace, then the segment between them doesn't either. With
-this in mind, we can now describe what we want to do:</p>
-<p><em>We want to find the smallest subsegment of the ICAO route which fully contains the UK portion(s) of the flight.</em></p>
+don't intersect UK airspace, then the segment between them doesn't either.</p>
 <p>The mistake of the faulty algorithm described above is to try to work on both
 the ICAO data and the ADEXP data as they are, maintaining pointers into each of
-them, and updating them in an imperative style, with vague and wrong invariants
-in the background of the programmers mind. This is a recepe for bugs.</p>
-<p>The first thing to do is to reconcile the data. So we create a datastructure of
+them, and updating them in an imperative style, with vague and wrong invariant
+in the background of the programmers mind. This is a recipe for bugs.</p>
+<p>The first thing to do is to reconcile the data. So we create a data-structure of
 &quot;segments&quot;:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">data </span><span style="color:#d08770;">Plan</span><span> p r
 </span><span>  = </span><span style="color:#d08770;">End</span><span> p
 </span><span>  | </span><span style="color:#d08770;">Leg</span><span> p r (</span><span style="color:#d08770;">Plan</span><span> p r)
 </span></code></pre>
+<p>(This is <a href="https://www.haskell.org/">Haskell</a> code.)</p>
 <p>We can now define all the sorts of flight plan data we will deal with:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">type </span><span style="color:#d08770;">ICAO</span><span>     p r = </span><span style="color:#d08770;">Plan</span><span> p r
 </span><span style="color:#b48ead;">type </span><span style="color:#d08770;">ADEXP</span><span>    p   = </span><span style="color:#d08770;">Plan</span><span> p [p]
@@ -721,8 +736,8 @@ in the background of the programmers mind. This is a recepe for bugs.</p>
 </span><span>  }
 </span><span>  </span><span style="color:#b48ead;">deriving</span><span> stock (</span><span style="color:#d08770;">Show</span><span>)
 </span></code></pre>
-<p>Here <code>Plan</code> is our reconciled flight plan, it combined all the information form
-ICAO and ADEXP. We can project a <code>Plan</code> back down to <code>ICAO</code> or <code>ADEXP</code>:</p>
+<p>Here <code>Combined</code> is our reconciled flight plan, it combined all the information
+form ICAO and ADEXP. We can project a <code>Plan</code> back down to <code>ICAO</code> or <code>ADEXP</code>:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">projectICAO </span><span style="color:#b48ead;">:: Combined </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r
 </span><span>projectICAO = mapRoutes (.route)
 </span><span>
@@ -733,10 +748,14 @@ ICAO and ADEXP. We can project a <code>Plan</code> back down to <code>ICAO</code
 </span><span>mapRoutes _ (</span><span style="color:#d08770;">End</span><span> p) = </span><span style="color:#d08770;">End</span><span> p
 </span><span>mapRoutes f (</span><span style="color:#d08770;">Leg</span><span> p r rest) = </span><span style="color:#d08770;">Leg</span><span> p (f r) (mapRoutes f rest)
 </span></code></pre>
-<p>Now we write our reconciliation function. To reconcile, the start and end points
-must match. When reconciling a leg of a flight plan, a certain amount of
-waypoints can be skipped, and the rest of them must reconcile with the rest of
-the flight plan:</p>
+<p>As mentioned before, the <code>FPRSA-R</code> seems to work directly on the text-version of
+the flight plans, which it <em>crazy</em>. We'll assume we have already parsed the data
+into the data structures above. This is just a matter of reading the spec
+carefully and turning it into code.</p>
+<p>Now we write our reconciliation function. For ICAO and ADEXP to reconcile, the
+start and end points must match. When reconciling a leg of a flight plan, a
+certain amount of waypoints can be skipped in the ICAO plan, and the rest of
+them must reconcile with the rest of the flight plan:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>]
 </span><span>reconcile (</span><span style="color:#d08770;">End</span><span> p) [p&#39;]             | p == p&#39; = pure (</span><span style="color:#d08770;">End</span><span> p)
 </span><span>reconcile (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; = </span><span style="color:#b48ead;">do
@@ -745,13 +764,10 @@ the flight plan:</p>
 </span><span>  pure (</span><span style="color:#d08770;">Leg</span><span> p </span><span style="color:#d08770;">Via</span><span> {route = r, through} recoRest)
 </span><span>reconcile _ _ = </span><span style="color:#d08770;">[]
 </span></code></pre>
-<p>It takes an <code>ICAO</code> flight plan and an ADEXP list of waypoints, and produces all
-the possible reconciliations. This is because reconciliations are not
-necessarily unique, because waypoints can appear more than once. This happens
-<em>not only</em> when two distinct geographic locations share the same waypoint
-identifier, but also if you simply have an strange flight which revistis
-previous waypoints. By calculating all the possible reconciliations, we'll know
-if the data is ambiguous, and flag those for manual processing.</p>
+<p>Note that the function produces <em>all</em> the possible reconciliations. This is
+because reconciliations are not necessarily unique, because waypoints can appear
+more than once. By calculating all the possible reconciliations, we'll know if
+the data is ambiguous, and flag those flight plans for manual processing.</p>
 <p>Next we extract the UK portion of the flight plan. This is done in 3 steps:</p>
 <ol>
 <li>Remove all legs at the start which don't cross into UK airspace.</li>
@@ -760,8 +776,8 @@ if the data is ambiguous, and flag those for manual processing.</p>
 </ol>
 <p>Each function calls the next step in sequence. Note that we return an
 <code>NonUkPlan</code> error when the system reaches the end of the plan without having
-found a UK part. By having a compiler which checks that patterns are covering,
-the possible failure modes arise naturally while coding.</p>
+found a UK part. By having a compiler which checks that pattern-matches are
+covering, the possible failures arise naturally while coding.</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">-- Extract the UK part of the flight.
 </span><span style="color:#8fa1b3;">ukSegment </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; Combined </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt; Either Err</span><span> (</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>)
 </span><span>ukSegment uk (</span><span style="color:#d08770;">End</span><span> p)
@@ -805,7 +821,14 @@ the possible failure modes arise naturally while coding.</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPartOfICAO </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Either Err</span><span> (</span><span style="color:#b48ead;">ICAO </span><span style="color:#bf616a;">p r</span><span>)
 </span><span>ukPartOfICAO uk icao adexp = </span><span style="color:#b48ead;">case</span><span> reconcile icao adexp </span><span style="color:#b48ead;">of
 </span><span>  [plan] -&gt; projectICAO &lt;$&gt; ukSegment uk plan
-</span><span>  _ -&gt; </span><span style="color:#d08770;">Left CannotReconcileIcaoAdexp
+</span><span>  </span><span style="color:#d08770;">[]     </span><span>-&gt; </span><span style="color:#d08770;">Left CannotReconcileIcaoAdexp
+</span><span>  _      -&gt; </span><span style="color:#d08770;">Left AmbiguousReconciliationsOfIcaoAdexp
+</span></code></pre>
+<p>We collected the following errors while coding:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">data </span><span style="color:#d08770;">Err
+</span><span>  = </span><span style="color:#d08770;">NonUkPlan
+</span><span>  | </span><span style="color:#d08770;">CannotReconcileIcaoAdexp
+</span><span>  | </span><span style="color:#d08770;">AmbiguousReconciliationsOfIcaoAdexp
 </span></code></pre>
 <p>Let's test it with our example:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>           4       2        8         5              1           9
@@ -815,7 +838,7 @@ the possible failure modes arise naturally while coding.</p>
 </span><span>                       UK  UK   UK UK UK    UK  UK
 </span></code></pre>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span>inUK = (</span><span style="color:#8fa1b3;">`</span><span>elem</span><span style="color:#8fa1b3;">`</span><span> [&quot;</span><span style="color:#a3be8c;">T</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">A</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">O</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">E</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">X</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">P</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">W</span><span>&quot;])
-</span><span>icao = (&quot;</span><span style="color:#a3be8c;">F</span><span>&quot;, </span><span style="color:#d08770;">4</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">Q</span><span>&quot;, </span><span style="color:#d08770;">2</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">T</span><span>&quot;, </span><span style="color:#d08770;">8</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">O</span><span>&quot;, </span><span style="color:#d08770;">5</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">P</span><span>&quot;, </span><span style="color:#d08770;">1</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;, </span><span style="color:#d08770;">9</span><span>) ~&gt; </span><span style="color:#d08770;">Triv </span><span>&quot;</span><span style="color:#a3be8c;">U</span><span>&quot;
+</span><span>icao = (&quot;</span><span style="color:#a3be8c;">F</span><span>&quot;, </span><span style="color:#d08770;">4</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">Q</span><span>&quot;, </span><span style="color:#d08770;">2</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">T</span><span>&quot;, </span><span style="color:#d08770;">8</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">O</span><span>&quot;, </span><span style="color:#d08770;">5</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">P</span><span>&quot;, </span><span style="color:#d08770;">1</span><span>) ~&gt; (&quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;, </span><span style="color:#d08770;">9</span><span>) ~&gt; </span><span style="color:#d08770;">End </span><span>&quot;</span><span style="color:#a3be8c;">U</span><span>&quot;
 </span><span>adexp = [&quot;</span><span style="color:#a3be8c;">F</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">S</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Q</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">C</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">T</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">A</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">O</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">E</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">X</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">P</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">W</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">B</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Q</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">U</span><span>&quot;]
 </span><span>
 </span><span>infixr </span><span style="color:#d08770;">6 </span><span>~&gt;
@@ -825,7 +848,7 @@ the possible failure modes arise naturally while coding.</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>λ&gt; ukPortionOfICAO inUK icao adexp
 </span><span>Right (Leg &quot;T&quot; 8 (Leg &quot;O&quot; 5 (Leg &quot;P&quot; 1 (End &quot;Y&quot;))))
 </span></code></pre>
-<p>We can see is the correct result:</p>
+<p>We can see that this is the correct result:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>                                 UK portion of ICAO
 </span><span>                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
 </span><span>           4       2        8         5              1           9
@@ -836,8 +859,8 @@ the possible failure modes arise naturally while coding.</p>
 </span></code></pre>
 <p>The waypoint <code>Q</code> is a duplicate in the ADEXP list, but the system still returns
 the correct portion of the ICAO flight path. Crisis averted! The fact that there
-is a duplicate identifier in this case is immaterial, the correct sub-route is
-still well defined.</p>
+is a duplicate identifier in this case is immaterial, the ICAO and ADEXP data
+still reconciles unambiguously, and the correct sub-route is well defined.</p>
 <p>How large can flight plans get? Well here is a flight plan from London to Sydney
 that contains a total of 158 waypoints, and about a third of them appear in the
 ICAO route:
