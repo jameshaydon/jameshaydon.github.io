@@ -90,7 +90,7 @@
 </span>
     </header>
     <div itemprop="articleBody">
-      <p>On 28 August 2023 <em>NATS</em>, the UKs air traffic control operator, suffered a
+      <p>On 28 August 2023 <em>NATS</em>, the UK's air traffic control operator, suffered a
 <strong>major</strong> technical incident. The BBC reports that more than <a href="https://www.bbc.com/news/uk-66685349">2000 flights were
 cancelled</a> and the cost has been estimated
 at over <em>£100 million</em> GBP. The incident probably affected hundreds of thousands
@@ -103,7 +103,7 @@ Flight Plan Reception Suite Automated (FPRSA-R) Sub-system Incident 28th August 
 <a href="https://publicapps.caa.co.uk/docs/33/NERL%20Major%20Incident%20Investigation%20Preliminary%20Report.pdf">pdf</a>.</p>
 </blockquote>
 <p><em>NATS</em> is a &quot;public-private&quot; company in the UK that is responsible for all of
-the UK's air-traffic control:</p>
+the UK's air traffic control:</p>
 <blockquote>
 <p>Air Traffic Control (ATC) is the provision and operation of a safe system for
 controlling and monitoring aircraft.
@@ -148,9 +148,9 @@ flight data manually, directly into NAS using a manual input system.</p>
 <li>Flight plans are first submitted to a European-wide authority <em>IFPS</em>.</li>
 <li>If a plan is accepted, the flight is cleared for takeoff.</li>
 <li><em>NATS</em> requires the flight plan be transferred to them at least 4 hours before
-the aircraft is due to enter UK airspace. This is supposed to give NATS a 4
-hour window to be able to fix any problems in processing flight plans.</li>
-<li>It seems that there is also probably some process which <em>delays</em> flight-plans
+the aircraft is due to enter UK airspace. This is supposed to give NATS a
+4-hour window to be able to fix any problems in processing flight plans.</li>
+<li>It seems that there is also probably some process which <em>delays</em> flight plans
 until <em>close</em> to the deadline (see below). This might be to avoid congesting
 the system with flight plans too early, or lots of plans that may later
 change. Still, this results in flight plans being received by NATS sometimes
@@ -163,7 +163,7 @@ change. Still, this results in flight plans being received by NATS sometimes
 Eurocontrol’s flight planning distribution system, IFPS.</p>
 </blockquote>
 <p>ICAO stands for <a href="https://en.wikipedia.org/wiki/International_Civil_Aviation_Organization" title="wikipedia">International Civil Aviation
-Organization</a>, it an United Nations agency.
+Organization</a>, a United Nations agency.
 An ICAO4444 flight plan looks like this:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>(FPL-TTT123-IS
 </span><span>-C550/L-SDE1E2GHIJ3J5RWZ/SB1D1
@@ -284,7 +284,7 @@ Some notable fields (page 48):</p>
 <tr><td>route</td><td>b</td><td><code>'-' &quot;ROUTE&quot; {LIM_CHAR}</code></td><td>Complete ICAO Field 15 information containing speed, RFL and route (conforming to the syntax given in Ref. [3]).</td></tr>
 <tr><td>rtepts</td><td>c</td><td><code>'-' &quot;BEGIN&quot; &quot;RTEPTS&quot; { pt I ad / vec} '-' &quot;END&quot; &quot;RTEPTS&quot;</code></td><td>List of route points. May also contain an aerodrome identifier.</td></tr>
 </tbody></table>
-<p>In the example we have the ICAO route:</p>
+<p>In the example, we have the ICAO route:</p>
 <pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>-ROUTE N0417F330 ANEKI8L ANEKI Y163 NATOR UN850 TRA UP131 RESIA Q333 BABAG UN606 PEVAL DCT PETAK UL607 PINDO UM603 EDASI
 </span></code></pre>
 <p>(9 waypoints, 11 if you add the start and end waypoints)</p>
@@ -394,7 +394,7 @@ ADEXP flight plan, commencing at the first line of that waypoint data. FPRSA-R
 was able to specifically identify the character string as it appeared in the
 ADEXP flight plan text.</p>
 </blockquote>
-<p>The programming style is very imperative. Furthermore the description sounds
+<p>The programming style is very imperative. Furthermore, the description sounds
 like the procedure is working directly on the textual representation of the
 flight plan, rather than a data structure parsed from the text file. This would
 be quite worrying, but it might also just be how it is explained.</p>
@@ -458,7 +458,7 @@ plan.</p>
 are searching for, we are searching for waypoint <code>Y</code>, since <code>[T, O, P, Y]</code> is
 the smallest segment of the ICAO plan that contains all the UK waypoints.</p>
 <p>It's important to note here that the original algorithm is buggy; it is perfectly
-possibly to unambiguously extract the UK portion of this example flight plan;
+possible to unambiguously extract the UK portion of this example flight plan;
 see <a href="https://jameshaydon.github.io/nats-fail/#how-to-code-this-properly">below</a>. And this is likely the case for the
 flight plan that caused the meltdown too.</p>
 <blockquote>
@@ -587,10 +587,10 @@ even though the flight plan was apparently valid (at least according to IFPS).</
 <p>The procedure was very fiddly, and failed for a silly reason.</p>
 </li>
 <li>
-<p>It's true that waypoint markers are not globally unique, but this is a known
-issue, so NATS should make sure their systems are robust enough to handle it.
-<em>All other air traffic control authorities have to deal with this</em>. NATS says
-the following about this in the report:</p>
+<p>Waypoint markers are not globally unique, but this is a known issue, so NATS
+should make sure their systems are robust enough to handle it. <em>All other air
+traffic control authorities have to deal with this</em>. NATS says the following
+about this in the report:</p>
 <blockquote>
 <p>Although there has been work by ICAO and other bodies to eradicate
 non-unique waypoint names there are duplicates around the world. In order to
@@ -601,7 +601,7 @@ route and one towards the end; approximately 4000 nautical miles apart.</p>
 </blockquote>
 <p>When waypoints with the same name are widely spaced, this makes flight plans
 unambiguous, because successive waypoints in a flight plan cannot be too far
-apart. The also mention possible actions they will take:</p>
+apart. They also mention possible actions they will take:</p>
 <blockquote>
 <p>The feasibility of working through the UK state with ICAO to remove the
 small number of duplicate waypoint names in the ICAO administered global
@@ -611,16 +611,16 @@ dataset that relate to this incident.</p>
 from some flight plan I found: <code>KOMAL</code>, <code>ATRAK</code>, <code>SORES</code>, <code>SAKTA</code>, <code>ALMIK</code>,
 <code>IGORO</code>, <code>ATMED</code>, etc. It's clear that the system has been designed so these
 names can be communicated quickly, e.g. over radio, and that pilots and
-air-traffic controllers can become familiar with those on the routes they
-usually fly. Changing the names of a waypoints can by a scary operation.
+air traffic controllers can become familiar with those on the routes they
+usually fly. Changing the name of a waypoint can by a scary operation.
 Uniqueness is obviously desirable, but it has to be balanced against other
 considerations. Including this suggestion in the initial report feels like
 NATS is trying to shift the blame onto ICAO.</p>
 <p>Furthermore, I don't see why a flight plan can't include the same <em>geographic</em>
-waypoint several times; for example for leisure flights, or military
-exercises. Taking off and landing at the same airport is definitely a thing
-(called a &quot;round-robin flight plan&quot;). It doesn't sound like the <code>FPRSA-R</code>
-algorithm would be very robust to that.</p>
+waypoint several times; for example for leisure flights or military exercises.
+Taking off and landing at the same airport is definitely a thing (called a
+&quot;round-robin flight plan&quot;). It doesn't sound like the <code>FPRSA-R</code> algorithm
+would be very robust to that.</p>
 </li>
 </ul>
 <p>NATS officials are trying to spin this as:</p>
@@ -633,10 +633,10 @@ with this system up until this point and never seen this before,&quot; NATS CEO
 Martin Rolfe told the BBC, as airlines stepped up calls for compensation for
 the breakdown. <a href="https://www.reuters.com/world/uk/uk-aviation-regulator-review-air-traffic-control-failure-2023-09-06/">Reuters</a></p>
 </blockquote>
-<p>The system was put in place in 2018, so what Martin Rolfe is saying here is
-that, this sort of thing only had a chance of occurring &quot;once every 5 years&quot;,
-which is apparently an acceptable frequency for having a complete air traffic
-control meltdown.</p>
+<p>The system was put in place in 2018, so what Martin Rolfe is saying here is that
+this sort of thing only had a chance of occurring &quot;once every 5 years&quot;, which is
+apparently an acceptable frequency for having a complete air traffic control
+meltdown.</p>
 <h3 id="the-system-was-poorly-tested">The system was poorly tested</h3>
 <p><a href="https://en.wikipedia.org/wiki/Fuzzing">fuzzing</a>, for example, may have
 prevented this. By bombarding such a system with randomly generated flight
@@ -664,7 +664,7 @@ which brings down the whole system, a notification (including the flight plan)
 should immediately be sent to some monitoring team.</p>
 <p>NATS was also not prepared for an <code>FPRSA-R</code> system failure. The 1st
 and 2nd Line support engineers were not able to locate, or did not think to
-check, the low level log files. This has been fixed:</p>
+check, the low-level log files. This has been fixed:</p>
 <blockquote>
 <p>An operating instruction has been put in place to allow prompt recovery of the
 FPRSA-R sub-system if the same circumstances recur. Each of the technical
@@ -677,7 +677,7 @@ oversee the activity.</p>
 highlighted above, planes in the air over the UK were still safe at all times.
 They were being monitored by experienced ATCOs, which monitor planes by their
 known flight plan, radio, radar and vision. The consequence of all this was not
-that any human lives were put into danger, it's simply that far fewer flights
+that any human lives were put in danger, it's simply that far fewer flights
 could take off in the first place, or had to be diverted away from UK airspace.
 NATS did the right thing (reducing the number of flights), and kept everybody
 safe.</p>
@@ -699,7 +699,7 @@ find a single contiguous segment that contains all UK portions of the flight,
 since this is what the original code seemed to do.</p>
 <p>I'm unsure why this task attempts to do this only using the ADEXP data, rather
 than consulting a database about how waypoints and flight segments intersect UK
-airspace. It seems strange, but lets move on.</p>
+airspace. It seems strange, but let's move on.</p>
 <p>Note that it is impossible to achieve this task with the ICAO flight plan alone
 (and no knowledge of routes), even if you know for each waypoint if it is in the
 UK or not. Indeed you could even be in a situation where <em>none</em> of the waypoints
@@ -712,9 +712,9 @@ don't intersect UK airspace, then the segment between them doesn't either.</p>
 <p>The mistake of the faulty algorithm described above is to try to work on both
 the ICAO data and the ADEXP data as they are, maintaining pointers into each of
 them, updating them with vague and wrong invariants in the background of the
-programmers mind. This is a recipe for bugs. Instead the first thing to do is to
-reconcile the data, and then to carefully extract the UK portion from that.</p>
-<p>So we create a data-structure for a plan:</p>
+programmer's mind. This is a recipe for bugs. Instead, the first thing to do is
+to reconcile the data and then to carefully extract the UK portion from that.</p>
+<p>So we create a data structure for a plan:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">-- A flight plan, with segments between points &#39;p&#39; via routes &#39;r&#39;.
 </span><span style="color:#b48ead;">data </span><span style="color:#d08770;">Plan</span><span> p r
 </span><span>  = </span><span style="color:#d08770;">End</span><span> p
@@ -764,16 +764,16 @@ them must reconcile with the rest of the flight plan:</p>
 </span><span>reconcile _ _ = </span><span style="color:#d08770;">[]
 </span></code></pre>
 <p>Note that the function produces <em>all</em> the possible reconciliations. This is
-because reconciliations are not necessarily unique, because waypoints can appear
+because reconciliations are not necessarily unique because waypoints can appear
 more than once. By calculating all the possible reconciliations, we'll know if
 the data is ambiguous, and flag those flight plans for manual processing.</p>
-<p>Next we extract the UK portion of the flight plan. This is done in 3 steps:</p>
+<p>Next, we extract the UK portion of the flight plan. This is done in 3 steps:</p>
 <ol>
 <li>Remove all legs at the start which don't cross into UK airspace.</li>
 <li>Traverse the legs which are in UK airspace.</li>
 <li>Once the rest of the flight plan is never again in the UK, cut it short.</li>
 </ol>
-<p>Each function calls the next step in sequence. Note that we return an
+<p>Each function calls the next step in sequence. Note that we return a
 <code>NonUkPlan</code> error when the system reaches the end of the plan without having
 found a UK part. By having a compiler which checks that pattern-matches are
 covering, the possible failures arise naturally while coding.</p>
@@ -859,7 +859,7 @@ covering, the possible failures arise naturally while coding.</p>
 <p>The waypoint <code>Q</code> is a duplicate in the ADEXP list, but the system still returns
 the correct portion of the ICAO flight path. Crisis averted! The fact that there
 is a duplicate identifier in this case is immaterial, the ICAO and ADEXP data
-still reconciles unambiguously, and the correct sub-route is well defined.</p>
+still reconcile unambiguously, and the correct sub-route is well-defined.</p>
 <p>How large can flight plans get? Well here is a flight plan from London to Sydney
 that contains a total of 158 waypoints, and about a third of them appear in the
 ICAO route:
