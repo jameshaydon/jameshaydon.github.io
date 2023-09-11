@@ -390,7 +390,7 @@ ADEXP flight plan, commencing at the first line of that waypoint data. FPRSA-R
 was able to specifically identify the character string as it appeared in the
 ADEXP flight plan text.</p>
 </blockquote>
-<p>The programming style seems very imperative. Furthermore the description sounds
+<p>The programming style is very imperative. Furthermore the description sounds
 like the procedure is working directly on the textual representation of the
 flight plan, rather than a data structure parsed from the text file. This would
 be quite worrying, but it might also just be how it is explained.</p>
@@ -580,7 +580,7 @@ way.</li>
 even though the flight plan was apparently valid (at least according to IFPS).</p>
 <ul>
 <li>
-<p>The procedure was very imperative and fiddly, and failed for a silly reason.</p>
+<p>The procedure was very fiddly, and failed for a silly reason.</p>
 </li>
 <li>
 <p>It's true that waypoint markers are not globally unique, but this is a known
@@ -707,8 +707,8 @@ furthermore, waypoint granularity is such that if <em>adjacent</em> waypoints bo
 don't intersect UK airspace, then the segment between them doesn't either.</p>
 <p>The mistake of the faulty algorithm described above is to try to work on both
 the ICAO data and the ADEXP data as they are, maintaining pointers into each of
-them, and updating them in an imperative style, with vague and wrong invariant
-in the background of the programmers mind. This is a recipe for bugs.</p>
+them, updating them with vague and wrong invariants in the background of the
+programmers mind. This is a recipe for bugs.</p>
 <p>The first thing to do is to reconcile the data. So we create a data-structure of
 &quot;segments&quot;:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">data </span><span style="color:#d08770;">Plan</span><span> p r
