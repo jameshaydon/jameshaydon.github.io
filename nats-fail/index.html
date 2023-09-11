@@ -79,7 +79,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>32 minute read</span>
+    <span>33 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -539,6 +539,21 @@ to restore the service, which were unsuccessful, the 2nd Line engineering team
 was mobilised and supported the on-site engineers remotely via video link.</p>
 </blockquote>
 <p><img src="https://jameshaydon.github.io/nats-fail/off-and-on-again.jpg" alt="have you tried turning it off and on again?" /></p>
+<p>As sharp-eyed reddit user <code>voidstarcpp</code> <a href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k03tlx8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points out</a>, it's interesting to contrast these two parts of the report:</p>
+<blockquote>
+<p>However, since flight data is safety critical information that is passed to
+ATCOs the system must be sure it is correct and could not do so in this case.
+It therefore stopped operating, avoiding any opportunity for incorrect data
+being passed to a controller.</p>
+</blockquote>
+<p>and</p>
+<blockquote>
+<p>The initial response for the team followed standard recovery processes using
+the centralised C&amp;M systems to restart the sub-system.</p>
+</blockquote>
+<p>If a critical error had detected that incorrect data could be passed to ATCOs if
+flight plan processing continue, then, since the team didn't know what was
+wrong, why did they try to restart processing flight plans?</p>
 <blockquote>
 <p>The on-call teams working remotely with the on-site engineering teams followed
 a staged analysis, involving increasingly detailed procedures to attempt to
