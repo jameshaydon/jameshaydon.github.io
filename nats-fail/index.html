@@ -655,7 +655,7 @@ waypoint identifiers in the ADEXP portion cannot be processed properly.</p>
 a good way</em> and that those responsible are <em>prepared</em> for malfunctions.</p>
 <p>A single flight plan caused a problem, and the entire <code>FPRSA-R</code> system crashed,
 which means no flight plans are being processed at all. If there is a problem
-with a single flight plan, it should be moved to a separate, slower queue, for
+with a single flight plan, it should be moved to a separate slower queue, for
 manual processing by humans. NATS acknowledges this in their &quot;actions already
 undertaken or in progress&quot;:</p>
 <blockquote>
@@ -784,6 +784,11 @@ them must reconcile with the rest of the flight plan:</p>
 </span><span>  recoRest &lt;- reconcile rest restAdexp
 </span><span>  pure (</span><span style="color:#d08770;">Leg</span><span> p </span><span style="color:#d08770;">Via</span><span> {route = r, through} recoRest)
 </span><span>reconcile _ _ = </span><span style="color:#d08770;">[]
+</span><span>
+</span><span style="color:#65737e;">-- | All the ways to snap a list in two.
+</span><span style="color:#8fa1b3;">splits </span><span style="color:#b48ead;">::</span><span> [</span><span style="color:#bf616a;">a</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> [([</span><span style="color:#bf616a;">a</span><span>], [</span><span style="color:#bf616a;">a</span><span>])]
+</span><span>splits </span><span style="color:#d08770;">[] </span><span>= [(</span><span style="color:#d08770;">[]</span><span>, </span><span style="color:#d08770;">[]</span><span>)]
+</span><span>splits xs@(x : rest) = (</span><span style="color:#d08770;">[]</span><span>, xs) : (first (x :) &lt;$&gt; splits rest)
 </span></code></pre>
 <p>Note that the function produces <em>all</em> the possible reconciliations. This is
 because reconciliations are not necessarily unique because waypoints can appear
