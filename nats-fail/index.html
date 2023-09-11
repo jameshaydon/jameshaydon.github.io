@@ -708,14 +708,14 @@ don't intersect UK airspace, then the segment between them doesn't either.</p>
 <p>The mistake of the faulty algorithm described above is to try to work on both
 the ICAO data and the ADEXP data as they are, maintaining pointers into each of
 them, updating them with vague and wrong invariants in the background of the
-programmers mind. This is a recipe for bugs.</p>
-<p>The first thing to do is to reconcile the data. So we create a data-structure of
-&quot;segments&quot;:</p>
+programmers mind. This is a recipe for bugs. Instead the first thing to do is to
+reconcile the data, and then to carefully extract the UK portion from that.</p>
+<p>So we create a data-structure for a plan:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">data </span><span style="color:#d08770;">Plan</span><span> p r
 </span><span>  = </span><span style="color:#d08770;">End</span><span> p
 </span><span>  | </span><span style="color:#d08770;">Leg</span><span> p r (</span><span style="color:#d08770;">Plan</span><span> p r)
 </span></code></pre>
-<p>(This is <a href="https://www.haskell.org/">Haskell</a> code.)</p>
+<p>(This is <a href="https://www.haskell.org/">Haskell</a> code, but the ideas apply to most languages.)</p>
 <p>We can now define all the sorts of flight plan data we will deal with:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">type </span><span style="color:#d08770;">ICAO</span><span>     p r = </span><span style="color:#d08770;">Plan</span><span> p r
 </span><span style="color:#b48ead;">type </span><span style="color:#d08770;">ADEXP</span><span>    p   = </span><span style="color:#d08770;">Plan</span><span> p [p]
