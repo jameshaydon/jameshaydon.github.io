@@ -679,6 +679,14 @@ operators have been trained to implement the new process. With enhanced
 monitoring in place, additional engineering expertise will also be present to
 oversee the activity.</p>
 </blockquote>
+<p>But, the low-level log files inside the magic <code>FPRSA-R</code> box provided by
+Frequentis AG was not the only place where the flight plan existed. Indeed, when
+the primary crashed, the queue of flight plans was redirected to the backup,
+which failed in the exact same way on the exact same flight plan. It stands to
+reason that if the system that is meant to process flight plans has crashed,
+that might be because of a problematic flight plan. So they could have simply
+tried skipping a few that were at the head of the queue, to see if this fixed
+the problem. (And then processed those manually.)</p>
 <h3 id="possible-lack-of-formal-verification">Possible lack of formal verification</h3>
 <p>As reddit user <code>DontWannaMissAFling</code> <a href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k02o6n8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points out</a>:</p>
 <blockquote>
