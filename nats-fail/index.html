@@ -79,7 +79,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>30 minute read</span>
+    <span>31 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -678,6 +678,22 @@ operators have been trained to implement the new process. With enhanced
 monitoring in place, additional engineering expertise will also be present to
 oversee the activity.</p>
 </blockquote>
+<h3 id="possible-lack-of-formal-verification">Possible lack of formal verification</h3>
+<p>As reddit user <code>DontWannaMissAFling</code> <a href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k02o6n8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points out</a>:</p>
+<blockquote>
+<p>But what's wild to me is that something as safety critical as air traffic
+control apparently isn't using proven techniques like formal verification,
+model checking to eliminate these classes of bugs entirely.</p>
+<p>Like as an industry we use TLA+ to stop AWS from having downtime or Xboxes
+segfaulting, but not to keep planes in the air?</p>
+</blockquote>
+<p>I agree that it certainly doesn't sound like any formal verification was used in
+this case (for this system), and the report doesn't mention anything. Using
+formal verification would certainly have helped here, I might explore this in
+subsequent posts.</p>
+<p>But it's possible formal verification was used, but faulty code still made its
+way into production: end-2-end formal verification for large systems is still in
+its infancy. We'll have to wait for the result of the enquiry to know more.</p>
 <h2 id="humans-were-kept-safe-at-all-times">Humans were kept safe at all times</h2>
 <p>I'd like to note (as does NATS in the report) that despite all the problems
 highlighted above, planes in the air over the UK were still safe at all times.
