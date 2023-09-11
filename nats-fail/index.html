@@ -69,7 +69,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>29 minute read</span>
+    <span>30 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -441,11 +441,12 @@ tries to find it too, and also does not find it.</li>
 plan.</p>
 </blockquote>
 <p>What should the software have done? Well, <code>Q</code> is clearly <em>not</em> the waypoint we
-are searching for, we are searching for waypoint <code>Y</code>. It's important to note
-here that the algorithm is buggy; it is perfectly possibly to unambiguously
-extract the UK portion of this example flight plan; see
-<a href="https://jameshaydon.github.io/nats-fail/#how-to-code-this-properly">below</a>. And this is likely the case for the flight
-plan that caused the meltdown too.</p>
+are searching for, we are searching for waypoint <code>Y</code>, since <code>[T, O, P, Y]</code> is
+the smallest segment of the ICAO plan that contains all the UK waypoints.</p>
+<p>It's important to note here that the original algorithm is buggy; it is perfectly
+possibly to unambiguously extract the UK portion of this example flight plan;
+see <a href="https://jameshaydon.github.io/nats-fail/#how-to-code-this-properly">below</a>. And this is likely the case for the
+flight plan that caused the meltdown too.</p>
 <blockquote>
 <p>Having found an entry and exit point, with the latter being the duplicate and
 therefore geographically incorrect, the software could not extract a valid UK
@@ -462,11 +463,9 @@ route.</p>
 means that in the event they cannot proceed in a demonstrably safe manner,
 they will move into a state that requires manual intervention.</p>
 </blockquote>
-<p>&quot;Demonstably safe&quot; 🤨 --- the code was clearly, demonstrably, <em>unsafe</em>: a
-portion of the code wrongly identified entry/exit points to the UK airspace in
-flight plans. We are left wondering if if, had the misidentified waypoint been
-in a more plausible geographic location, the code might not have thrown an
-exception and passed along wrong data to ATCOs.</p>
+<p>We are left wondering if, had the misidentified waypoint been in a more
+plausible geographic location, the code might not have thrown an exception and
+passed along wrong data to ATCOs.</p>
 <blockquote>
 <p>In this case the software within the FPRSA-R subsystem was unable to establish
 a reasonable course of action that would preserve safety and so raised a
@@ -552,12 +551,12 @@ and they hold a world-leading position in aeronautical information management
 (AIM) and message handling systems.</p>
 </blockquote>
 <p>The &quot;Nobody ever gets fired for hiring Accenture&quot; defence.</p>
-<p>We can find a few job ads related to air traffic control systems at Frequenti AG
-at their <a href="https://jobs.frequentis.com/careers/SearchJobs/air?listFilterMode=1">careers
+<p>We can find a few job ads related to air traffic control systems at Frequentis
+AG at their <a href="https://jobs.frequentis.com/careers/SearchJobs/air?listFilterMode=1">careers
 page</a>
 Programming languages used: <code>Ada</code>, <code>C++</code>, <code>Java</code>, <code>Python</code>, with <code>Java</code> being
-the most common. Any of these languages would explain the imperative nature of
-the faulty code, but Ada would at least be safer than the others in other ways.</p>
+the most common. The code above sounds like it could have been written in any of
+these languages, but Ada would at least be safer than the others in other ways.</p>
 <h2 id="thoughts">Thoughts</h2>
 <p>Things that went wrong:</p>
 <ol>
@@ -605,9 +604,9 @@ considerations. Including this suggestion in the initial report feels like
 NATS is trying to shift the blame onto ICAO.</p>
 <p>Furthermore, I don't see why a flight plan can't include the same <em>geographic</em>
 waypoint several times; for example for leisure flights, or military
-exercises, in any case taking off and landing at the same airport is
-definitely a thing (called a &quot;round-robin flight plan&quot;). It doesn't sound like
-the <code>FPRSA-R</code> algorithm would be very robust to that.</p>
+exercises. Taking off and landing at the same airport is definitely a thing
+(called a &quot;round-robin flight plan&quot;). It doesn't sound like the <code>FPRSA-R</code>
+algorithm would be very robust to that.</p>
 </li>
 </ul>
 <p>NATS officials are trying to spin this as:</p>
@@ -621,31 +620,30 @@ Martin Rolfe told the BBC, as airlines stepped up calls for compensation for
 the breakdown. <a href="https://www.reuters.com/world/uk/uk-aviation-regulator-review-air-traffic-control-failure-2023-09-06/">Reuters</a></p>
 </blockquote>
 <p>The system was put in place in 2018, so what Martin Rolfe is saying here is
-that, this bug only has a chance of occurring &quot;once every 5 years&quot;, which is
-apparently an acceptable frequency for having a complete air traffic control
-meltdown.</p>
+that, this sort of thing only had a chance of occurring &quot;once every 5 years&quot;,
+which is apparently an acceptable frequency for having a complete air traffic
+control meltdown.</p>
 <h3 id="the-system-was-poorly-tested">The system was poorly tested</h3>
-<p>It doesn't sound like NATS or Frequentis used any
-<a href="https://en.wikipedia.org/wiki/Fuzzing">fuzzing</a>, for example. By bombarding
-such a system with randomly generated flight plans, you can see if any unhandled
-exceptions are raised. By inspecting which sorts of flight plans cause problems,
-it would become apparent that those with duplicate waypoint identifiers in the
-ADEXP portion cannot be processed properly.</p>
-<p>This allows one to detect &quot;1 in 15 million&quot; events ahead of time.</p>
+<p><a href="https://en.wikipedia.org/wiki/Fuzzing">fuzzing</a>, for example, may have
+prevented this. By bombarding such a system with randomly generated flight
+plans, you can see if any of them cause bad failure modes: a crashed system
+where one doesn't know immediately what went wrong. By inspecting which sorts of
+flight plans cause problems, it would become apparent that those with duplicate
+waypoint identifiers in the ADEXP portion cannot be processed properly.</p>
 <h3 id="the-fprsa-r-system-has-bad-failure-modes">The <code>FPRSA-R</code> system has bad failure modes</h3>
 <p>All systems can malfunction, so the important thing is that they malfunction <em>in
 a good way</em>, and that those responsible are <em>prepared</em> for malfunctions.</p>
 <p>A single flight plan caused a problem, and the entire <code>FPRSA-R</code> system crashed,
 which means no flight plans are being processed at all. If there is a problem
 with a single flight plan, it should be moved to a separate, slower queue, for
-manual processing by humans. NATS basically acknowledges this in their &quot;actions
-already undertaken or in progress&quot;:</p>
+manual processing by humans. NATS acknowledges this in their &quot;actions already
+undertaken or in progress&quot;:</p>
 <blockquote>
 <p>The addition of specific message filters into the data flow between IFPS and
 FPRSA-R to filter out any flight plans that fit the conditions that caused the
 incident.</p>
 </blockquote>
-<p>Furthermore, when it does crash, it does so in an obscure way. This is a system
+<p>When <code>FPRSA-R</code> it did crash, it did so in an obscure way. This is a system
 which <em>processes flight plans</em>, yet the relevant flight plan was only found in
 &quot;lower-level software logs&quot;. If there is an error processing a flight plan,
 which brings down the whole system, a notification (including the flight plan)
@@ -660,6 +658,15 @@ operators have been trained to implement the new process. With enhanced
 monitoring in place, additional engineering expertise will also be present to
 oversee the activity.</p>
 </blockquote>
+<h2 id="humans-were-kept-safe-at-all-times">Humans were kept safe at all times</h2>
+<p>I'd like to note (as does NATS in the report) that despite all the problems
+highlighted above, planes in the air over the UK were still safe at all times.
+They were being monitored by experienced ATCOs, which monitor planes by their
+known flight plan, radio, radar and vision. The consequence of all this was not
+that any human lives were put into danger, it's simply that far fewer flights
+could take off in the first place, or had to be diverted away from UK airspace.
+NATS did the right thing (reducing the number of flights), and kept everybody
+safe.</p>
 <h2 id="how-to-code-this-properly">How to code this properly</h2>
 <p>So, how can we avoid this bug?</p>
 <p>Let's recap the problem. There are two sequences of waypoints:</p>
@@ -722,10 +729,10 @@ form ICAO and ADEXP. We can project a <code>Plan</code> back down to <code>ICAO<
 </span><span>mapRoutes _ (</span><span style="color:#d08770;">End</span><span> p) = </span><span style="color:#d08770;">End</span><span> p
 </span><span>mapRoutes f (</span><span style="color:#d08770;">Leg</span><span> p r rest) = </span><span style="color:#d08770;">Leg</span><span> p (f r) (mapRoutes f rest)
 </span></code></pre>
-<p>As mentioned before, the <code>FPRSA-R</code> seems to work directly on the text-version of
-the flight plans, which it <em>crazy</em>. We'll assume we have already parsed the data
-into the data structures above. This is just a matter of reading the spec
-carefully and turning it into code.</p>
+<p>We'll assume we have already parsed the data into the data structures above.
+This is just a matter of reading the spec carefully and turning it into code,
+and hopefully something the <code>FPRSA-R</code> did correctly, though as noted previously
+it might be working on the text version directly.</p>
 <p>Now we write our reconciliation function. For ICAO and ADEXP to reconcile, the
 start and end points must match. When reconciling a leg of a flight plan, a
 certain amount of waypoints can be skipped in the ICAO plan, and the rest of
