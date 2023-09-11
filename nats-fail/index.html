@@ -711,15 +711,19 @@ them, updating them with vague and wrong invariants in the background of the
 programmers mind. This is a recipe for bugs. Instead the first thing to do is to
 reconcile the data, and then to carefully extract the UK portion from that.</p>
 <p>So we create a data-structure for a plan:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">data </span><span style="color:#d08770;">Plan</span><span> p r
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#65737e;">-- A flight plan, with segments between points &#39;p&#39; via routes &#39;r&#39;.
+</span><span style="color:#b48ead;">data </span><span style="color:#d08770;">Plan</span><span> p r
 </span><span>  = </span><span style="color:#d08770;">End</span><span> p
 </span><span>  | </span><span style="color:#d08770;">Leg</span><span> p r (</span><span style="color:#d08770;">Plan</span><span> p r)
 </span></code></pre>
 <p>(This is <a href="https://www.haskell.org/">Haskell</a> code, but the ideas apply to most languages.)</p>
+<p>This says that a <code>Plan p r</code> has either arrived at its destination <code>End p</code>, or
+consists of a segment starting from <code>p</code>, via <code>r</code>, and the <code>rest</code> of the plan:
+<code>Leg p r rest</code>.</p>
 <p>We can now define all the sorts of flight plan data we will deal with:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">type </span><span style="color:#d08770;">ICAO</span><span>     p r = </span><span style="color:#d08770;">Plan</span><span> p r
-</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">ADEXP</span><span>    p   = </span><span style="color:#d08770;">Plan</span><span> p [p]
-</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">Combined</span><span> p r = </span><span style="color:#d08770;">Plan</span><span> p (</span><span style="color:#d08770;">Via</span><span> p r)
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#b48ead;">type </span><span style="color:#d08770;">ICAO</span><span>     p r = </span><span style="color:#d08770;">Plan</span><span> p r         </span><span style="color:#65737e;">-- points and routes, no intermediate waypoints
+</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">ADEXP</span><span>    p   = </span><span style="color:#d08770;">Plan</span><span> p [p]       </span><span style="color:#65737e;">-- points and intermediate waypoints, no route data
+</span><span style="color:#b48ead;">type </span><span style="color:#d08770;">Combined</span><span> p r = </span><span style="color:#d08770;">Plan</span><span> p (</span><span style="color:#d08770;">Via</span><span> p r) </span><span style="color:#65737e;">-- all the data combined
 </span><span>
 </span><span style="color:#b48ead;">data </span><span style="color:#d08770;">Via</span><span> p r = </span><span style="color:#d08770;">Via
 </span><span>  { route   :: r,
