@@ -477,6 +477,12 @@ portion of flight plan between these two points. This is the root cause of the
 incident. We can therefore rule out any cyber related contribution to this
 incident.</p>
 </blockquote>
+<pre data-lang="Java" style="background-color:#2b303b;color:#c0c5ce;" class="language-Java "><code class="language-Java" data-lang="Java"><span style="color:#b48ead;">if </span><span>(exit_idx &lt; entry_idx) {
+</span><span>  </span><span style="color:#b48ead;">throw new </span><span style="color:#ebcb8b;">Exception</span><span>(&quot;</span><span style="color:#a3be8c;">This should never happen</span><span>&quot;);
+</span><span>} </span><span style="color:#b48ead;">else </span><span>{
+</span><span>  ...
+</span><span>}
+</span></code></pre>
 <p>It sounds like the exception was raised in a later portion of the code, which
 converts the plan to an internal format for <em>NAS</em>. This part failed because the
 identified entry/exit waypoints didn't even specify a valid segment of the ICAO
