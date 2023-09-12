@@ -84,7 +84,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>33 minute read</span>
+    <span>34 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -424,7 +424,28 @@ the list of <code>ADEXP</code> waypoints.</p>
 the ADEXP file.</p>
 </blockquote>
 <p>It seems at this point, having identified the entry and exit points from the
-list of ADEXP waypoints, it will try to extract the UK portion of the flight plan from the ICAO route.</p>
+list of ADEXP waypoints, it will try to extract the UK portion of the flight
+plan from the ICAO route. Why does it do this? User <code>t0mas88</code> on Hacker News <a href="https://news.ycombinator.com/item?id=37475075" title="HackerNews">explains</a>:</p>
+<blockquote>
+<p>They use the ADEXP to determine which part of the route is in the UK. Because
+the auto generated points are ATC area handover points. So this data is the
+best way so see which part of the route is within the UK airspace. Then it
+needs to find the ICAO part that corresponds, because the controller needs to
+use the ICAO plan that the pilot has.</p>
+<p>If the controller sees other (auto generated) waypoints that the pilots don't
+have you get problems during operation. A simple example is that controllers
+can tell pilots to fly in a straight line to a specific point on their filed
+route (and do so quite often). The pilot is expected to continue the filed
+route from that point onwards.</p>
+<p>They can also tell a pilot to fly direct to some random other point (this also
+happens but less often). The pilot is then not expected to pick up a route
+after that point.</p>
+<p>The radio instruction for both is exactly the same, the only difference is
+whether the point is part of the planned route or not. So the controller needs
+to see the exact same route as the pilots have, not one with additional
+waypoints added by the IFPS system.</p>
+</blockquote>
+<p>Back to the report:</p>
 <blockquote>
 <p>It initially searches from the beginning of that data, to find
 the identified UK airspace entry point. This was successfully found. Next, it
@@ -475,6 +496,10 @@ the smallest segment of the ICAO plan that contains all the UK waypoints.</p>
 possible to unambiguously extract the UK portion of this example flight plan;
 see <a href="https://jameshaydon.github.io/nats-fail/#how-to-code-this-properly">below</a>. And this is likely the case for the
 flight plan that caused the meltdown too.</p>
+<p>(<em>Side note:</em> How are UK waypoints identified? Are there any UK waypoints that
+have a duplicate somewhere else in the world? Either there is special code to
+handle this case, in which case the &quot;duplicate waypoint name&quot; problem is well
+known to the engineers, or it doesn't, and this is another potential problem.)</p>
 <blockquote>
 <p>Having found an entry and exit point, with the latter being the duplicate and
 therefore geographically incorrect, the software could not extract a valid UK
