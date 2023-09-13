@@ -824,7 +824,7 @@ to reconcile the data and then carefully extract the UK portion from that.</p>
 </span><span>  = </span><span style="color:#d08770;">End</span><span> p
 </span><span>  | </span><span style="color:#d08770;">Leg</span><span> p r (</span><span style="color:#d08770;">Plan</span><span> p r)
 </span></code></pre>
-<p>(This is <a href="https://www.haskell.org/">Haskell</a> code, but the ideas apply to most languages.)</p>
+<p>(This is <a href="https://www.haskell.org/">Haskell</a> code, but the ideas apply to most languages. Full code is in <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">this repo</a>.)</p>
 <p>This says that a <code>Plan p r</code> has either arrived at its destination <code>End p</code>, or
 consists of a segment starting from <code>p</code>, via <code>r</code>, and the <code>rest</code> of the plan:
 <code>Leg p r rest</code>.</p>
@@ -974,6 +974,7 @@ that contains a total of 158 waypoints, and about a third of them appear in the
 ICAO route:
 <img src="https://jameshaydon.github.io/nats-fail/london-sydney.png" alt="London to Sydney flight plan" /> 
 <code>ukPortionOfICAO</code> returns practically instantly for such a flight plan.</p>
+<p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.)</p>
 <p><em>Edit 2023-09-13:</em>
 So the actual flight plan has been <a href="https://chaos.social/@russss/111048524540643971">identified</a>!</p>
 <blockquote>
