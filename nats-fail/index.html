@@ -84,7 +84,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>35 minute read</span>
+    <span>36 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -748,7 +748,18 @@ which failed in the exact same way on the exact same flight plan. It stands to
 reason that if the system that is meant to process flight plans has crashed,
 that might be because of a problematic flight plan. So they could have inspected
 these for anomalies, or manually removed some from the head of the queue, to see
-if this fixed the problem. (And then processed those manually.)</p>
+if this fixed the problem. In fact they <em>did</em> start processing the flights
+manually:</p>
+<blockquote>
+<p>The fallback procedures for this incident include specific actions for the
+manual entry of flight plan data into the system and manual coordination of
+flights between sectors. In the event of a reversion to manual process, it is
+necessary to reduce the UK traffic flow by implementing air traffic control
+restrictions.</p>
+</blockquote>
+<p>But maybe this process didn't remove the flight plans that were being manually
+processed from the queue that feeds <code>FPRSA-R</code>; if they were, they one of the
+attempts to restart the system would have succeeded.</p>
 <h3 id="possible-lack-of-formal-verification">Possible lack of formal verification</h3>
 <p>As reddit user <code>DontWannaMissAFling</code> <a href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k02o6n8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points out</a>:</p>
 <blockquote>
