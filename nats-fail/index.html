@@ -867,10 +867,10 @@ them must reconcile with the rest of the flight plan:</p>
 </span><span>  pure (</span><span style="color:#d08770;">Leg</span><span> p </span><span style="color:#d08770;">Via</span><span> {route = r, through} recoRest)
 </span><span>reconcile _ _ = </span><span style="color:#d08770;">[]
 </span><span>
-</span><span style="color:#65737e;">-- | All the ways to snap a list in two.
+</span><span style="color:#65737e;">-- All the ways to snap a list in two. That is, &#39;split xs&#39; returns all pairs
+</span><span style="color:#65737e;">-- &#39;(ys, zs)&#39; where &#39;xs == ys ++ zs&#39;.
 </span><span style="color:#8fa1b3;">splits </span><span style="color:#b48ead;">::</span><span> [</span><span style="color:#bf616a;">a</span><span>] </span><span style="color:#b48ead;">-&gt;</span><span> [([</span><span style="color:#bf616a;">a</span><span>], [</span><span style="color:#bf616a;">a</span><span>])]
-</span><span>splits </span><span style="color:#d08770;">[] </span><span>= [(</span><span style="color:#d08770;">[]</span><span>, </span><span style="color:#d08770;">[]</span><span>)]
-</span><span>splits xs@(x : rest) = (</span><span style="color:#d08770;">[]</span><span>, xs) : (first (x :) &lt;$&gt; splits rest)
+</span><span>splits xs = zip (inits xs) (tails xs)
 </span></code></pre>
 <p>Note that the function produces <em>all</em> the possible reconciliations. This is
 because reconciliations are not necessarily unique because waypoints can appear
