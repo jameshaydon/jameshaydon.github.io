@@ -100,11 +100,12 @@
       <p>This is part 3 of my blog posts about the UK air traffic control meltdown. You might want to read <a href="/nats-fail">part one</a> and <a href="/what-went-wrong">part two</a>.</p>
 <p>Having had some time to process some of the numerous comments about my first
 post, I realise now that I was not clear in communicating my thoughts about the
-programming style, and what led to the bug. I will have another go now. The
-point I was trying to make was:</p>
-<p>With a better programming style, the bug would not have been made <strong>even if the
-code is only meant for flight plans with no duplicate waypoints</strong>.</p>
-<span id="continue-reading"></span>
+programming style, and how that contributed to the existence of the bug. I will
+have another go now. The point I was trying to make was:</p>
+<p>With a better programming style, the bug might not have been made <strong>even if the
+code is only meant for flight plans with no duplicate waypoints</strong>.<span id="continue-reading"></span>
+Of course I also agree that better spec/requirements would have helped too, as
+would have <a href="/what-went-wrong">many things</a>.</p>
 <p>The comments I am referring to are of the sort:</p>
 <ul>
 <li>Why the &quot;out of the blue&quot; comment about &quot;imperative&quot; programming in the middle
@@ -112,11 +113,11 @@ of the post?</li>
 <li>What is even meant by &quot;imperative&quot; programming?</li>
 <li>Why blame the bug on programming style, when it is just that the original code
 was not aware of the possibility of waypoints with duplicate names? The
-original algorithm works fine on those flight plans.</li>
+original algorithm (probably) works fine on those flight plans.</li>
 </ul>
-<p>What I hope to convince you of in this post is that: The programming style does
-matter, the bug would not have been made with a certain sort of programming
-style, even if the programmer was not aware of the duplicate waypoint issue.</p>
+<p>What I hope to convince you of in this post is that the programming style <em>does</em>
+matter, the bug might not have occurred when using a specific coding style, even
+if the programmer was not aware of the duplicate waypoint issue.</p>
 <h2 id="what-did-i-mean-by-imperative">What did I mean by &quot;imperative&quot;?</h2>
 <p>A user on HackerNews <a href="https://news.ycombinator.com/item?id=37472846">replied</a> to
 such a query:</p>
@@ -127,12 +128,12 @@ rather than using higher-order map, fold etc. operations, and explicitly
 checks tag bits rather than using sum types.</p>
 </blockquote>
 <p>This is a great answer. But I think I should have used &quot;not
-correct-by-construction style&quot; instead. There is no precise
-definition of what this means, but it would at least include:</p>
+correct-by-construction style&quot; instead. There is no precise definition of what
+&quot;correct-by-construction&quot; means, but it would at least include:</p>
 <ul>
 <li>representing domain objects with data structures,</li>
-<li>only operating on them with functions that are known to preserve invariants,
-that is are &quot;safe&quot;.</li>
+<li>only operating on them with functions that are known to preserve certain
+invariants, that is are &quot;safe&quot;.</li>
 </ul>
 <h2 id="another-look-at-the-problem">Another look at the problem</h2>
 <p>Let us from now on assume that <strong><em>we do not know that a flight plan can contain

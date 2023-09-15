@@ -19,11 +19,10 @@
         <summary type="html">&lt;p&gt;This is part 3 of my blog posts about the UK air traffic control meltdown. You might want to read &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;part one&lt;&#x2F;a&gt; and &lt;a href=&quot;&#x2F;what-went-wrong&quot;&gt;part two&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Having had some time to process some of the numerous comments about my first
 post, I realise now that I was not clear in communicating my thoughts about the
-programming style, and what led to the bug. I will have another go now. The
-point I was trying to make was:&lt;&#x2F;p&gt;
-&lt;p&gt;With a better programming style, the bug would not have been made &lt;strong&gt;even if the
-code is only meant for flight plans with no duplicate waypoints&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
-</summary>
+programming style, and how that contributed to the existence of the bug. I will
+have another go now. The point I was trying to make was:&lt;&#x2F;p&gt;
+&lt;p&gt;With a better programming style, the bug might not have been made &lt;strong&gt;even if the
+code is only meant for flight plans with no duplicate waypoints&lt;&#x2F;strong&gt;.</summary>
         
     </entry>
     <entry xml:lang="en">
