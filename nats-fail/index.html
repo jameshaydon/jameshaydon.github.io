@@ -86,7 +86,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>36 minute read</span>
+    <span>37 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -682,15 +682,18 @@ apart. They also mention possible actions they will take:</p>
 small number of duplicate waypoint names in the ICAO administered global
 dataset that relate to this incident.</p>
 </blockquote>
-<p>Waypoint names are clearly chosen to be short and snappy. Here's a sequence
-from some flight plan I found: <code>KOMAL</code>, <code>ATRAK</code>, <code>SORES</code>, <code>SAKTA</code>, <code>ALMIK</code>,
-<code>IGORO</code>, <code>ATMED</code>, etc. It's clear that the system has been designed so these
-names can be communicated quickly, e.g. over radio, and that pilots and
-air traffic controllers can become familiar with those on the routes they
-usually fly. Changing the name of a waypoint can be a scary operation.
-Uniqueness is obviously desirable, but it has to be balanced against other
-considerations. Including this suggestion in the initial report feels like
-NATS is trying to shift the blame onto ICAO.</p>
+<p>Waypoint names are chosen to be short and snappy, and to vaguely abbreviate
+the location they are in. Here's a sequence from some flight plan I found:
+<code>KOMAL</code>, <code>ATRAK</code>, <code>SORES</code>, <code>SAKTA</code>, <code>ALMIK</code>, <code>IGORO</code>, <code>ATMED</code>, etc. The
+duplicate waypoint that caused the crash was <code>DVL</code>, short for &quot;Devil's Lake&quot;
+in Wisconsin and also short for &quot;Deauville&quot; in Normandy. It's clear that the
+system has been designed so these names can be communicated quickly, e.g. over
+radio, and that pilots and air traffic controllers can become familiar with
+those on the routes they usually fly. It's natural that such a naming system
+would accumulate some duplicates over time, but changing the name of a
+waypoint can be a scary operation. Uniqueness is obviously desirable, but it
+has to be balanced against other considerations. Including this suggestion in
+the initial report feels like NATS is trying to shift some blame onto ICAO.</p>
 <p>Furthermore, I don't see why a flight plan can't include the same <em>geographic</em>
 waypoint several times; for example for leisure flights or military exercises.
 Taking off and landing at the same airport is definitely a thing (called a

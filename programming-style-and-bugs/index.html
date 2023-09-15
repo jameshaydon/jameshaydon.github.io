@@ -166,7 +166,7 @@ ADEXP plans &quot;match up&quot;.</p>
 <p>In the original post this was achieved by a function <code>reconcile :: ICAO p r -&gt; [p] -&gt; [Combined p r]</code>. Now, suppose that I hadn't realised waypoint names were
 non-unique, then I would have reasoned that the plans can only match up in at
 most one way since every waypoint in the ICAO plan can only match a single point
-in the ADEXP list. So I would probably have coded this instead:</p>
+in the ADEXP list. So I think<sup class="footnote-reference"><a href="#3">3</a></sup> I would probably have coded this instead:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> (</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>)
 </span><span>reconcile&#39; (</span><span style="color:#d08770;">End</span><span> p) [p&#39;] | p == p&#39; = pure (</span><span style="color:#d08770;">End</span><span> p)
 </span><span>reconcile&#39; (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; = </span><span style="color:#b48ead;">do
@@ -262,7 +262,10 @@ invariants to be machine-verified.</li>
 <p>&quot;Correct-by-construction&quot; usually refers to something more precise than what I am talking about here. Most people would use this term when the criteria for &quot;correct&quot; are clearly stated, and the correctness is formally verified. I couldn't think of any other term to describe this coding style though.</p>
 </div>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
-<p>Closer conceptually, and in terms of the call graph.</p>
+<p>Closer conceptually, and in terms of the call graph/code. Failing close to the root cause is why assertions are useful for example, even though this can be counter-intuitive at first (&quot;why instruct the progam to failmore?&quot;). This is also why JavaScript can so hard to debug: it does its damdest to not fail at all at every turn.</p>
+</div>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
+<p>Of course I know it's impossible for me to know what I would have coded had someone not shouted &quot;DUPLICATE WAYPOINTS&quot; in my ear, but I am trying my best.</p>
 </div>
 
     </div>
