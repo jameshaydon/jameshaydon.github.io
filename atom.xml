@@ -16,7 +16,8 @@
         <link rel="alternate" href="https://jameshaydon.github.io/programming-style-and-bugs/" type="text/html"/>
         <id>https://jameshaydon.github.io/programming-style-and-bugs/</id>
         
-        <summary type="html">&lt;p&gt;This is part 3 of my blog posts about the UK air traffic control meltdown. You might want to read &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;part one&lt;&#x2F;a&gt; and &lt;a href=&quot;&#x2F;what-went-wrong&quot;&gt;part two&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+        <summary type="html">&lt;p&gt;This is part 3 of my blog posts about the UK air traffic control meltdown. You
+might want to read &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;part one&lt;&#x2F;a&gt; and &lt;a href=&quot;&#x2F;what-went-wrong&quot;&gt;part two&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Having had some time to process some of the comments about my first post, I
 realise now that I was not clear in communicating my thoughts about the
 programming style, and how that contributed to the existence of the bug. I will

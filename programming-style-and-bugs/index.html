@@ -97,7 +97,8 @@
 </span>
     </header>
     <div itemprop="articleBody">
-      <p>This is part 3 of my blog posts about the UK air traffic control meltdown. You might want to read <a href="/nats-fail">part one</a> and <a href="/what-went-wrong">part two</a>.</p>
+      <p>This is part 3 of my blog posts about the UK air traffic control meltdown. You
+might want to read <a href="/nats-fail">part one</a> and <a href="/what-went-wrong">part two</a>.</p>
 <p>Having had some time to process some of the comments about my first post, I
 realise now that I was not clear in communicating my thoughts about the
 programming style, and how that contributed to the existence of the bug. I will
@@ -120,8 +121,8 @@ if the programmer was not aware of the duplicate waypoint issue.</p>
 <h2 id="what-did-i-mean-by-imperative">What did I mean by &quot;imperative&quot;?</h2>
 <p>Using this word was a mistake. What I should have said instead was roughly:
 <em>&quot;not correct-by-construction style&quot;</em><sup class="footnote-reference"><a href="#1">1</a></sup>. I conflated &quot;correct-by-construction&quot;
-with my own personal preference in achieving this programming style, which
-involves functional programming.</p>
+with my own personal preference when striving to achieve this programming style,
+which involves functional programming.</p>
 <p>There is no precise definition of what &quot;correct-by-construction&quot; means, but it
 would at least include:</p>
 <ul>
@@ -139,16 +140,18 @@ don't correspond to the domain objects, the invariants are harder to think of
 and reasoning about them is more brittle. Compare:</p>
 <p><em>correct-by-construction style:</em></p>
 <blockquote>
-<p>Cutting short a flight plan when the rest is not in the UK results in a flight
-plan that fully contains the UK part.</p>
+<p>Cutting a flight plan short, where the part we cut off is at no point in the
+UK, results in a flight plan that fully contains the UK part.</p>
 </blockquote>
 <p>and</p>
 <p><em>non correct-by-construction style:</em></p>
 <blockquote>
-<p>If I keep iterating rightwards in the ADEXP list from the known UK exit point
-until I find that point in the ICAO plan then this is the end of the UK
+<p>Iterating rightwards in the ADEXP list from the known UK exit point until a a
+match is found in the ICAO plan produces the index marking the end of the UK
 part.</p>
 </blockquote>
+<p>The former is statement is obvious and unconditionally correct, the latter
+requires thought and breaks down in the presence of duplicate waypoint names.</p>
 <p>The smaller modelling gap in correct-by-construction style also ensures that
 errors, should they occur, are usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this
 can make failures less serious.</p>
@@ -160,25 +163,23 @@ the problem anew.</p>
 information the other does not have. Our goal is to extract the UK part of the
 ICAO flight plan, using data from the ADEXP plan.</p>
 <p>One possibility, which sounds like what the original code did, is to keep the
-data as it is and perform various operations in a <code>while</code> loop which mutate some
-variables like <code>current_endpoint_candidate</code> until we are satisfied we have found
-two indexes <code>start_index</code> and <code>end_index</code> which delimit the UK portion of the
-flight plan. This is not correct-by-construction: the end result is an
-<code>end_index</code> value for which <code>end_index &lt; start_index</code>. This doesn't correspond
-to a sub-flight-plan at all. The code has &quot;gone wrong&quot;, and not noticed: the
-invariant that the pair of indices represent a valid sub-plan has been violated.
-Noticing that something has gone wrong is important: the closer you are to the
-root cause, the more likely the exception will contain the information that is
-relevant to those who are dealing with the crash. It may even have failed
-gracefully at this point.</p>
+data as it is and perform various operations until we are satisfied we have
+found two indices <code>start_index</code> and <code>end_index</code> which delimit the UK portion of
+the flight plan. The process was not correct-by-construction: the end result was
+an <code>end_index</code> value for which <code>end_index &lt; start_index</code>. This doesn't
+correspond to a sub-flight-plan at all. The code has &quot;gone wrong&quot;, and not
+noticed: the invariant that the pair of indices represent a valid sub-plan has
+been violated. Noticing that something has gone wrong is important: the closer
+you are to the root cause, the more likely the exception will contain the
+information that is relevant to those who are dealing with the crash. It may
+even have failed gracefully at this point.</p>
 <p>The correct-by-construction approach, at least the one that I chose, is to
 operate on a version of the flight plan that combines all the information you
 need. This therefore involves a first step which works out how the ICAO and
 ADEXP plans &quot;match up&quot;.</p>
 <p>In the original post this was achieved by a function <code>reconcile :: ICAO p r -&gt; [p] -&gt; [Combined p r]</code>. Now, suppose that I hadn't realised waypoint names were
-non-unique, then I would have reasoned that the plans can only match up in at
-most one way since every waypoint in the ICAO plan can only match a single point
-in the ADEXP list. So I think<sup class="footnote-reference"><a href="#3">3</a></sup> I would probably have coded this instead:</p>
+non-unique, then I would assume the plans can only match up in at most one way.
+So I might<sup class="footnote-reference"><a href="#3">3</a></sup> have defined something like this instead:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> (</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>)
 </span><span>reconcile&#39; (</span><span style="color:#d08770;">End</span><span> p) [p&#39;] | p == p&#39; = pure (</span><span style="color:#d08770;">End</span><span> p)
 </span><span>reconcile&#39; (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; = </span><span style="color:#b48ead;">do
@@ -196,8 +197,9 @@ validate&quot;</a>.
 Parsing is how semantically meaningful domain values are produced from less
 meaningful data, and so is often a necessary first step in
 correct-by-construction style. In fact I wouldn't be surprised if the original
-code <em>did validate</em> and <em>not parse</em>, with code much like <code>reconcile'</code> above, but
-that just checks the plans match up instead of returning a combined plan.</p>
+code violated precisely this slogan, <em>validated</em> and <em>not parsed</em>. This would be
+a snippet of code much like <code>reconcile'</code> above, but that just checks the plans
+match up instead of returning a combined plan.</p>
 <p>The function <code>reconcile'</code> is <em>wrong</em> because it doesn't consider the possibility
 of duplicate waypoints, but much less wrong than the original bug because of the
 correct-by-construction programming style. It will either:</p>
@@ -209,16 +211,15 @@ in which case it <em>knows</em> it should now fail gracefully, or,</li>
 far more understandable: the input data was ambiguous.</li>
 </ul>
 <p>The code for extracting the UK part of the plan is the same as in the original
-post, this is quite simple once we have the version flight plan which combines
-all the information we need. All that changes is pattern matching on a
+post, this is quite simple once we have the version of the flight plan which
+combines all the information we need. All that changes is pattern matching on a
 <code>Maybe</code>-value instead of a list:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPartOfICAO&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Either Err</span><span> (</span><span style="color:#b48ead;">ICAO </span><span style="color:#bf616a;">p r</span><span>)
 </span><span>ukPartOfICAO&#39; uk icao adexp = </span><span style="color:#b48ead;">case</span><span> reconcile&#39; icao adexp </span><span style="color:#b48ead;">of
 </span><span>  </span><span style="color:#d08770;">Just</span><span> plan -&gt; projectICAO &lt;$&gt; ukSegment uk plan
 </span><span>  _ -&gt; </span><span style="color:#d08770;">Left CannotReconcileIcaoAdexp
 </span></code></pre>
-<p>In the original example, and the flight plan that caused the air traffic control
-incident, this version simply <em>works correctly</em>:</p>
+<p>In the original example this version of the code simply <em>works correctly</em>:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span>λ&gt; ukPortionOfICAO&#39; inUK icao adexp
 </span><span style="color:#d08770;">Right</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">T</span><span>&quot; </span><span style="color:#d08770;">8</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">O</span><span>&quot; </span><span style="color:#d08770;">5</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">P</span><span>&quot; </span><span style="color:#d08770;">1</span><span> (</span><span style="color:#d08770;">End </span><span>&quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;))))
 </span></code></pre>
@@ -237,23 +238,23 @@ exists, and the duplicate waypoint doesn't get in the way of finding it.</p>
 <p>The reconciliation is also unique in this case, so the processing of the flight
 plan is completely correct. The code here differs from the code of the previous
 post only when there are multiple reconciliations: the first post has code which
-fails with an error, whereas this code will take the first reconciliation (which
-might be the wrong one). This would only happen if there are duplicate waypoints
-in the ADEXP list, say <code>w1</code> and <code>w2</code>, appearing in that order. Since
-<code>reconcile'</code> settles on the first matching waypoint it finds, to have gone
-wrong it would match <code>w</code> in the ICAO list with <code>w1</code> when it should have matched
-it with <code>w2</code>. This would mean that there is a leg of the ICAO flight plan which
-skips over <code>w1</code> and ends at <code>w2</code>. Since waypoints with duplicate names are
-supposed to be very far apart, and flight plan legs are <em>not</em> supposed to be
-over very long distances, this shouldn't happen. Indeed this requirement is in
-place precisely to avoid flight plans being ambiguous.</p>
+fails with an error, whereas this code will use the first reconciliation (which
+might be the wrong one). Since <code>reconcile'</code> settles on the first matching
+waypoint it is trying to find, to have gone wrong it would have to match some
+<code>w</code> in the ICAO list with <code>w1</code> when it should have matched it with <code>w2</code>, for two
+waypoints <code>w1</code> and <code>w2</code> in the ADEXP list, appearing in that order. This would
+mean that there is a leg of the ICAO flight plan which skips over <code>w1</code> and ends
+at <code>w2</code>. Since waypoints with duplicate names are supposed to be very far apart,
+and flight plan legs are <em>not</em> supposed to be over very long distances, this
+shouldn't happen. Indeed this requirement is in place precisely to avoid flight
+plans being ambiguous.</p>
 <p>The code of the original blog post was proceeding with an &quot;abundance of caution&quot;
 so to speak.</p>
 <p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.</p>
 <p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
 with programming values. It operates on these values with semantically
 meaningful operations, e.g. &quot;removing the first leg of a flight plan results in
-a flight plan&quot;. So in the end you get a valid flight plan, not indexes into a
+a flight plan&quot;. So in the end you get a valid flight plan, not indices into a
 list which doesn't mean anything.</p>
 <p><em>In my opinion</em>, it is important that we slowly move towards such a coding
 style. I would hope to see this style used more and more in industry, especially
