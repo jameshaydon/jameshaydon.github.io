@@ -86,7 +86,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>37 minute read</span>
+    <span>38 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -432,7 +432,8 @@ the ADEXP file.</p>
 </blockquote>
 <p>It seems at this point, having identified the entry and exit points from the
 list of ADEXP waypoints, it will try to extract the UK portion of the flight
-plan from the ICAO route. Why does it do this? User <code>t0mas88</code> on Hacker News <a href="https://news.ycombinator.com/item?id=37475075" title="HackerNews">explains</a>:</p>
+plan from the ICAO route. Why does it do this? User <code>t0mas88</code> on Hacker News
+<a href="https://news.ycombinator.com/item?id=37475075" title="HackerNews">explains</a>:</p>
 <blockquote>
 <p>They use the ADEXP to determine which part of the route is in the UK. Because
 the auto generated points are ATC area handover points. So this data is the
@@ -497,7 +498,8 @@ waypoints that are located in the UK airspace are marked with <code>UK</code>.</
 tries to find it too, and also does not find it.</p>
 </li>
 <li>
-<p>So it does this again, taking waypoint <code>Q</code>, and it <em>does</em> find it, but at the <em>start</em> of the ICAO flight plan, before the flight even enters the UK.</p>
+<p>So it does this again, taking waypoint <code>Q</code>, and it <em>does</em> find it, but at the
+<em>start</em> of the ICAO flight plan, before the flight even enters the UK.</p>
 </li>
 </ul>
 <blockquote>
@@ -545,7 +547,8 @@ essentially mark the point at which the affected system cannot continue.</p>
 <p>It sounds like the exception was raised in a later portion of the code, which
 converts the plan to an internal format for <em>NAS</em>. This part probable failed
 because the <code>entry</code>/<code>exit</code> pair doesn't specify a valid portion of the ICAO
-flight plan.</p>
+flight plan, but it's a shame we don't have more detail about how the actual
+exception occurred.</p>
 <blockquote>
 <p>Clearly a better way to handle this specific logic error would be for FPRSA-R
 to identify and remove the message and avoid a critical exception. However,
@@ -602,9 +605,10 @@ being passed to a controller.</p>
 <p>The initial response for the team followed standard recovery processes using
 the centralised C&amp;M systems to restart the sub-system.</p>
 </blockquote>
-<p>If the system raised a critical error, one that signalled that incorrect data
-could be sent to ATCOs if flight plan processing continued, then, since the team
-didn't know what was wrong, why did they try to restart processing flight plans?</p>
+<p>If the system crashed in such a way as to signal the possibility of a critical
+error, one that could send incorrect data to ATCOs if flight plan processing
+continued, then, since the team didn't know what was wrong, why did they try to
+restart processing flight plans?</p>
 <blockquote>
 <p>The on-call teams working remotely with the on-site engineering teams followed
 a staged analysis, involving increasingly detailed procedures to attempt to
@@ -657,9 +661,9 @@ way.</li>
 even though the flight plan was apparently valid (at least according to IFPS).</p>
 <ul>
 <li>
-<p>The procedure was very fiddly and failed for a silly reason. A better style of
-programming would have prevented this sort of bug <a href="https://jameshaydon.github.io/nats-fail/programming-style-and-bugs">even if the programmer is
-unaware of the duplicate waypoint problem</a>.</p>
+<p>The procedure was very fiddly and failed for a silly reason. A <a href="https://jameshaydon.github.io/nats-fail/programming-style-and-bugs">better
+programming style</a> could have prevented this sort
+of bug <em>even if the programmer is unaware of the duplicate waypoint problem</em>.</p>
 </li>
 <li>
 <p>Waypoint markers are not globally unique, but this is a known issue, so NATS
@@ -716,12 +720,21 @@ this sort of thing only had a chance of occurring &quot;once every 5 years&quot;
 apparently an acceptable frequency for having a complete air traffic control
 meltdown.</p>
 <h3 id="the-system-was-poorly-tested">The system was poorly tested</h3>
+<p>For a safety critical system, I would expect all the steps in the processing of
+the flight plan to be tested, and extracting the UK part of a flight plan is
+quite an important step. Testing failed to expose the bug in this case, maybe
+because the testing also did not consider duplicate waypoint names.</p>
 <p><a href="https://en.wikipedia.org/wiki/Fuzzing">Fuzzing</a>, for example, may have
 prevented this. By bombarding such a system with randomly generated flight
 plans, you can see if any of them cause bad failure modes: a crashed system
 where one doesn't know immediately what went wrong. By inspecting which sorts of
 flight plans cause problems, it would become apparent that those with duplicate
-waypoint identifiers in the ADEXP portion cannot be processed properly.</p>
+waypoint identifiers in the ADEXP portion cannot be processed properly. I would
+assume <em>all</em> flight plans need to have their UK part extracted, so if fuzzing
+was used and failed to expose this bad failure mode, it must have been because
+of (gracefully handled) failures earlier in the pipeline; it's possible that for
+whatever reason it was very hard to randomly generate flight plans that passed
+some validation step.</p>
 <h3 id="the-fprsa-r-system-has-bad-failure-modes">The <code>FPRSA-R</code> system has bad failure modes</h3>
 <p>All systems can malfunction, so the important thing is that they malfunction <em>in
 a good way</em> and that those responsible are <em>prepared</em> for malfunctions.</p>
@@ -735,14 +748,14 @@ undertaken or in progress&quot;:</p>
 FPRSA-R to filter out any flight plans that fit the conditions that caused the
 incident.</p>
 </blockquote>
-<p>When <code>FPRSA-R</code> it did crash, it did so in an obscure way. This is a system
+<p>When <code>FPRSA-R</code> did crash, it did so in an obscure way. This is a system
 which <em>processes flight plans</em>, yet the relevant flight plan was only found in
 &quot;lower-level software logs&quot;. If there is an error processing a flight plan,
 which brings down the whole system, a notification (including the flight plan)
 should immediately be sent to some monitoring team.</p>
-<p>NATS was also not prepared for an <code>FPRSA-R</code> system failure. The 1st
-and 2nd Line support engineers were not able to locate, or did not think to
-check, the low-level log files. This has been fixed:</p>
+<p>NATS was also not prepared for an <code>FPRSA-R</code> system failure. The 1st and 2nd Line
+support engineers were not able to locate the low-level log files. This has been
+fixed:</p>
 <blockquote>
 <p>An operating instruction has been put in place to allow prompt recovery of the
 FPRSA-R sub-system if the same circumstances recur. Each of the technical
@@ -766,9 +779,9 @@ flights between sectors. In the event of a reversion to manual process, it is
 necessary to reduce the UK traffic flow by implementing air traffic control
 restrictions.</p>
 </blockquote>
-<p>But maybe this process didn't remove the flight plans that were being manually
-processed from the queue that feeds <code>FPRSA-R</code>; if they were, they one of the
-attempts to restart the system would have succeeded.</p>
+<p>But maybe this process didn't simultaneously drain the flight plan queue that
+feeds <code>FPRSA-R</code>; if it did, then one of the attempts to restart the system
+(after some flight plans had been manually processed) would have succeeded.</p>
 <h3 id="possible-lack-of-formal-verification">Possible lack of formal verification</h3>
 <p>As reddit user <code>DontWannaMissAFling</code> <a href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k02o6n8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points out</a>:</p>
 <blockquote>
@@ -779,9 +792,8 @@ model checking to eliminate these classes of bugs entirely.</p>
 segfaulting, but not to keep planes in the air?</p>
 </blockquote>
 <p>I agree that it certainly doesn't sound like any formal verification was used in
-this case (for this system), and the report doesn't mention anything. Using
-formal verification would certainly have helped here, I might explore this in
-subsequent posts.</p>
+this case (for this step, in this system), and the report doesn't mention
+anything. Using formal verification might have helped here.</p>
 <p>But it's possible formal verification was used, but faulty code still made its
 way into production: end-2-end formal verification for large systems is still in
 its infancy. We'll have to wait for the result of the enquiry to know more.</p>
@@ -793,9 +805,26 @@ known flight plan, radio, radar and vision. The consequence of all this was not
 that any human lives were put in danger, it's simply that far fewer flights
 could take off in the first place, or had to be diverted away from UK airspace.
 NATS did the right thing (reducing the number of flights), and kept everybody
-safe.</p>
+safe. And that's great.</p>
+<h2 id="transparent-reporting">Transparent reporting</h2>
+<p>Because ultimately these systems are about keeping humans safe from harm, it's
+also great that they released a report that was quite transparent and detailed.
+I think this is important for critical infrastructure.</p>
+<blockquote>
+<p>The boss of Ryanair has slammed a report on the flights chaos seen over the
+bank holiday as &quot;rubbish&quot;.</p>
+<p>Michael O'Leary claimed the findings &quot;downplay the impact on the aviation
+industry&quot; and said the report was &quot;full of excuses&quot;.</p>
+</blockquote>
+<p>I don't agree with this, I think the report was quite factual, and I don't think
+it was in the scope of the initial report to analyse to what extent there had
+been failings at NATS.</p>
 <h2 id="how-to-code-this-properly">How to code this properly</h2>
 <p>So, how can we avoid this bug?</p>
+<p>(<em>Note:</em> This post explain how to code up a correct solution (in full knowledge
+of the duplicate waypoint issue). See <a href="/programming-style-and-bugs">this post</a>
+for an explanation of how the bug might have been avoided even in the absence of
+such knowledge.)</p>
 <p>Let's recap the problem. There are two sequences of waypoints:</p>
 <ul>
 <li><code>ADEXP</code>: the full list of waypoints.</li>
