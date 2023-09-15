@@ -78,7 +78,7 @@
 
 <article itemscope itemtype="http://schema.org/BlogPosting">
     <header>
-        <h1 itemprop="headline">On programming style and bugs</h1>
+        <h1 itemprop="headline">On programming style and bugs -- UK ATC meltdown</h1>
         <span class="muted">
     <svg class="icon i-clock" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
@@ -114,8 +114,8 @@ of the post?</li>
 was not aware of the possibility of waypoints with duplicate names? The
 original algorithm works fine on those flight plans.</li>
 </ul>
-<p>What I hope to convince you of in this post is that: Yes, the programming style
-does matter: the bug would not have been made with a certain sort of programming
+<p>What I hope to convince you of in this post is that: The programming style does
+matter, the bug would not have been made with a certain sort of programming
 style, even if the programmer was not aware of the duplicate waypoint issue.</p>
 <h2 id="what-is-meant-by-imperative">What is meant by &quot;imperative&quot;</h2>
 <p>A user on HackerNews <a href="https://news.ycombinator.com/item?id=37472846">replied</a> to
@@ -197,6 +197,7 @@ would need quite a few duplicate waypoint names to actually get several
 reconciliations for any flight crosses over the UK in a non-degenerate manner.
 The code from the original post was proceeding with an &quot;abundance of caution&quot; so
 to speak.</p>
+<p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.</p>
 <p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
 with data structures. It operates on those structures with semantically
 meaningful operations, e.g. &quot;removing the first leg of a flight plan results in
