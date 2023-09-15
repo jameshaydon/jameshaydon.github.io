@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <!-- Enable responsiveness on mobile devices-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+
+    
+      
+      <meta name="description" content="Clarification on my comments about programming style, bugs and the UK ATC meltdown." />
+      
+    
+
+      <title></title>
+
+      
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="https://jameshaydon.github.io/atom.xml">
+      
+
+      
+          <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
+      
+
+      
+      
+
+          <!-- Google tag (gtag.js) -->
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-X4MP59NZ35"></script>
+          <script>
+           window.dataLayer = window.dataLayer || [];
+           function gtag(){dataLayer.push(arguments);}
+           gtag('js', new Date());
+
+           gtag('config', 'G-X4MP59NZ35');
+          </script>
+  </head>
+
+    <body class="hack dark main container">
+        
+    
+        
+                
+                    <header>
+                        <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                        
+                            <a itemprop="url"
+                               class=""
+                               href="https://jameshaydon.github.io">
+                                <span itemprop="name">Home</span></a>
+                        
+                            <a itemprop="url"
+                               class=""
+                               href="https://github.com/jameshaydon">
+                                <span itemprop="name">GitHub</span></a>
+                        
+                            <a itemprop="url"
+                               class=""
+                               href="https://jameshaydon.github.io/papers">
+                                <span itemprop="name">Papers</span></a>
+                        
+                            <a itemprop="url"
+                               class=""
+                               href="https://github.com/jameshaydon/lawvere">
+                                <span itemprop="name">lawvere-lang</span></a>
+                        
+                        </nav>
+                    </header>
+                
+            
+    
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">On programming style and bugs</h1>
+        <span class="muted">
+    <svg class="icon i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>6 minute read</span>
+    <svg class="icon i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2023-09-15
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>This is part 3 of my blog posts about the UK air traffic control meltdown. You might want to read <a href="/nats-fail">part one</a> and <a href="/what-went-wrong">part two</a>.</p>
+<p>Having had some time to process some of the numerous comments about my first
+post, I realise now that I was not clear in communicating my thoughts about the
+programming style, and what led to the bug. I will have another go now. The
+point I was trying to make was:</p>
+<p>With a better programming style, the bug would not have been made <strong>even if the
+code is only meant for flight plans with no duplicate waypoints</strong>.</p>
+<span id="continue-reading"></span>
+<p>The comments I am referring to are of the sort:</p>
+<ul>
+<li>Why the &quot;out of the blue&quot; comment about &quot;imperative&quot; programming in the middle
+of the post?</li>
+<li>What is even meant by &quot;imperative&quot; programming?</li>
+<li>Why blame the bug on programming style, when it is just that the original code
+was not aware of the possibility of waypoints with duplicate names? The
+original algorithm works fine on those flight plans.</li>
+</ul>
+<p>What I hope to convince you of in this post is that: Yes, the programming style
+does matter: the bug would not have been made with a certain sort of programming
+style, even if the programmer was not aware of the duplicate waypoint issue.</p>
+<h2 id="what-is-meant-by-imperative">What is meant by &quot;imperative&quot;</h2>
+<p>A user on HackerNews <a href="https://news.ycombinator.com/item?id=37472846">replied</a> to
+such a query:</p>
+<blockquote>
+<p>Typically it would be used to mean things like the code mutates data in place
+rather than using persistent data structures, explicitly loops over data
+rather than using higher-order map, fold etc. operations, and explicitly
+checks tag bits rather than using sum types.</p>
+</blockquote>
+<p>This is a great answer. To go further, I would like to see a style of coding
+which is more &quot;correct by construction&quot;. There is no precise definition of what this means, but it would at least include:</p>
+<ul>
+<li>representing domain objects with data structures,</li>
+<li>only operating on them with functions that are known to preserve invariants,
+that is are &quot;safe&quot;.</li>
+</ul>
+<h2 id="another-look-at-the-problem">Another look at the problem</h2>
+<p>Let us from now on assume that <strong><em>we do not know that a flight plan can contain
+duplicate waypoints</em></strong>, and that we <strong><em>assume they are unique</em></strong>, and look at
+the problem anew.</p>
+<p>We are given two versions of the flight plan, ICAO and ADEXP, each containing
+information the other does not have. Our goal is to extract the UK part of the
+ICAO flight plan, using in particular data from the ADEXP plan.</p>
+<p>One possibility, which sounds like what the original code did, is to keep the
+data as it is, and perform various operations in a <code>while</code> loop which mutate
+some variables like <code>current_endpoint_candidate</code> until we are satisfied we have
+found two indexes <code>start_idx</code> and <code>end_idx</code> which delimit the UK portion of the
+flight plan we are looking for. This is not correct by construction: the end
+result is an <code>end_idx</code> which for which <code>end_idx &lt; start_idx</code>. The code has &quot;gone
+wrong&quot;, and not noticed. Noticing that something has gone wrong is important:
+the closer you are to the root cause, the more likely the exception will contain
+the information actually is really relevant to those who are dealing with the
+crash. It may even have failed gracefully at this point.</p>
+<p>The correct-by-construction approach, at least the one that I chose, is to
+operate on a version of the flight plan that combines all the information you
+need. This therefore involves a first step which works out how the ICAO and
+ADEXP plans &quot;match up&quot;.</p>
+<p>So we write a function to do this, which we call <code>reconcile'</code>. Since we don't
+expect duplicate waypoint names, the plans will only match up in one way (or not
+at all): each point of the ICAO plan corresponds uniquely with one point of the
+ADEXP plan. So instead of returning a list of reconciliations (as in the
+original post), we return a <code>Maybe</code>:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> (</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>)
+</span><span>reconcile&#39; (</span><span style="color:#d08770;">End</span><span> p) [p&#39;] | p == p&#39; = pure (</span><span style="color:#d08770;">End</span><span> p)
+</span><span>reconcile&#39; (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; = </span><span style="color:#b48ead;">do
+</span><span>  </span><span style="color:#b48ead;">let</span><span> (skipped, restAdexp) = span (/= start rest) ps
+</span><span>  recoRest &lt;- reconcile&#39; rest restAdexp
+</span><span>  pure (</span><span style="color:#d08770;">Leg</span><span> p </span><span style="color:#d08770;">Via</span><span> {route = r, through = skipped} recoRest)
+</span><span>reconcile&#39; _ _ = </span><span style="color:#d08770;">Nothing
+</span></code></pre>
+<p>This function is simpler than <code>reconcile</code> from the original post and does the
+obvious thing: when reconciling a leg of the ICAO plan with the ADEXP list, it
+will skip all the ADEXP points that are not equal to the next point in the ICAO
+plan, and then reconciles the rest of the plan recursively.</p>
+<p>The code for extracting the UK part of the plan is the same as in the original
+post, this is quite simple once we have the flight plan which combines all the
+information. All that changes is pattern matching on <code>Maybe</code> instead of a list:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPartOfICAO&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Either Err</span><span> (</span><span style="color:#b48ead;">ICAO </span><span style="color:#bf616a;">p r</span><span>)
+</span><span>ukPartOfICAO&#39; uk icao adexp = </span><span style="color:#b48ead;">case</span><span> reconcile&#39; icao adexp </span><span style="color:#b48ead;">of
+</span><span>  </span><span style="color:#d08770;">Just</span><span> plan -&gt; projectICAO &lt;$&gt; ukSegment uk plan
+</span><span>  _ -&gt; </span><span style="color:#d08770;">Left CannotReconcileIcaoAdexp
+</span></code></pre>
+<p>And what does this do on the example? It works <em>just fine</em>:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span>λ&gt; ukPortionOfICAO&#39; inUK icao adexp
+</span><span style="color:#d08770;">Right</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">T</span><span>&quot; </span><span style="color:#d08770;">8</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">O</span><span>&quot; </span><span style="color:#d08770;">5</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">P</span><span>&quot; </span><span style="color:#d08770;">1</span><span> (</span><span style="color:#d08770;">End </span><span>&quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;))))
+</span></code></pre>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>                                 UK portion of ICAO
+</span><span>                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+</span><span>           4       2        8         5              1           9
+</span><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U
+</span><span>
+</span><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
+</span><span>                       UK  UK   UK UK UK    UK  UK
+</span></code></pre>
+<p>The reason it still works is that in this case, and I would imagine pretty much
+all cases the system would see in practice, the reconciliation is unique. You
+would need quite a few duplicate waypoint names to actually get several
+reconciliations for any flight crosses over the UK in a non-degenerate manner.
+The code from the original post was proceeding with an &quot;abundance of caution&quot; so
+to speak.</p>
+<p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
+with data structures. It operates on those structures with semantically
+meaningful operations, e.g. &quot;removing the first leg of a flight plan results in
+a flight plan&quot;. So in the end you get a valid flight plan, not indexes into a
+list which don't mean anything.</p>
+<p><em>In my opinion</em>, it is important that we slowly move to such a coding style. I
+would hope to see this style used more and more in industry, especially in
+critical software.</p>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by James Haydon
+                
+                
+                
+            </p>
+            
+            
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>
