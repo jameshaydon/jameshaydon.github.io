@@ -134,7 +134,10 @@ correct-by-construction style&quot; instead. There is no precise definition of w
 <li>representing domain objects with data structures,</li>
 <li>only operating on them with functions that are known to preserve certain
 invariants, that is are &quot;safe&quot;.</li>
+<li>building up a solution by composing such functions.</li>
 </ul>
+<p>The idea is that if you are correct that the &quot;base&quot; functions are &quot;correct&quot; (in
+some way), then by induction the full program is too.</p>
 <h2 id="another-look-at-the-problem">Another look at the problem</h2>
 <p>Let us from now on assume that <strong><em>we do not know that a flight plan can contain
 duplicate waypoints</em></strong>, and that we <strong><em>assume they are unique</em></strong>, and look at
@@ -217,12 +220,20 @@ list which don't mean anything.</p>
 <p><em>In my opinion</em>, it is important that we slowly move to such a coding style. I
 would hope to see this style used more and more in industry, especially in
 critical software.</p>
-<p>Note that:</p>
+<p>Notes:</p>
 <ul>
 <li>It's possible to code in this style in most languages.</li>
 <li>It's possible to code in non-correct-by-construction style in <em>all</em> languages.</li>
 <li>But <strong><em>in my opinion</em></strong>, some languages lend themselves more to this style
 than others.</li>
+<li>Correct-by-construction style most certainly doesn't prevent <em>all</em> bugs, just
+some of them.</li>
+<li>There are many other techniques/tools to prevent bugs.</li>
+<li>Static types is <em>not</em> a prerequisite to correct-by-construction style. I've
+seen these ideas espoused by the Clojure<a href="https://clojure.org/">Clojure</a>
+community, for example.</li>
+<li>Languages with <a href="https://en.wikipedia.org/wiki/Dependent_type">dependent types</a>
+allow the type system to be used to check invariants.</li>
 </ul>
 
     </div>
