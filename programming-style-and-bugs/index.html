@@ -86,7 +86,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>6 minute read</span>
+    <span>7 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -127,7 +127,8 @@ rather than using higher-order map, fold etc. operations, and explicitly
 checks tag bits rather than using sum types.</p>
 </blockquote>
 <p>This is a great answer. To go further, I would like to see a style of coding
-which is more &quot;correct by construction&quot;. There is no precise definition of what this means, but it would at least include:</p>
+which is more &quot;correct by construction&quot;. There is no precise definition of what
+this means, but it would at least include:</p>
 <ul>
 <li>representing domain objects with data structures,</li>
 <li>only operating on them with functions that are known to preserve invariants,
@@ -191,12 +192,21 @@ information. All that changes is pattern matching on <code>Maybe</code> instead 
 </span><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
 </span><span>                       UK  UK   UK UK UK    UK  UK
 </span></code></pre>
-<p>The reason it still works is that in this case, and I would imagine pretty much
-all cases the system would see in practice, the reconciliation is unique. You
-would need quite a few duplicate waypoint names to actually get several
-reconciliations for any flight crosses over the UK in a non-degenerate manner.
-The code from the original post was proceeding with an &quot;abundance of caution&quot; so
-to speak.</p>
+<p>The reason it still works is that the reconciliation still exists, and the
+duplicate waypoint doesn't get in the way of finding it. The reconciliation is
+also unique in this case, so the processing of the flight plan is completely
+correct. The only case in which it differs from the code of the previous post is
+when there are multiple reconciliations: the first post has code which fails
+with a an error, whereas this code will take the first reconciliation (which
+might be the wrong one). This would only happen if there are duplicate waypoints
+in in the ADEXP list, say <code>w1</code> and <code>w2</code>, appearing in that order. Since
+<code>reconcile'</code> selects the first matching waypoint, to have gone wrong it would
+match <code>w</code> in the ICAO list with <code>w1</code> when it should have matched it with <code>w2</code>.
+This would mean that there is a leg of the ICAO flight plan which <em>skips</em> <code>w1</code>
+and ends at <code>w2</code>. Since waypoints with duplicate names are supposed to be very
+far apart, and flight plan legs are <em>not</em> supposed to be over very long
+distances, this shouldn't happen. The code of the original blog post was
+proceeding with an &quot;abundance of caution&quot; so to speak.</p>
 <p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.</p>
 <p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
 with data structures. It operates on those structures with semantically
