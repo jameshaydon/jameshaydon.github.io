@@ -105,7 +105,7 @@ have another go now. The point I was trying to make was:</p>
 <p>With a better programming style, the bug might not have been made <strong>even if the
 code is only meant for flight plans with no duplicate waypoints</strong>.<span id="continue-reading"></span>
 Of course, I also agree that better specs/requirements would have helped too.</p>
-<p>I've read replies to my previous blog posts with comments of the sort:</p>
+<p>I've read comments about my original blog posts with comments of the sort:</p>
 <ul>
 <li>Why the &quot;out of the blue&quot; comment about &quot;imperative&quot; programming in the middle
 of the post?</li>
@@ -126,7 +126,7 @@ involves functional programming.</p>
 <p>There is no precise definition of what &quot;correct-by-construction&quot; means, but it
 would at least include:</p>
 <ul>
-<li>representing domain objects with data structures,</li>
+<li>representing domain objects with programming values as faithfully as possible,</li>
 <li>only operating on them with functions that are known to preserve certain
 invariants, so that they are &quot;safe&quot;,</li>
 <li>building up a solution by composing such functions.</li>
@@ -135,11 +135,12 @@ invariants, so that they are &quot;safe&quot;,</li>
 induction the full program is too.</p>
 <p>In correct-by-construction programming the invariants are expressed in terms of
 the domain: the &quot;modelling gap&quot; is small. Programs that are not
-correct-by-construction have invariants expressed in terms of the
-implementation. The former are easier to state and to reason about. The latter
-are harder to come up with and more error-prone. The smaller modelling gap also
-ensures that errors, should they occur, are usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route
-cause, and this can make failure modes less intense.</p>
+correct-by-construction have invariants, but because the programming objects
+don't correspond to the domain objects, the invariants are harder to think about
+and reasoning about them is more brittle. The smaller modelling gap in
+correct-by-construction style also ensures that errors, should they occur, are
+usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this can make failures less
+serious.</p>
 <h2 id="another-look-at-the-problem">Another look at the problem</h2>
 <p>Let us from now on assume that <strong><em>we do not know that a flight plan can contain
 duplicate waypoints</em></strong> and that we <strong><em>assume they are unique</em></strong>, and look at
@@ -163,10 +164,10 @@ gracefully at this point.</p>
 operate on a version of the flight plan that combines all the information you
 need. This therefore involves a first step which works out how the ICAO and
 ADEXP plans &quot;match up&quot;.</p>
-<p>In the original post, I wrote a function <code>reconcile :: ICAO p r -&gt; [p] -&gt; [Combined p r]</code>, to this effect. Now, suppose that I hadn't realised waypoint
-names were non-unique, then I would have reasoned that the plans can only match
-up in at most one way since every waypoint in the ICAO plan can only match a
-single point in the ADEXP list. So I'd have written, instead:</p>
+<p>In the original post this was achieved by a function <code>reconcile :: ICAO p r -&gt; [p] -&gt; [Combined p r]</code>. Now, suppose that I hadn't realised waypoint names were
+non-unique, then I would have reasoned that the plans can only match up in at
+most one way since every waypoint in the ICAO plan can only match a single point
+in the ADEXP list. So I would probably have coded this instead:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> (</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>)
 </span><span>reconcile&#39; (</span><span style="color:#d08770;">End</span><span> p) [p&#39;] | p == p&#39; = pure (</span><span style="color:#d08770;">End</span><span> p)
 </span><span>reconcile&#39; (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; = </span><span style="color:#b48ead;">do
@@ -180,8 +181,8 @@ obvious thing: when reconciling a leg of the ICAO plan with the ADEXP list, it
 will skip all the ADEXP points that are not equal to the next point in the ICAO
 plan, and then reconciles the rest of the plan recursively.</p>
 <p>This function is <em>wrong</em> because it doesn't consider the possibility of
-duplicate waypoints, but it's not nearly as wrong as the function in NATS's
-system, because of the correct-by-construction programming style. It will
+duplicate waypoints, but it doesn't suffer from the same sorts of defects as the
+original bug, because of the correct-by-construction programming style. It will
 either:</p>
 <ul>
 <li>return <code>Nothing</code> because it can't create a valid domain object (a flight plan),
@@ -192,15 +193,15 @@ far more understandable: the input data was ambiguous.</li>
 </ul>
 <p>The code for extracting the UK part of the plan is the same as in the original
 post, this is quite simple once we have the version flight plan which combines
-all the information we need. All that changes is pattern matching on <code>Maybe</code>
-value instead of a list:</p>
+all the information we need. All that changes is pattern matching on a
+<code>Maybe</code>-value instead of a list:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPartOfICAO&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Either Err</span><span> (</span><span style="color:#b48ead;">ICAO </span><span style="color:#bf616a;">p r</span><span>)
 </span><span>ukPartOfICAO&#39; uk icao adexp = </span><span style="color:#b48ead;">case</span><span> reconcile&#39; icao adexp </span><span style="color:#b48ead;">of
 </span><span>  </span><span style="color:#d08770;">Just</span><span> plan -&gt; projectICAO &lt;$&gt; ukSegment uk plan
 </span><span>  _ -&gt; </span><span style="color:#d08770;">Left CannotReconcileIcaoAdexp
 </span></code></pre>
-<p>On the original example, and the flight plan that caused the air traffic control
-incident, this version simply <em>works</em>:</p>
+<p>In the original example, and the flight plan that caused the air traffic control
+incident, this version simply <em>works correctly</em>:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span>λ&gt; ukPortionOfICAO&#39; inUK icao adexp
 </span><span style="color:#d08770;">Right</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">T</span><span>&quot; </span><span style="color:#d08770;">8</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">O</span><span>&quot; </span><span style="color:#d08770;">5</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">P</span><span>&quot; </span><span style="color:#d08770;">1</span><span> (</span><span style="color:#d08770;">End </span><span>&quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;))))
 </span></code></pre>
@@ -213,9 +214,9 @@ incident, this version simply <em>works</em>:</p>
 </span><span>                       UK  UK   UK UK UK    UK  UK
 </span></code></pre>
 <p>The bug would therefore have been completely avoided, even if the failure modes
-were bad, and even though the spec might not have made the duplicate waypoint
-issue clear. The reason it still works is that the reconciliation still exists,
-and the duplicate waypoint doesn't get in the way of finding it.</p>
+were bad, and even though the spec might not have mentioned the duplicate
+waypoint issue. The reason it still works is that the reconciliation still
+exists, and the duplicate waypoint doesn't get in the way of finding it.</p>
 <p>The reconciliation is also unique in this case, so the processing of the flight
 plan is completely correct. The code here differs from the code of the previous
 post only when there are multiple reconciliations: the first post has code which
@@ -233,13 +234,13 @@ place precisely to avoid flight plans being ambiguous.</p>
 so to speak.</p>
 <p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.</p>
 <p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
-with data structures. It operates on those structures with semantically
+with programming values. It operates on these values with semantically
 meaningful operations, e.g. &quot;removing the first leg of a flight plan results in
 a flight plan&quot;. So in the end you get a valid flight plan, not indexes into a
 list which doesn't mean anything.</p>
-<p><em>In my opinion</em>, it is important that we slowly move to such a coding style. I
-would hope to see this style used more and more in industry, especially in
-critical software.</p>
+<p><em>In my opinion</em>, it is important that we slowly move towards such a coding
+style. I would hope to see this style used more and more in industry, especially
+in critical software.</p>
 <p>Notes:</p>
 <ul>
 <li>It's possible to code in this style in most languages.</li>
@@ -249,13 +250,15 @@ than others, for example, those that are functional.</li>
 <li>Correct-by-construction style most certainly doesn't prevent <em>all</em> bugs, just
 some of them.</li>
 <li>There are many other techniques/tools to prevent bugs.</li>
-<li>Static types are <em>not</em> a prerequisite to correct-by-construction style. I've
-seen these ideas espoused by the <a href="https://clojure.org/">Clojure</a> community,
-for example.</li>
+<li>Static types are <em>not</em> a prerequisite to correct-by-construction style (though
+they do help in my opinion). I've seen these ideas espoused by the
+<a href="https://clojure.org/">Clojure</a> community, for example.</li>
 <li>Languages with <a href="https://en.wikipedia.org/wiki/Dependent_type">dependent types</a>
 or <a href="https://ucsd-progsys.github.io/liquidhaskell/">SMT plugins</a> allow
 invariants to be machine-verified.</li>
 </ul>
+<hr />
+<p>Many thanks to <a href="http://assert-false.science/arnaud/">Arnaud Spiwack</a> and <a href="https://blog.csongor.co.uk/">Csongor Kiss</a> for reviewing a draft of this post.</p>
 <hr />
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>&quot;Correct-by-construction&quot; usually refers to something more precise than what I am talking about here. Most people would use this term when the criteria for &quot;correct&quot; are clearly stated, and the correctness is formally verified. I couldn't think of any other term to describe this coding style though.</p>
