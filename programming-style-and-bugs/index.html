@@ -126,9 +126,9 @@ rather than using persistent data structures, explicitly loops over data
 rather than using higher-order map, fold etc. operations, and explicitly
 checks tag bits rather than using sum types.</p>
 </blockquote>
-<p>This is a great answer. To go further, I would like to see a style of coding
-which is more &quot;correct by construction&quot;. There is no precise definition of what
-this means, but it would at least include:</p>
+<p>This is a great answer. But I think I should have used &quot;not
+correct-by-construction style&quot; instead. There is no precise
+definition of what this means, but it would at least include:</p>
 <ul>
 <li>representing domain objects with data structures,</li>
 <li>only operating on them with functions that are known to preserve invariants,
@@ -216,6 +216,13 @@ list which don't mean anything.</p>
 <p><em>In my opinion</em>, it is important that we slowly move to such a coding style. I
 would hope to see this style used more and more in industry, especially in
 critical software.</p>
+<p>Note that:</p>
+<ul>
+<li>It's possible to code in this style in most languages.</li>
+<li>It's possible to code in non-correct-by-construction style in <em>all</em> languages.</li>
+<li>But <strong><em>in my opinion</em></strong>, some languages lend themselves more to this style
+than others.</li>
+</ul>
 
     </div>
 
