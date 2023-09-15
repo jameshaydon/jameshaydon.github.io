@@ -86,7 +86,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>9 minute read</span>
+    <span>10 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -136,10 +136,16 @@ induction the full program is too.</p>
 domain: the &quot;modelling gap&quot; is small. Programs that are not
 correct-by-construction have invariants too, but because the programming objects
 don't correspond to the domain objects, the invariants are harder to think of
-and reasoning about them is more brittle. The smaller modelling gap in
-correct-by-construction style also ensures that errors, should they occur, are
-usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this can make failures less
-serious.</p>
+and reasoning about them is more brittle. Compare:</p>
+<p><em>correct-by-construction style:</em><br/> &quot;Cutting short a flight plan when the rest
+is not in the UK results in a flight plan that fully contains the UK part&quot;</p>
+<p>and</p>
+<p><em>non corecct-by-construction style:</em><br/> &quot;If I keep iterating rightwards in the
+ADEXP list from the known UK exit point until I find that point in the ICAO plan
+then this is the end of the UK portion&quot;</p>
+<p>The smaller modelling gap in correct-by-construction style also ensures that
+errors, should they occur, are usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this
+can make failures less serious.</p>
 <h2 id="another-look-at-the-problem">Another look at the problem</h2>
 <p>Let us from now on assume that <strong><em>we do not know that a flight plan can contain
 duplicate waypoints</em></strong> and that we <strong><em>assume they are unique</em></strong>, and look at
@@ -179,8 +185,15 @@ in the ADEXP list. So I think<sup class="footnote-reference"><a href="#3">3</a><
 obvious thing: when reconciling a leg of the ICAO plan with the ADEXP list, it
 will skip all the ADEXP points that are not equal to the next point in the ICAO
 plan, and then reconciles the rest of the plan recursively.</p>
-<p>This function is <em>wrong</em> because it doesn't consider the possibility of
-duplicate waypoints, but much less wrong than the original bug because of the
+<p>This function is an example of <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">&quot;Parse, don’t
+validate&quot;</a>.
+Parsing is how semantically meaningful domain values are produced from less
+meaningful data, and so is often a necessary first step in
+correct-by-construction style. In fact I wouldn't be surprised if the original
+code <em>did validate</em> and <em>not parse</em>, with code much like <code>reconcile'</code> above, but
+that just checks the plans match up instead of returning a combined plan.</p>
+<p>The function <code>reconcile'</code> is <em>wrong</em> because it doesn't consider the possibility
+of duplicate waypoints, but much less wrong than the original bug because of the
 correct-by-construction programming style. It will either:</p>
 <ul>
 <li>return <code>Nothing</code> because it can't create a valid domain object (a flight plan),
