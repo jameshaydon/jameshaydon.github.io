@@ -105,22 +105,21 @@ have another go now. The point I was trying to make was:</p>
 <p>With a better programming style, the bug might not have been made <strong>even if the
 code is only meant for flight plans with no duplicate waypoints</strong>.<span id="continue-reading"></span>
 Of course, I also agree that better specs/requirements would have helped too.</p>
-<p>I've read comments about my original blog posts with comments of the sort:</p>
+<p>The original post attracted comments of the sort:</p>
 <ul>
-<li>Why the &quot;out of the blue&quot; comment about &quot;imperative&quot; programming in the middle
-of the post?</li>
 <li>What is even meant by &quot;imperative&quot; programming? How is it relevant to the rest
 of the post?</li>
 <li>Why blame the bug on programming style, when it is just that the original code
 was not aware of the possibility of waypoints with duplicate names? The
-original algorithm (probably) works fine on those flight plans.</li>
+original algorithm (probably) works fine on flight plans with no duplicate
+waypoints.</li>
 </ul>
 <p>What I hope to convince you of in this post is that the programming style <em>does</em>
-matter, the bug might not have occurred when using a specific coding style, even
+matter: the bug might not have occurred when using a specific coding style, even
 if the programmer was not aware of the duplicate waypoint issue.</p>
 <h2 id="what-did-i-mean-by-imperative">What did I mean by &quot;imperative&quot;?</h2>
 <p>Using this word was a mistake. What I should have said instead was roughly:
-<em>&quot;not correct by construction style&quot;</em><sup class="footnote-reference"><a href="#1">1</a></sup>. I conflated &quot;correct-by-construction&quot;
+<em>&quot;not correct-by-construction style&quot;</em><sup class="footnote-reference"><a href="#1">1</a></sup>. I conflated &quot;correct-by-construction&quot;
 with my own personal preference in achieving this programming style, which
 involves functional programming.</p>
 <p>There is no precise definition of what &quot;correct-by-construction&quot; means, but it
@@ -133,10 +132,10 @@ invariants, so that they are &quot;safe&quot;,</li>
 </ul>
 <p>The idea is that if the &quot;base&quot; functions are &quot;correct&quot; (in some way), then by
 induction the full program is too.</p>
-<p>In correct-by-construction programming the invariants are expressed in terms of
-the domain: the &quot;modelling gap&quot; is small. Programs that are not
-correct-by-construction have invariants, but because the programming objects
-don't correspond to the domain objects, the invariants are harder to think about
+<p>In correct-by-construction programming invariants are expressed in terms of the
+domain: the &quot;modelling gap&quot; is small. Programs that are not
+correct-by-construction have invariants too, but because the programming objects
+don't correspond to the domain objects, the invariants are harder to think of
 and reasoning about them is more brittle. The smaller modelling gap in
 correct-by-construction style also ensures that errors, should they occur, are
 usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this can make failures less
@@ -152,7 +151,7 @@ ICAO flight plan, using data from the ADEXP plan.</p>
 data as it is and perform various operations in a <code>while</code> loop which mutate some
 variables like <code>current_endpoint_candidate</code> until we are satisfied we have found
 two indexes <code>start_index</code> and <code>end_index</code> which delimit the UK portion of the
-flight plan. This is not correct by construction: the end result is an
+flight plan. This is not correct-by-construction: the end result is an
 <code>end_index</code> value for which <code>end_index &lt; start_index</code>. This doesn't correspond
 to a sub-flight-plan at all. The code has &quot;gone wrong&quot;, and not noticed: the
 invariant that the pair of indices represent a valid sub-plan has been violated.
@@ -181,9 +180,8 @@ obvious thing: when reconciling a leg of the ICAO plan with the ADEXP list, it
 will skip all the ADEXP points that are not equal to the next point in the ICAO
 plan, and then reconciles the rest of the plan recursively.</p>
 <p>This function is <em>wrong</em> because it doesn't consider the possibility of
-duplicate waypoints, but it doesn't suffer from the same sorts of defects as the
-original bug, because of the correct-by-construction programming style. It will
-either:</p>
+duplicate waypoints, but much less wrong than the original bug because of the
+correct-by-construction programming style. It will either:</p>
 <ul>
 <li>return <code>Nothing</code> because it can't create a valid domain object (a flight plan),
 in which case it <em>knows</em> it should now fail gracefully, or,</li>
