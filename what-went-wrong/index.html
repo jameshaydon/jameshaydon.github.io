@@ -105,7 +105,7 @@ of <a href="https://news.ycombinator.com/item?id=37461695">comments</a>. What wa
 discussed was:</p>
 <p><strong><em>&quot;But really though, what was the one thing that went wrong?&quot;</em></strong></p>
 <span id="continue-reading"></span>
-<p>Well, that depends who you ask. We've seen everything in the comments:</p>
+<p>Well, that depends who you ask. There was a bit of everything in the comments:</p>
 <ul>
 <li>If you ask someone who's job it is to gather requirements, and write specs,
 they are saying: &quot;It wasn't made clear that waypoint names are not unique!&quot;.</li>
@@ -128,7 +128,9 @@ management</a> specialist, they
 will say the situation wasn't escalated fast enough through the lines of
 support, or.. (I don't know, I'm not a crisis management specialist.)</li>
 </ul>
-<p>The point is, these systems are meant to not fail because they have lot of layers of protection. This is the <a href="https://en.wikipedia.org/wiki/Swiss_cheese_model">swiss cheese model</a>:</p>
+<p>The point is, these systems are meant to not fail because they have lot of
+layers of protection. This is the <a href="https://en.wikipedia.org/wiki/Swiss_cheese_model">swiss cheese
+model</a>:</p>
 <p><img src="https://jameshaydon.github.io/what-went-wrong/Swiss_cheese_model_textless.svg.png" alt="The Swiss cheese model of accident causation illustrates that, although many layers of defense lie between hazards and accidents, there are flaws in each layer that, if aligned, can allow the accident to occur. In this diagram, three hazard vectors are stopped by the defences, but one passes through where the &quot;holes&quot; are lined up." title="wikipedia" /></p>
 <blockquote>
 <p>It likens human systems to multiple slices of Swiss cheese, which has randomly
@@ -145,18 +147,18 @@ tested by a third person in order to make it into production, then that's 3
 slices of swiss cheese. If the probability that each of these people doesn't
 know about some requirement (e.g. &quot;there can be duplicate waypoints&quot;) is 1/5,
 then (assuming independence)<sup class="footnote-reference"><a href="#1">1</a></sup>, the probability that this lack of knowledge
-cauaes a bug to be coded that makes it through all the slices is 1/125.</p>
+causes a bug to be coded that makes it through these three slices is 1/125.</p>
 <p>It took several failures for the crisis to manifest. What went wrong was that
-<em>everything went wrong</em>.</p>
+<em>many things went wrong</em>.</p>
 <p>So that's the question that NATS, the
 <a href="https://www.gov.uk/government/news/statement-following-publication-of-nats-report-into-last-weeks-air-traffic-control-technical-failure">enquiry</a>,
 and the wider community has to grapple with: <em>what has gone wrong, to lead to a
-situation where everything can go wrong?</em></p>
+situation where many things can go wrong?</em></p>
 <p>Other posts: <a href="/nats-fail">part one</a> and <a href="/programming-style-and-bugs">part
 three</a>.</p>
 <hr />
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>This is a bit naive, and it's why when developping systems where there is a primary and a backup, the teams developping both are sometimes kept completely seperated: different locations, not allowed to talk to each other about work, etc.</p>
+<p>This is a bit naive, and it's why when developping systems where there is a primary and a backup, the teams developping them are sometimes kept completely seperated: different locations, not allowed to talk to each other about work, etc.</p>
 </div>
 
     </div>
