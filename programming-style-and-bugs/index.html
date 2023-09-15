@@ -137,12 +137,18 @@ domain: the &quot;modelling gap&quot; is small. Programs that are not
 correct-by-construction have invariants too, but because the programming objects
 don't correspond to the domain objects, the invariants are harder to think of
 and reasoning about them is more brittle. Compare:</p>
-<p><em>correct-by-construction style:</em><br/> &quot;Cutting short a flight plan when the rest
-is not in the UK results in a flight plan that fully contains the UK part&quot;</p>
+<p><em>correct-by-construction style:</em></p>
+<blockquote>
+<p>Cutting short a flight plan when the rest is not in the UK results in a flight
+plan that fully contains the UK part.</p>
+</blockquote>
 <p>and</p>
-<p><em>non corecct-by-construction style:</em><br/> &quot;If I keep iterating rightwards in the
-ADEXP list from the known UK exit point until I find that point in the ICAO plan
-then this is the end of the UK portion&quot;</p>
+<p><em>non corecct-by-construction style:</em></p>
+<blockquote>
+<p>If I keep iterating rightwards in the ADEXP list from the known UK exit point
+until I find that point in the ICAO plan then this is the end of the UK
+part.</p>
+</blockquote>
 <p>The smaller modelling gap in correct-by-construction style also ensures that
 errors, should they occur, are usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this
 can make failures less serious.</p>
