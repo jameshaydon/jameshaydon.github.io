@@ -86,7 +86,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>3 minute read</span>
+    <span>4 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -140,12 +140,21 @@ a hole in each slice in the stack aligning with holes in all other slices),
 since other defenses also exist (e.g. other slices of cheese), to prevent a
 single point of failure.</p>
 </blockquote>
+<p>For example, if code must be coded by one programmer, reviewed by another, and
+tested by a third person in order to make it into production, then that's 3
+slices of swiss cheese. If the probability that each of these people doesn't
+know about some requirement (e.g. &quot;there can be duplicate waypoints&quot;) is 1/5,
+then (assuming independence)<sup class="footnote-reference"><a href="#1">1</a></sup>, the probability that the bug makes it through all
+the slices is 1/125.</p>
 <p>It took several failures for the crisis to manifest. What went wrong was that
 <em>everything went wrong</em>.</p>
 <p>So that's the question that NATS, the
 <a href="https://www.gov.uk/government/news/statement-following-publication-of-nats-report-into-last-weeks-air-traffic-control-technical-failure">enquiry</a>,
 and the wider community has to grapple with: <em>what has gone wrong, to lead to a
 situation where everything can go wrong?</em></p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>This is a bit naive, and it's why when developping systems where there is a primary and a backup, the teams developping both are sometimes kept completely seperated: different locations, not allowed to talk to each other about work, etc.</p>
+</div>
 
     </div>
 
