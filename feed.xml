@@ -3,10 +3,14 @@
     <channel>
         <title>James Haydon</title>
         <link>jameshaydon.github.io</link>
-        <description>FIXME: A Blog Description - required item</description>
+        <description>James Haydon's personal blog.</description>
         <docs>https://www.rssboard.org/rss-specification</docs>
         <item>
-            <title>UK air traffic control meltdown</title>
+            <title>UK ATC meltdown followup: what went wrong?</title>
+            <link>https://jameshaydon.github.io/nats-fail/</link>
+        </item>
+        <item>
+            <title>Notes on the UK air traffic control meltdown</title>
             <link>https://jameshaydon.github.io/nats-fail/</link>
         </item>
         <item>
