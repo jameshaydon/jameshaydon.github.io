@@ -122,9 +122,9 @@ if the programmer was not aware of the duplicate waypoint issue.</p>
 <p>In the original version of my notes on the bug, I used the word <em>&quot;imperative&quot;</em>
 to describe how I thought the original code worked. Using this word was a
 mistake. What I should have said instead was roughly: <em>&quot;not
-correct-by-construction style&quot;</em><sup class="footnote-reference"><a href="#1">1</a></sup>. I conflated &quot;correct-by-construction&quot; with
-my own personal preference when striving to achieve this programming style,
-which involves functional programming.</p>
+correct-by-domain-construction style&quot;</em><sup class="footnote-reference"><a href="#1">1</a></sup>. I conflated
+&quot;correct-by-construction&quot; with my own personal preference when striving to
+achieve this programming style, which involves functional programming.</p>
 <p>There is no precise definition of what &quot;correct-by-construction&quot; (C-b-C) means,
 but it would at least include:</p>
 <ul>
@@ -152,8 +152,7 @@ prove that some formalisation of this statement is true, I'm saying that this is
 an obviously true statement in the <em>domain</em> of flight plans.</p>
 <p>Statement (2) is non C-b-C style. It requires thought and breaks down in the
 presence of duplicate waypoint names.</p>
-<p>I think what I'm advocating for here is basically what you get when you mix
-these two design philosophies:</p>
+<p>I think what I'm advocating for here is basically what you get when you mix</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain-driven design</a>,
 which argues that the programming constructs should match the domain,</li>
@@ -162,6 +161,7 @@ validate</a>,
 or <em>&quot;Type-driven design&quot;</em>, which argues that properties/invariants should be
 tracked in the types of values, rather than merely validated at the
 boundaries.</li>
+<li>The more formal meaning of &quot;correct-by-construction&quot;, as used in the formal verification community.</li>
 </ul>
 <p>So a more precise name might be &quot;Correct-by-Domain-Construction&quot;.</p>
 <p>Programming in C-b-C style will lead to code that is &quot;more correct&quot;, because its
