@@ -118,7 +118,7 @@ waypoints.</li>
 <p>What I hope to convince you of in this post is that the programming style <em>does</em>
 matter: the bug might not have occurred when using a specific coding style, even
 if the programmer was not aware of the duplicate waypoint issue.</p>
-<h2 id="correct-by-construction-style">Correct-by-construction style</h2>
+<h2 id="correct-by-domain-construction-style">&quot;Correct-by-Domain-Construction&quot; style</h2>
 <p>In the original version of my notes on the bug, I used the word <em>&quot;imperative&quot;</em>
 to describe how I thought the original code worked. Using this word was a
 mistake. What I should have said instead was roughly: <em>&quot;not
@@ -136,10 +136,9 @@ are known to preserve certain invariants, so that they are &quot;safe&quot;,</li
 <p>The idea is that if the &quot;base&quot; functions are &quot;correct&quot; (in some way), then by
 induction the full program is too.</p>
 <p>In C-b-C style, invariants are expressed in terms of the domain: the &quot;modelling
-gap&quot; is small. Programs that are not correct-by-construction have invariants
-too, but because the programming objects don't correspond to the domain objects,
-the invariants are harder to think of and reasoning about them is more brittle.
-Compare:</p>
+gap&quot; is small. Programs that are not C-b-C have invariants too, but because the
+programming objects don't correspond to the domain objects, the invariants are
+harder to think of and reasoning about them is more brittle. Compare:</p>
 <p><strong>(1)</strong> <em>Cutting a flight plan short at a point where the rest of the plan is at
 no point in the UK results in a flight plan that fully contains the UK
 part.</em></p>
@@ -170,9 +169,9 @@ correctness is based on the logical structure of the domain. In particular the
 robustness of the code is less affected by <em>unknowns</em> about the domain (e.g.
 possibility of duplicate waypoint names), because the correctness of the code is
 based on <em>known</em> facts about the domain.</p>
-<p>The smaller modelling gap in correct-by-construction style also ensures that
-errors, should they occur, are usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this
-can make failures less serious.</p>
+<p>The smaller modelling gap in C-b-C style also ensures that errors, should they
+occur, are usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this can make failures
+less serious.</p>
 <h2 id="another-look-at-the-problem">Another look at the problem</h2>
 <p>Let us from now on assume that <strong><em>we do not know that a flight plan can contain
 duplicate waypoints</em></strong> and that we <strong><em>assume they are unique</em></strong>, and look at
