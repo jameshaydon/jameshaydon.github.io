@@ -86,7 +86,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>10 minute read</span>
+    <span>11 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -118,40 +118,58 @@ waypoints.</li>
 <p>What I hope to convince you of in this post is that the programming style <em>does</em>
 matter: the bug might not have occurred when using a specific coding style, even
 if the programmer was not aware of the duplicate waypoint issue.</p>
-<h2 id="what-did-i-mean-by-imperative">What did I mean by &quot;imperative&quot;?</h2>
-<p>Using this word was a mistake. What I should have said instead was roughly:
-<em>&quot;not correct-by-construction style&quot;</em><sup class="footnote-reference"><a href="#1">1</a></sup>. I conflated &quot;correct-by-construction&quot;
-with my own personal preference when striving to achieve this programming style,
+<h2 id="correct-by-construction-style">Correct-by-construction style</h2>
+<p>In the original version of my notes on the bug, I used the word <em>&quot;imperative&quot;</em>
+to describe how I thought the original code worked. Using this word was a
+mistake. What I should have said instead was roughly: <em>&quot;not
+correct-by-construction style&quot;</em><sup class="footnote-reference"><a href="#1">1</a></sup>. I conflated &quot;correct-by-construction&quot; with
+my own personal preference when striving to achieve this programming style,
 which involves functional programming.</p>
-<p>There is no precise definition of what &quot;correct-by-construction&quot; means, but it
-would at least include:</p>
+<p>There is no precise definition of what &quot;correct-by-construction&quot; (C-b-C) means,
+but it would at least include:</p>
 <ul>
 <li>representing domain objects with programming values as faithfully as possible,</li>
-<li>only operating on them with functions that are known to preserve certain
-invariants, so that they are &quot;safe&quot;,</li>
+<li>only operating on them with functions that make sense in the domain, and that
+are known to preserve certain invariants, so that they are &quot;safe&quot;,</li>
 <li>building up a solution by composing such functions.</li>
 </ul>
 <p>The idea is that if the &quot;base&quot; functions are &quot;correct&quot; (in some way), then by
 induction the full program is too.</p>
-<p>In correct-by-construction programming invariants are expressed in terms of the
-domain: the &quot;modelling gap&quot; is small. Programs that are not
-correct-by-construction have invariants too, but because the programming objects
-don't correspond to the domain objects, the invariants are harder to think of
-and reasoning about them is more brittle. Compare:</p>
-<p><em>correct-by-construction style:</em></p>
-<blockquote>
-<p>Cutting a flight plan short, where the part we cut off is at no point in the
-UK, results in a flight plan that fully contains the UK part.</p>
-</blockquote>
+<p>In C-b-C style, invariants are expressed in terms of the domain: the &quot;modelling
+gap&quot; is small. Programs that are not correct-by-construction have invariants
+too, but because the programming objects don't correspond to the domain objects,
+the invariants are harder to think of and reasoning about them is more brittle.
+Compare:</p>
+<p><strong>(1)</strong> <em>Cutting a flight plan short at a point where the rest of the plan is at
+no point in the UK results in a flight plan that fully contains the UK
+part.</em></p>
 <p>and</p>
-<p><em>non correct-by-construction style:</em></p>
-<blockquote>
-<p>Iterating rightwards in the ADEXP list from the known UK exit point until a a
-match is found in the ICAO plan produces the index marking the end of the UK
-part.</p>
-</blockquote>
-<p>The former is statement is obvious and unconditionally correct, the latter
-requires thought and breaks down in the presence of duplicate waypoint names.</p>
+<p><strong>(2)</strong> <em>Iterating rightwards in the ADEXP list from the known UK exit point
+until a a match is found in the ICAO plan produces the index marking the end
+of the UK part.</em></p>
+<p>Statement (1) is C-b-C style, it is obvious and unconditionally true. Note that
+I'm not just referring here to the fact that one can use formal verification to
+prove that some formalisation of this statement is true, I'm saying that this is
+an obviously true statement in the <em>domain</em> of flight plans.</p>
+<p>Statement (2) is non C-b-C style. It requires thought and breaks down in the
+presence of duplicate waypoint names.</p>
+<p>I think what I'm advocating for here is basically what you get when you mix
+these two design philosophies:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain-driven design</a>,
+which argues that the programming constructs should match the domain,</li>
+<li><a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don’t
+validate</a>,
+or <em>&quot;Type-driven design&quot;</em>, which argues that properties/invariants should be
+tracked in the types of values, rather than merely validated at the
+boundaries.</li>
+</ul>
+<p>So maybe it could be called &quot;Correct-by-Domain-Construction&quot;.</p>
+<p>Programming in C-b-C style will lead to code that is &quot;more correct&quot;, because its
+correctness is based on the logical structure of the domain. In particular the
+robustness of the code is less affected by <em>unknowns</em> about the domain (e.g.
+possibility of duplicate waypoint names), because the correctness of the code is
+based on <em>known</em> facts about the domain.</p>
 <p>The smaller modelling gap in correct-by-construction style also ensures that
 errors, should they occur, are usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this
 can make failures less serious.</p>
@@ -254,8 +272,9 @@ so to speak.</p>
 <p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
 with programming values. It operates on these values with semantically
 meaningful operations, e.g. &quot;removing the first leg of a flight plan results in
-a flight plan&quot;. So in the end you get a valid flight plan, not indices into a
-list which doesn't mean anything.</p>
+a flight plan&quot;. It's correctness is based on reasoning patterns from the domain.
+So in the end you get a valid flight plan, not indices into a list which doesn't
+mean anything.</p>
 <p><em>In my opinion</em>, it is important that we slowly move towards such a coding
 style. I would hope to see this style used more and more in industry, especially
 in critical software.</p>
@@ -284,7 +303,7 @@ this post.</p>
 <p>&quot;Correct-by-construction&quot; usually refers to something more precise than what I am talking about here. Most people would use this term when the criteria for &quot;correct&quot; are clearly stated, and the correctness is formally verified. I couldn't think of any other term to describe this coding style though.</p>
 </div>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
-<p>Closer conceptually, and in terms of the call graph/code. Failing close to the root cause is why assertions are useful for example, even though this can be counter-intuitive at first (&quot;why instruct the progam to failmore?&quot;). This is also why JavaScript can so hard to debug: it does its damdest to not fail at all at every turn.</p>
+<p>Closer conceptually, and in terms of the call graph/code. Failing close to the root cause is why assertions are useful for example, even though this can be counter-intuitive at first (&quot;why instruct the progam to fail more?&quot;). This is also why JavaScript can be so hard to debug: it does its damdest to not fail at all at every turn.</p>
 </div>
 <div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
 <p>Of course I know it's impossible for me to know what I would have coded had someone not shouted &quot;DUPLICATE WAYPOINTS&quot; in my ear, but I am trying my best.</p>

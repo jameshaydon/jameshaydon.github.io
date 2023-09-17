@@ -724,17 +724,18 @@ meltdown.</p>
 the flight plan to be tested, and extracting the UK part of a flight plan is
 quite an important step. Testing failed to expose the bug in this case, maybe
 because the testing also did not consider duplicate waypoint names.</p>
-<p><a href="https://en.wikipedia.org/wiki/Fuzzing">Fuzzing</a>, for example, may have
-prevented this. By bombarding such a system with randomly generated flight
-plans, you can see if any of them cause bad failure modes: a crashed system
-where one doesn't know immediately what went wrong. By inspecting which sorts of
-flight plans cause problems, it would become apparent that those with duplicate
+<p><a href="https://en.wikipedia.org/wiki/Fuzzing">Fuzzing</a> may have prevented this this
+bug/crash. By bombarding such a system with randomly generated flight plans, you
+can see if any of them cause bad failure modes: a crashed system where one
+doesn't know immediately what went wrong. By inspecting which sorts of flight
+plans cause problems, it would become apparent that those with duplicate
 waypoint identifiers in the ADEXP portion cannot be processed properly. I would
-assume <em>all</em> flight plans need to have their UK part extracted, so if fuzzing
-was used and failed to expose this bad failure mode, it must have been because
-of (gracefully handled) failures earlier in the pipeline; it's possible that for
-whatever reason it was very hard to randomly generate flight plans that passed
-some validation step.</p>
+assume <em>all</em> flight plans need to have their UK part extracted, so the faulty
+code is not buried deep in some branching code. So fuzzing would hit this code
+path, unless it is always blocked at some earlier point in the pipeline (by some
+validation code maybe). But this would be apparent to the testers: if no inputs
+make it all the way through the system, it's clear the system isn't being well
+tested.</p>
 <h3 id="the-fprsa-r-system-has-bad-failure-modes">The <code>FPRSA-R</code> system has bad failure modes</h3>
 <p>All systems can malfunction, so the important thing is that they malfunction <em>in
 a good way</em> and that those responsible are <em>prepared</em> for malfunctions.</p>
