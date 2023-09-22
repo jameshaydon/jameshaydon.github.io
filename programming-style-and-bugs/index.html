@@ -14,11 +14,11 @@
 
     
       
-      <meta name="description" content="Clarification on my comments about programming style, bugs and the UK ATC meltdown." />
+      <meta name="description" content="Thoughts on programming style, bugs and the UK ATC meltdown." />
       
     
 
-      <title>James Haydon - Correct-by-Domain-Contruction style (UK ATC crash) </title>
+      <title>James Haydon - Domain structured programming (UK ATC meltdown) </title>
 
       
         <link rel="alternate" type="application/atom+xml" title="RSS" href="https://jameshaydon.github.io/atom.xml">
@@ -78,7 +78,7 @@
 
 <article itemscope itemtype="http://schema.org/BlogPosting">
     <header>
-        <h1 itemprop="headline">Correct-by-Domain-Contruction style (UK ATC crash)</h1>
+        <h1 itemprop="headline">Domain structured programming (UK ATC meltdown)</h1>
         <span class="muted">
     <svg class="icon i-clock" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
@@ -116,63 +116,62 @@ original algorithm (probably) works fine on flight plans with no duplicate
 waypoints.</li>
 </ul>
 <p>What I hope to convince you of in this post is that the programming style <em>does</em>
-matter: the bug might not have occurred when using a specific coding style, even
-if the programmer was not aware of the duplicate waypoint issue.</p>
-<h2 id="correct-by-domain-construction-style">&quot;Correct-by-Domain-Construction&quot; style</h2>
+matter: the bug might not have occurred when using &quot;domain structured
+programming&quot;, even if the programmer was not aware of the duplicate waypoint
+issue. And the ideas behind this sort of programming style have been around for
+decades.</p>
+<h2 id="domain-structured-programming">Domain structured programming</h2>
 <p>In the original version of my notes on the bug, I used the word <em>&quot;imperative&quot;</em>
-to describe how I thought the original code worked. Using this word was a
-mistake. What I should have said instead was roughly: <em>&quot;not
-correct-by-domain-construction style&quot;</em><sup class="footnote-reference"><a href="#1">1</a></sup>. I conflated
-&quot;correct-by-construction&quot; with my own personal preference when striving to
-achieve this programming style, which involves functional programming.</p>
-<p>There is no precise definition of what &quot;correct-by-construction&quot; (C-b-C) means,
-but it would at least include:</p>
+to describe what I thought the original code might look like. Using this word
+was a mistake. What I was really meant was that it was not <em>&quot;domain structured
+programming&quot;</em>, by which I roughly mean:</p>
 <ul>
-<li>representing domain objects with programming values as faithfully as possible,</li>
-<li>only operating on them with functions that make sense in the domain, and that
-are known to preserve certain invariants, so that they are &quot;safe&quot;,</li>
+<li>representing domain objects with data-structures as faithfully as possible,</li>
+<li>operating on them with functions that make sense in the domain, and that
+are known to preserve certain invariants,</li>
 <li>building up a solution by composing such functions.</li>
 </ul>
-<p>The idea is that if the &quot;base&quot; functions are &quot;correct&quot; (in some way), then by
-induction the full program is too.</p>
-<p>In C-b-C style, invariants are expressed in terms of the domain: the &quot;modelling
-gap&quot; is small. Programs that are not C-b-C have invariants too, but because the
-programming objects don't correspond to the domain objects, the invariants are
-harder to think of and reasoning about them is more brittle. Compare:</p>
-<p><strong>(1)</strong> <em>Cutting a flight plan short at a point where the rest of the plan is at
-no point in the UK results in a flight plan that fully contains the UK
-part.</em></p>
+<p>By programming in this style the various manipulations by the program all make
+sense in the domain, and are thus less likely to &quot;go wrong&quot;, especially for
+reasons that are irrelevant to the domain.</p>
+<p>In this style, invariants are expressed in terms of the domain: the &quot;modelling
+gap&quot; is small. Programs not written in this style have invariants too, but
+because the programming objects don't correspond to the domain objects, the
+invariants are harder to think of and reasoning about them is more brittle.
+Compare:</p>
+<p><strong>(1)</strong> <em>Cutting a flight plan short at a point where the rest of the plan is
+not in the UK results in a flight plan that fully contains the UK part.</em></p>
 <p>and</p>
 <p><strong>(2)</strong> <em>Iterating rightwards in the ADEXP list from the known UK exit point
 until a a match is found in the ICAO plan produces the index marking the end
 of the UK part.</em></p>
-<p>Statement (1) is C-b-C style, it is obvious and unconditionally true. Note that
-I'm not just referring here to the fact that one can use formal verification to
-prove that some formalisation of this statement is true, I'm saying that this is
-an obviously true statement in the <em>domain of air traffic control</em>. An
-air-traffic control expert can immediately tell you if it is true or not.</p>
-<p>Statement (2) is non C-b-C style. It requires thought and breaks down in the
-presence of duplicate waypoint names. An air-traffic control expert with no programming experience cannot say anything about it.</p>
+<p>Statement (1) is in domain structured programming style, it is obvious and
+unconditionally true. Note that I'm not just referring here to the fact that one
+can use formal verification to prove that some formalisation of this statement
+is true, I'm saying that this is an obviously true statement in the <em>domain of
+air traffic control</em>.</p>
+<p>Statement (2) refers to objects that are <em>domain-irrelevant</em>, such as array
+indices. Judging its validity requires thought and it breaks down in the
+presence of duplicate waypoint names.</p>
 <p>I think what I'm advocating for here is basically what you get when you mix</p>
 <ul>
+<li><a href="https://en.wikipedia.org/wiki/Structured_programming">Structured programming</a>, which advocates using the correct data-structures for solving a problem, and structuring the code in analogy with those data structures,</li>
 <li><a href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain-driven design</a>,
-which argues that the programming constructs should match the domain,</li>
+which argues that the language of the domain should be used in the programming
+source code<sup class="footnote-reference"><a href="#1">1</a></sup>,</li>
 <li><a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don’t
 validate</a>,
 or <em>&quot;Type-driven design&quot;</em>, which argues that properties/invariants should be
-tracked in the types of values, rather than merely validated at the
-boundaries.</li>
-<li>The more formal meaning of &quot;correct-by-construction&quot;, as used in the formal verification community.</li>
+represented by proper data-strctures (&quot;make illegal state unrepresentable&quot;),
+rather than merely validated at the boundaries.</li>
 </ul>
-<p>So a more precise name might be &quot;Correct-by-Domain-Construction&quot;.</p>
-<p>Programming in C-b-C style will lead to code that is &quot;more correct&quot;, because its
+<p>Programming in this style will lead to code that is &quot;more correct&quot;, because its
 correctness is based on the logical structure of the domain. In particular the
-robustness of the code is less affected by <em>unknowns</em> about the domain (e.g.
-possibility of duplicate waypoint names), because the correctness of the code is
-based on <em>known</em> facts about the domain.</p>
-<p>The smaller modelling gap in C-b-C style also ensures that errors, should they
-occur, are usually &quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this can make failures
-less serious.</p>
+robustness of the code is less affected by <em>unknowns</em> (e.g. possibility of
+duplicate waypoint names), because the correctness of the code is based on
+<em>known</em> facts about the domain.</p>
+<p>A smaller modelling gap also ensures that errors, should they occur, are usually
+&quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this can make failures less serious.</p>
 <h2 id="another-look-at-the-problem">Another look at the problem</h2>
 <p>Let us from now on assume that <strong><em>we do not know that a flight plan can contain
 duplicate waypoints</em></strong> and that we <strong><em>assume they are unique</em></strong>, and look at
@@ -183,18 +182,17 @@ ICAO flight plan, using data from the ADEXP plan.</p>
 <p>One possibility, which sounds like what the original code did, is to keep the
 data as it is and perform various operations until we are satisfied we have
 found two indices <code>start_index</code> and <code>end_index</code> which delimit the UK portion of
-the flight plan. The process was not correct-by-construction: the end result was
-an <code>end_index</code> value for which <code>end_index &lt; start_index</code>. This doesn't
-correspond to a sub-flight-plan at all. The code has &quot;gone wrong&quot;, and not
-noticed: the invariant that the pair of indices represent a valid sub-plan has
-been violated. Noticing that something has gone wrong is important: the closer
-you are to the root cause, the more likely the exception will contain the
-information that is relevant to those who are dealing with the crash. It may
-even have failed gracefully at this point.</p>
-<p>The correct-by-construction approach, at least the one that I chose, is to
-operate on a version of the flight plan that combines all the information you
-need. This therefore involves a first step which works out how the ICAO and
-ADEXP plans &quot;match up&quot;.</p>
+the flight plan. The process is not manipulating domain objects, it is
+manipulating array indices. The end result is an <code>end_index</code> value for which
+<code>end_index &lt; start_index</code>. This doesn't correspond to a sub-flight-plan at all.
+The code has &quot;gone wrong&quot;, and not noticed: the invariant that the pair of
+indices represent a valid sub-plan has been violated. Noticing that something
+has gone wrong is important: the closer you are to the root cause, the more
+likely the exception will contain the information that is relevant to those who
+are dealing with the crash. It may even have failed gracefully at this point.</p>
+<p>The &quot;domain structured programming&quot; way to proceed is to operate on a version of
+the flight plan that combines all the information one needs. This therefore
+involves a first step which works out how the ICAO and ADEXP plans &quot;match up&quot;.</p>
 <p>In the original post this was achieved by a function <code>reconcile :: ICAO p r -&gt; [p] -&gt; [Combined p r]</code>. Now, suppose that I hadn't realised waypoint names were
 non-unique, then I would assume the plans can only match up in at most one way.
 So I might<sup class="footnote-reference"><a href="#3">3</a></sup> have defined something like this instead:</p>
@@ -213,14 +211,15 @@ plan, and then reconciles the rest of the plan recursively.</p>
 <p>This function is an example of <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">&quot;Parse, don’t
 validate&quot;</a>.
 Parsing is how semantically meaningful domain values are produced from less
-meaningful data, and so is often a necessary first step in
-correct-by-construction style. In fact I wouldn't be surprised if the original
-code violated precisely this slogan, <em>validated</em> and <em>not parsed</em>. This would be
-a snippet of code much like <code>reconcile'</code> above, but that just checks the plans
-match up instead of returning a combined plan.</p>
+meaningful data, and so is often a necessary first step in structuring the
+solution in terms of the domain. In fact I wouldn't be surprised if the original
+code violated precisely this slogan, <em>validated</em> the input and <em>not parsed</em> it
+(into a reconciled data structure). Validation code would look much like the
+code of <code>reconcile'</code> above, but that just checks the plans match up instead of
+returning a combined plan.</p>
 <p>The function <code>reconcile'</code> is <em>wrong</em> because it doesn't consider the possibility
 of duplicate waypoints, but much less wrong than the original bug because of the
-correct-by-construction programming style. It will either:</p>
+programming style. It will either:</p>
 <ul>
 <li>return <code>Nothing</code> because it can't create a valid domain object (a flight plan),
 in which case it <em>knows</em> it should now fail gracefully, or,</li>
@@ -249,10 +248,10 @@ combines all the information we need. All that changes is pattern matching on a
 </span><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
 </span><span>                       UK  UK   UK UK UK    UK  UK
 </span></code></pre>
-<p>The bug would therefore have been completely avoided, even if the failure modes
-were bad, and even though the spec might not have mentioned the duplicate
-waypoint issue. The reason it still works is that the reconciliation still
-exists, and the duplicate waypoint doesn't get in the way of finding it.</p>
+<p>The bug would therefore have been completely avoided even though the spec might
+not have mentioned the duplicate waypoint issue. The reason it still works is
+that the the duplicate waypoint doesn't get in the way of reconciling the
+inputs, it is just irrelevant.</p>
 <p>The reconciliation is also unique in this case, so the processing of the flight
 plan is completely correct. The code here differs from the code of the previous
 post only when there are multiple reconciliations: the first post has code which
@@ -266,33 +265,27 @@ at <code>w2</code>. Since waypoints with duplicate names are supposed to be very
 and flight plan legs are <em>not</em> supposed to be over very long distances, this
 shouldn't happen. Indeed this requirement is in place precisely to avoid flight
 plans being ambiguous.</p>
-<p>The code of the original blog post was proceeding with an &quot;abundance of caution&quot;
-so to speak.</p>
 <p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.</p>
 <p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
-with programming values. It operates on these values with semantically
-meaningful operations, e.g. &quot;removing the first leg of a flight plan results in
-a flight plan&quot;. It's correctness is based on reasoning patterns from the domain.
-So in the end you get a valid flight plan, not indices into a list which doesn't
-mean anything.</p>
+with data-structures. It operates on these values with semantically meaningful
+operations, e.g. &quot;removing the first leg of a flight plan results in a flight
+plan&quot;. It's correctness is based on reasoning patterns from the domain. So in
+the end you get a valid flight plan, not indices into a list which doesn't mean
+anything.</p>
 <p><em>In my opinion</em>, it is important that we slowly move towards such a coding
 style. I would hope to see this style used more and more in industry, especially
 in critical software.</p>
 <p>Notes:</p>
 <ul>
 <li>It's possible to code in this style in most languages.</li>
-<li>It's possible to code in non-correct-by-construction style in <em>all</em> languages.</li>
-<li>But <strong><em>in my opinion</em></strong>, some languages lend themselves more to this style
-than others, for example, those that are functional.</li>
-<li>Correct-by-construction style most certainly doesn't prevent <em>all</em> bugs, just
-some of them.</li>
+<li>It's possible to not code in this style in <em>all</em> languages.</li>
+<li><strong><em>In my opinion</em></strong>, some languages lend themselves more to this style
+than others.</li>
+<li>This style most certainly doesn't prevent <em>all</em> bugs, just some of them.</li>
 <li>There are many other techniques/tools to prevent bugs.</li>
-<li>Static types are <em>not</em> a prerequisite to correct-by-construction style (though
-they do help in my opinion). I've seen these ideas espoused by the
+<li>Static types are <em>not</em> a prerequisite to this style (though they do help in my
+opinion). I've seen these ideas espoused by the
 <a href="https://clojure.org/">Clojure</a> community, for example.</li>
-<li>Languages with <a href="https://en.wikipedia.org/wiki/Dependent_type">dependent types</a>
-or <a href="https://ucsd-progsys.github.io/liquidhaskell/">SMT plugins</a> allow
-invariants to be machine-verified.</li>
 </ul>
 <hr />
 <p>Many thanks to <a href="http://assert-false.science/arnaud/">Arnaud Spiwack</a> and
@@ -300,7 +293,12 @@ invariants to be machine-verified.</li>
 this post.</p>
 <hr />
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>&quot;Correct-by-construction&quot; usually refers to something more precise than what I am talking about here. Most people would use this term when the criteria for &quot;correct&quot; are clearly stated, and the correctness is formally verified. I couldn't think of any other term to describe this coding style though.</p>
+<p>I was tempted to just refer to the style I am advocating for as
+&quot;Domain-Driven Design&quot; (DDD), but I don't think this term, as it has come to
+be understood, is referring to quite the same idea. DDD, from what I've
+seen, is more about structuring interfaces, for example <em>naming</em> methods.
+I'm not sure &quot;DDD&quot; really prescribes <em>how</em> those methods should be written,
+in a more technical sense.</p>
 </div>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
 <p>Closer conceptually, and in terms of the call graph/code. Failing close to the root cause is why assertions are useful for example, even though this can be counter-intuitive at first (&quot;why instruct the progam to fail more?&quot;). This is also why JavaScript can be so hard to debug: it does its damdest to not fail at all at every turn.</p>
