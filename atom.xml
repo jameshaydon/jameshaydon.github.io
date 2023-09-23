@@ -104,11 +104,14 @@ asks why more Python developers couldn&#x27;t instead be using Haskell.&lt;&#x2F
         <id>https://jameshaydon.github.io/papers/</id>
         
         <content type="html">&lt;ul&gt;
-&lt;li&gt;Ichiro Hasuo, Clovis Eberhart, James Haydon, Jérémy Dubut, Rose Bohrer, Tsutomu
-Kobayashi, Sasinee Pruekprasert, Xiao-yi Zhang, Erik André Pallas, Akihisa
-Yamada, Kohei Suenaga, Fuyuki Ishikawa, Kenji Kamijo, Yoshiyuki Shinya, and
-Takamasa Suetomi. &lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2207.02387.pdf&quot; title=&quot;arxiv&quot;&gt;Goal-Aware RSS for Complex Scenarios via Program Logic&lt;&#x2F;a&gt;, IEEE
-T-IV, vol.8 (4), 3040–3072, 2023&lt;&#x2F;li&gt;
+&lt;li&gt;J. Haydon, M. Bondu, C. Eberhart, J. Dubut, and I. Hasuo. &lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2308.06785.pdf&quot;&gt;Formal Verification
+of Intersection Safety for Automated
+Driving&lt;&#x2F;a&gt;, ITSC, IEEE, 2023.&lt;&#x2F;li&gt;
+&lt;li&gt;I. Hasuo, C. Eberhart, J. Haydon, J. Dubut, R. Bohrer, T. Kobayashi, S.
+Pruekprasert, X. Zhang, E. Pallas, A. Yamada, K. Suenaga, F. Ishikawa, K.
+Kamijo, Y. Shinya, and T. Suetomi. &lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2207.02387.pdf&quot; title=&quot;arxiv&quot;&gt;Goal-Aware RSS for Complex Scenarios via
+Program Logic&lt;&#x2F;a&gt;, IEEE T-IV, vol.8
+(4), 3040–3072, 2023&lt;&#x2F;li&gt;
 &lt;li&gt;Clovis Eberhart, Jérémy Dubut, James Haydon, and Ichiro Hasuo. Formal Verification of
 Safety Architectures for Automated Driving, IV 2023&lt;&#x2F;li&gt;
 &lt;li&gt;Clovis Eberhart, James Haydon, Jérémy Dubut, Ahmet Cetinkaya, Sasinee Pruekprasert. &lt;a href=&quot;&#x2F;papers&#x2F;mu-tgl.pdf&quot;&gt;Logic
