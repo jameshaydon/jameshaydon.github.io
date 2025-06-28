@@ -1,79 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-    <!-- Enable responsiveness on mobile devices-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-    <!-- google fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  
+  
+  <meta name="description" content="I ask some people I know who like to program in Python why they choose Python over Haskell." />
+  
+  
+
+  <title>
     
-      
-      <meta name="description" content="I ask some people I know who like to program in Python why they choose Python over Haskell." />
-      
+    Why (some) Python programmers don&#x27;t want Haskell
     
+</title>
+  <link rel="alternate" type="application/atom+xml" title="James Haydon Atom Feed" href="https://jameshaydon.github.io/atom.xml" />
 
-      <title>James Haydon - Why (some) Python programmers don&#x27;t want Haskell </title>
+  
+  <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
+  
 
-      
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="https://jameshaydon.github.io/atom.xml">
-      
+  
+  
+</head>
 
-      
-          <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
-      
-
-      
-      
-
-          <!-- Google tag (gtag.js) -->
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-X4MP59NZ35"></script>
-          <script>
-           window.dataLayer = window.dataLayer || [];
-           function gtag(){dataLayer.push(arguments);}
-           gtag('js', new Date());
-
-           gtag('config', 'G-X4MP59NZ35');
-          </script>
-  </head>
-
-    <body class="hack dark main container">
-        
+<body class="hack dark main container">
+  
     
         
-                
-                    <header>
-                        <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://jameshaydon.github.io">
-                                <span itemprop="name">Home</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://github.com/jameshaydon">
-                                <span itemprop="name">GitHub</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://jameshaydon.github.io/papers">
-                                <span itemprop="name">Papers</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://github.com/jameshaydon/lawvere">
-                                <span itemprop="name">lawvere-lang</span></a>
-                        
-                        </nav>
-                    </header>
-                
-            
+  
+  <header class="nav-header">
+    <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="navbar">
+      <div class="nav-links">
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io/">
+          <span itemprop="name">Home</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon">
+          <span itemprop="name">GitHub</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//papers">
+          <span itemprop="name">Papers</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//categories">
+          <span itemprop="name">Categories</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//tags">
+          <span itemprop="name">Tags</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://imiron.io/">
+          <span itemprop="name">Imiron</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon/lawvere">
+          <span itemprop="name">lawvere-lang</span></a>
+        
+      </div>
+    </nav>
+    
+
+  </header>
+  
+  
     
 
 <article itemscope itemtype="http://schema.org/BlogPosting">
@@ -100,7 +106,7 @@
       <p>A <a href="https://discourse.haskell.org/t/commercial-haskell-should-go-after-python-julia-not-rust/6964/2">Haskell discourse
 thread</a>
 asks why more Python developers couldn't instead be using Haskell.</p>
-<p>One of the points made in this thread, is that there is a sizeable class of Python programmers for which the trope &quot;Python programmers will be scared of monads!&quot; doesn't apply. I thought I would ask some of the people I know that use Python why they don't use Haskell.</p>
+<p>One of the points made in this thread, is that there is a sizeable class of Python programmers for which the trope "Python programmers will be scared of monads!" doesn't apply. I thought I would ask some of the people I know that use Python why they don't use Haskell.</p>
 <span id="continue-reading"></span>
 <p>Some notes about the demographic:</p>
 <ul>
@@ -116,24 +122,24 @@ asks why more Python developers couldn't instead be using Haskell.</p>
 <li>Python has good, beginner friendly tooling.</li>
 <li>I am using Python and my collaborators are already using Python, would need a good reason to change.</li>
 <li>Students can pick up Python very quickly.</li>
-<li>With Python you (or a collaborator, or a student) can always &quot;muddle through&quot;. With Haskell you may just get stuck.</li>
-<li>Haskell seems &quot;locked down&quot; (types? purity is handcuffs? no imperative programming?)</li>
+<li>With Python you (or a collaborator, or a student) can always "muddle through". With Haskell you may just get stuck.</li>
+<li>Haskell seems "locked down" (types? purity is handcuffs? no imperative programming?)</li>
 <li>Unfamiliarity with functional programming.</li>
 <li>Haskell code in the wild looks very complicated compared to Python code in the wild.</li>
 </ul>
 <h2 id="subject-a">Subject A</h2>
 <blockquote>
 <p>I know nothing about Haskell despite it being in my list of things to look at for ages 😅😅😅
-But I think part of the answer is the same as &quot;why do you use this messaging app instead of that one&quot;: it's what the community uses.</p>
+But I think part of the answer is the same as "why do you use this messaging app instead of that one": it's what the community uses.</p>
 </blockquote>
 <p>network effect?</p>
 <blockquote>
-<p>I think it's a big part. Another could be inertia : &quot;I'm in research/industry and I have a new project. I'm not going to change my workflow just for shits and giggles&quot;. So if a working professional has been using python, it's unlikely to change if they keep working in the same field. I think.</p>
+<p>I think it's a big part. Another could be inertia : "I'm in research/industry and I have a new project. I'm not going to change my workflow just for shits and giggles". So if a working professional has been using python, it's unlikely to change if they keep working in the same field. I think.</p>
 </blockquote>
 <blockquote>
 <p>But I'll tell you that : I think imperative is easier then functional, and I think many people agree. And the fact that if you want, you can do a bit of functional un python just sweetens the pot.</p>
 </blockquote>
-<p>Are you aware that you can program imperatively in Haskell? </p>
+<p>Are you aware that you can program imperatively in Haskell?</p>
 <blockquote>
 <p>No, I wasn't aware.</p>
 </blockquote>
@@ -158,7 +164,7 @@ Numpy, scipy, pandas, geopandas, any tool API, ...</li>
 </ul>
 </blockquote>
 <blockquote>
-<p>Everything is available in Python. I can teach any student to write python in 15 minutes. 
+<p>Everything is available in Python. I can teach any student to write python in 15 minutes.
 With Haskell/Scala/... it will take me days to get there and most likely I'll encounter an issue where I'll need something that's not available or very inconvenient</p>
 </blockquote>
 <blockquote>
@@ -166,14 +172,14 @@ With Haskell/Scala/... it will take me days to get there and most likely I'll en
 </blockquote>
 <blockquote>
 <p>In pretty much every (university) course I am aware of, people will learn procedural programming with OO as a next step.
-Functional, logic oriented, etc. are seen as special cases that are taught &quot;on demand&quot;. I'm aware that functional is now trending for web dev, but usually you get into it after learning the imperative styles.</p>
+Functional, logic oriented, etc. are seen as special cases that are taught "on demand". I'm aware that functional is now trending for web dev, but usually you get into it after learning the imperative styles.</p>
 </blockquote>
 <blockquote>
-<p>This also includes tutorials. There are lots of &quot;intermediate level&quot; people doing YouTube tutorials of certain intermediate level Python things. 
+<p>This also includes tutorials. There are lots of "intermediate level" people doing YouTube tutorials of certain intermediate level Python things.
 (Function references, generators, lambda expressions, decorators)</p>
 </blockquote>
 <blockquote>
-<p>I'm yet to find any good video explaining currying or monads aimed at intermediate level programmers. It's either &quot;follow these steps exactly&quot; without proper explanation, or some deep dive stuff explaining the ins and outs using all the &quot;big words&quot;.</p>
+<p>I'm yet to find any good video explaining currying or monads aimed at intermediate level programmers. It's either "follow these steps exactly" without proper explanation, or some deep dive stuff explaining the ins and outs using all the "big words".</p>
 </blockquote>
 
     </div>
@@ -186,6 +192,16 @@ Functional, logic oriented, etc. are seen as special cases that are taught &quot
                     Published by James Haydon
                 
                 
+                    
+                    in <a href="https://jameshaydon.github.io/categories/programming/">programming</a>
+                
+                
+                    and
+                    tagged
+                    
+                        <a href="https://jameshaydon.github.io/tags/haskell/">haskell</a>
+                        
+                    
                 
             </p>
             
@@ -195,6 +211,35 @@ Functional, logic oriented, etc. are seen as special cases that are taught &quot
 </article>
 
 
-    </body>
+
+  <!-- optional scripts -->
+  
+  
+  <script src="https://jameshaydon.github.io/js/codeblock.js"></script>
+  
+
+  
+<!-- MathJax script for rendering LaTeX math equations -->
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"],
+      ],
+      displayMath: [
+        ["$$", "$$"],
+        ["\\[", "\\]"],
+      ],
+    },
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+
+  
+
+  
+</body>
 
 </html>

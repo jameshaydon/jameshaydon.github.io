@@ -7,6 +7,9 @@
         <loc>https://jameshaydon.github.io/categories/</loc>
     </url>
     <url>
+        <loc>https://jameshaydon.github.io/categories/programming/</loc>
+    </url>
+    <url>
         <loc>https://jameshaydon.github.io/nats-fail/</loc>
         <lastmod>2023-09-08</lastmod>
     </url>
@@ -14,8 +17,15 @@
         <loc>https://jameshaydon.github.io/page/1/</loc>
     </url>
     <url>
+        <loc>https://jameshaydon.github.io/page/2/</loc>
+    </url>
+    <url>
         <loc>https://jameshaydon.github.io/papers/</loc>
         <lastmod>2022-01-03</lastmod>
+    </url>
+    <url>
+        <loc>https://jameshaydon.github.io/passport/</loc>
+        <lastmod>2025-06-27</lastmod>
     </url>
     <url>
         <loc>https://jameshaydon.github.io/programming-style-and-bugs/</loc>
@@ -23,6 +33,21 @@
     </url>
     <url>
         <loc>https://jameshaydon.github.io/tags/</loc>
+    </url>
+    <url>
+        <loc>https://jameshaydon.github.io/tags/bugs/</loc>
+    </url>
+    <url>
+        <loc>https://jameshaydon.github.io/tags/haskell/</loc>
+    </url>
+    <url>
+        <loc>https://jameshaydon.github.io/tags/logic/</loc>
+    </url>
+    <url>
+        <loc>https://jameshaydon.github.io/tags/nats/</loc>
+    </url>
+    <url>
+        <loc>https://jameshaydon.github.io/tags/passport/</loc>
     </url>
     <url>
         <loc>https://jameshaydon.github.io/what-went-wrong/</loc>

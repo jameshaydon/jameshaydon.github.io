@@ -1,79 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-    <!-- Enable responsiveness on mobile devices-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-    <!-- google fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  
+  
+  <meta name="description" content="Thoughts on programming style, bugs and the UK ATC meltdown." />
+  
+  
+
+  <title>
     
-      
-      <meta name="description" content="Thoughts on programming style, bugs and the UK ATC meltdown." />
-      
+    Domain structured programming (UK ATC meltdown)
     
+</title>
+  <link rel="alternate" type="application/atom+xml" title="James Haydon Atom Feed" href="https://jameshaydon.github.io/atom.xml" />
 
-      <title>James Haydon - Domain structured programming (UK ATC meltdown) </title>
+  
+  <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
+  
 
-      
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="https://jameshaydon.github.io/atom.xml">
-      
+  
+  
+</head>
 
-      
-          <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
-      
-
-      
-      
-
-          <!-- Google tag (gtag.js) -->
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-X4MP59NZ35"></script>
-          <script>
-           window.dataLayer = window.dataLayer || [];
-           function gtag(){dataLayer.push(arguments);}
-           gtag('js', new Date());
-
-           gtag('config', 'G-X4MP59NZ35');
-          </script>
-  </head>
-
-    <body class="hack dark main container">
-        
+<body class="hack dark main container">
+  
     
         
-                
-                    <header>
-                        <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://jameshaydon.github.io">
-                                <span itemprop="name">Home</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://github.com/jameshaydon">
-                                <span itemprop="name">GitHub</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://jameshaydon.github.io/papers">
-                                <span itemprop="name">Papers</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://github.com/jameshaydon/lawvere">
-                                <span itemprop="name">lawvere-lang</span></a>
-                        
-                        </nav>
-                    </header>
-                
-            
+  
+  <header class="nav-header">
+    <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="navbar">
+      <div class="nav-links">
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io/">
+          <span itemprop="name">Home</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon">
+          <span itemprop="name">GitHub</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//papers">
+          <span itemprop="name">Papers</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//categories">
+          <span itemprop="name">Categories</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//tags">
+          <span itemprop="name">Tags</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://imiron.io/">
+          <span itemprop="name">Imiron</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon/lawvere">
+          <span itemprop="name">lawvere-lang</span></a>
+        
+      </div>
+    </nav>
+    
+
+  </header>
+  
+  
     
 
 <article itemscope itemtype="http://schema.org/BlogPosting">
@@ -86,7 +92,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>11 minute read</span>
+    <span>10 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -108,7 +114,7 @@ code is only meant for flight plans with no duplicate waypoints</strong>.<span i
 Of course, I also agree that better specs/requirements would have helped too.</p>
 <p>The original post attracted comments of the sort:</p>
 <ul>
-<li>What is even meant by &quot;imperative&quot; programming? How is it relevant to the rest
+<li>What is even meant by "imperative" programming? How is it relevant to the rest
 of the post?</li>
 <li>Why blame the bug on programming style, when it is just that the original code
 was not aware of the possibility of waypoints with duplicate names? The
@@ -116,15 +122,15 @@ original algorithm (probably) works fine on flight plans with no duplicate
 waypoints.</li>
 </ul>
 <p>What I hope to convince you of in this post is that the programming style <em>does</em>
-matter: the bug might not have occurred when using &quot;domain structured
-programming&quot;, even if the programmer was not aware of the duplicate waypoint
+matter: the bug might not have occurred when using "domain structured
+programming", even if the programmer was not aware of the duplicate waypoint
 issue. And the ideas behind this sort of programming style have been around for
 decades.</p>
 <h2 id="domain-structured-programming">Domain structured programming</h2>
-<p>In the original version of my notes on the bug, I used the word <em>&quot;imperative&quot;</em>
+<p>In the original version of my notes on the bug, I used the word <em>"imperative"</em>
 to describe what I thought the original code might look like. Using this word
-was a mistake. What I was really meant was that it was not <em>&quot;domain structured
-programming&quot;</em>, by which I roughly mean:</p>
+was a mistake. What I was really meant was that it was not <em>"domain structured
+programming"</em>, by which I roughly mean:</p>
 <ul>
 <li>representing domain objects with data-structures as faithfully as possible,</li>
 <li>operating on them with functions that make sense in the domain, and that
@@ -132,9 +138,9 @@ are known to preserve certain invariants,</li>
 <li>building up a solution by composing such functions.</li>
 </ul>
 <p>By programming in this style the various manipulations by the program all make
-sense in the domain, and are thus less likely to &quot;go wrong&quot;, especially for
+sense in the domain, and are thus less likely to "go wrong", especially for
 reasons that are irrelevant to the problem at hand.</p>
-<p>When invariants are expressed in terms of the domain the &quot;modelling gap&quot; is
+<p>When invariants are expressed in terms of the domain the "modelling gap" is
 small. Programs not written in this style have invariants too, but because the
 programming objects don't correspond to the domain objects, the invariants are
 harder to formulate and reasoning about them is more brittle. Compare:</p>
@@ -160,8 +166,8 @@ which argues that the language of the domain should be used in the programming
 source code<sup class="footnote-reference"><a href="#1">1</a></sup>,</li>
 <li><a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don’t
 validate</a>,
-or <em>&quot;Type-driven design&quot;</em>, which argues that properties/invariants should be
-represented by proper data-strctures (&quot;make illegal state unrepresentable&quot;),
+or <em>"Type-driven design"</em>, which argues that properties/invariants should be
+represented by proper data-strctures ("make illegal state unrepresentable"),
 rather than merely validated at the boundaries.</li>
 </ul>
 <p>Programming in this style will lead to code that is more robust, because its
@@ -169,7 +175,7 @@ correctness is based on the logical structure of the domain. The code is also
 less affected by <em>unknowns</em> (e.g. possibility of duplicate waypoint names),
 because the correctness of the code is based on <em>known</em> facts about the domain.</p>
 <p>A smaller modelling gap also ensures that errors, should they occur, are usually
-&quot;closer&quot;<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this can make failures less serious.</p>
+"closer"<sup class="footnote-reference"><a href="#2">2</a></sup> to the route cause, and this can make failures less serious.</p>
 <h2 id="another-look-at-the-problem">Another look at the problem</h2>
 <p>Let us from now on assume that <strong><em>we do not know that a flight plan can contain
 duplicate waypoints</em></strong> and that <strong><em>they are unique</em></strong>, and look at the problem
@@ -183,31 +189,31 @@ found two indices <code>start_index</code> and <code>end_index</code> which deli
 the flight plan. The process is not manipulating domain objects, it is
 manipulating array indices. The end result is an <code>end_index</code> value for which
 <code>end_index &lt; start_index</code>. This doesn't correspond to a sub-flight-plan at all.
-The code has &quot;gone wrong&quot;, and not noticed: the invariant that the pair of
+The code has "gone wrong", and not noticed: the invariant that the pair of
 indices represent a valid sub-plan has been violated. Noticing that something
 has gone wrong is important: the closer you are to the root cause, the more
 likely the exception will contain the information that is relevant to those who
 are dealing with the crash. It may even have failed gracefully at this point.</p>
-<p>The &quot;domain structured programming&quot; way to proceed is to perform operations on a
+<p>The "domain structured programming" way to proceed is to perform operations on a
 flight plan, one that unifies the information from the ICAO and ADEXP plans.
 This therefore involves a first step which works out how the ICAO and ADEXP
-plans &quot;match up&quot;.</p>
+plans "match up".</p>
 <p>In the original post this was achieved by a function <code>reconcile :: ICAO p r -&gt; [p] -&gt; [Combined p r]</code>. If waypoint names are unique then plans can only match
 up in at most one way, so I might<sup class="footnote-reference"><a href="#3">3</a></sup> have defined something like this instead:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">reconcile&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Maybe</span><span> (</span><span style="color:#b48ead;">Combined </span><span style="color:#bf616a;">p r</span><span>)
-</span><span>reconcile&#39; (</span><span style="color:#d08770;">End</span><span> p) [p&#39;] | p == p&#39; = pure (</span><span style="color:#d08770;">End</span><span> p)
-</span><span>reconcile&#39; (</span><span style="color:#d08770;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; = </span><span style="color:#b48ead;">do
-</span><span>  </span><span style="color:#b48ead;">let</span><span> (skipped, restAdexp) = span (\x -&gt; x /= start rest) ps
-</span><span>  recoRest &lt;- reconcile&#39; rest restAdexp
-</span><span>  pure (</span><span style="color:#d08770;">Leg</span><span> p </span><span style="color:#d08770;">Via</span><span> {route = r, through = skipped} recoRest)
-</span><span>reconcile&#39; _ _ = </span><span style="color:#d08770;">Nothing
+<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#5cb3fa;">reconcile&#39; </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Eq </span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">=&gt; ICAO </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [</span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">] </span><span style="color:#cd74e8;">-&gt; Maybe</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Combined </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">)
+</span><span style="color:#abb2bf;">reconcile&#39; (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p) [p&#39;] </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> p </span><span style="color:#adb7c9;">==</span><span style="color:#abb2bf;"> p&#39; </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> pure (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p)
+</span><span style="color:#abb2bf;">reconcile&#39; (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p r rest) (p&#39; </span><span style="color:#adb7c9;">:</span><span style="color:#abb2bf;"> ps) </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> p </span><span style="color:#adb7c9;">==</span><span style="color:#abb2bf;"> p&#39; </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">do
+</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">let</span><span style="color:#abb2bf;"> (skipped, restAdexp) </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> span (</span><span style="color:#adb7c9;">\</span><span style="color:#abb2bf;">x </span><span style="color:#adb7c9;">-&gt;</span><span style="color:#abb2bf;"> x </span><span style="color:#adb7c9;">/=</span><span style="color:#abb2bf;"> start rest) ps
+</span><span style="color:#abb2bf;">  recoRest </span><span style="color:#adb7c9;">&lt;-</span><span style="color:#abb2bf;"> reconcile&#39; rest restAdexp
+</span><span style="color:#abb2bf;">  pure (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p </span><span style="color:#db9d63;">Via</span><span style="color:#abb2bf;"> {route </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> r, through </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> skipped} recoRest)
+</span><span style="color:#abb2bf;">reconcile&#39; _ _ </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Nothing
 </span></code></pre>
 <p>This function is simpler than <code>reconcile</code> from the original post and does the
 obvious thing: when reconciling a leg of the ICAO plan with the ADEXP list, it
 will skip all the ADEXP points that are not equal to the next point in the ICAO
 plan, and then reconciles the rest of the plan recursively.</p>
-<p>This function is an example of <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">&quot;Parse, don’t
-validate&quot;</a>.
+<p>This function is an example of <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">"Parse, don’t
+validate"</a>.
 Parsing is how semantically meaningful domain values are produced from less
 meaningful data, and so is often a necessary first step in structuring the
 solution in terms of the domain. In fact I wouldn't be surprised if the original
@@ -229,22 +235,22 @@ far more understandable: the input data is ambiguous.</li>
 post, this is quite simple once we have the version of the flight plan which
 combines all the information we need. All that changes is pattern matching on a
 <code>Maybe</code>-value instead of a list:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#8fa1b3;">ukPartOfICAO&#39; </span><span style="color:#b48ead;">::</span><span> (</span><span style="color:#b48ead;">Eq </span><span style="color:#bf616a;">p</span><span>) </span><span style="color:#b48ead;">=&gt;</span><span> (</span><span style="color:#bf616a;">p </span><span style="color:#b48ead;">-&gt; Bool</span><span>) </span><span style="color:#b48ead;">-&gt; ICAO </span><span style="color:#bf616a;">p r </span><span style="color:#b48ead;">-&gt;</span><span> [</span><span style="color:#bf616a;">p</span><span>] </span><span style="color:#b48ead;">-&gt; Either Err</span><span> (</span><span style="color:#b48ead;">ICAO </span><span style="color:#bf616a;">p r</span><span>)
-</span><span>ukPartOfICAO&#39; uk icao adexp = </span><span style="color:#b48ead;">case</span><span> reconcile&#39; icao adexp </span><span style="color:#b48ead;">of
-</span><span>  </span><span style="color:#d08770;">Just</span><span> plan -&gt; projectICAO &lt;$&gt; ukSegment uk plan
-</span><span>  _ -&gt; </span><span style="color:#d08770;">Left CannotReconcileIcaoAdexp
+<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#5cb3fa;">ukPartOfICAO&#39; </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Eq </span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">=&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#eb6772;">p </span><span style="color:#cd74e8;">-&gt; Bool</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">-&gt; ICAO </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [</span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">] </span><span style="color:#cd74e8;">-&gt; Either Err</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">ICAO </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">)
+</span><span style="color:#abb2bf;">ukPartOfICAO&#39; uk icao adexp </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">case</span><span style="color:#abb2bf;"> reconcile&#39; icao adexp </span><span style="color:#cd74e8;">of
+</span><span style="color:#abb2bf;">  </span><span style="color:#db9d63;">Just</span><span style="color:#abb2bf;"> plan </span><span style="color:#adb7c9;">-&gt;</span><span style="color:#abb2bf;"> projectICAO </span><span style="color:#adb7c9;">&lt;$&gt;</span><span style="color:#abb2bf;"> ukSegment uk plan
+</span><span style="color:#abb2bf;">  _ </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#db9d63;">Left CannotReconcileIcaoAdexp
 </span></code></pre>
 <p>For the original example this version of the code simply <em>works correctly</em>:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#c0c5ce;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span>λ&gt; ukPortionOfICAO&#39; inUK icao adexp
-</span><span style="color:#d08770;">Right</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">T</span><span>&quot; </span><span style="color:#d08770;">8</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">O</span><span>&quot; </span><span style="color:#d08770;">5</span><span> (</span><span style="color:#d08770;">Leg </span><span>&quot;</span><span style="color:#a3be8c;">P</span><span>&quot; </span><span style="color:#d08770;">1</span><span> (</span><span style="color:#d08770;">End </span><span>&quot;</span><span style="color:#a3be8c;">Y</span><span>&quot;))))
+<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#abb2bf;">λ</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> ukPortionOfICAO&#39; inUK icao adexp
+</span><span style="color:#db9d63;">Right</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">Leg </span><span style="color:#9acc76;">&quot;T&quot; </span><span style="color:#db9d63;">8</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">Leg </span><span style="color:#9acc76;">&quot;O&quot; </span><span style="color:#db9d63;">5</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">Leg </span><span style="color:#9acc76;">&quot;P&quot; </span><span style="color:#db9d63;">1</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">End </span><span style="color:#9acc76;">&quot;Y&quot;</span><span style="color:#abb2bf;">))))
 </span></code></pre>
-<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>                                 UK portion of ICAO
-</span><span>                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-</span><span>           4       2        8         5              1           9
-</span><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U
-</span><span>
-</span><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
-</span><span>                       UK  UK   UK UK UK    UK  UK
+<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">                                 UK portion of ICAO
+</span><span style="color:#abb2bf;">                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
+</span><span style="color:#abb2bf;">           4       2        8         5              1           9
+</span><span style="color:#abb2bf;">ICAO:  F------Q--------T--------O-----------P---------------Y--------U
+</span><span style="color:#abb2bf;">
+</span><span style="color:#abb2bf;">ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
+</span><span style="color:#abb2bf;">                       UK  UK   UK UK UK    UK  UK
 </span></code></pre>
 <p>The bug would therefore have been completely avoided even though the spec might
 not have mentioned the duplicate waypoint issue. The reason it still works is
@@ -266,8 +272,8 @@ plans being ambiguous.</p>
 <p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.</p>
 <p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
 with data-structures. It operates on these values with semantically meaningful
-operations, e.g. &quot;removing the first leg of a flight plan results in a flight
-plan&quot;. It's correctness is based on reasoning patterns from the domain. So in
+operations, e.g. "removing the first leg of a flight plan results in a flight
+plan". It's correctness is based on reasoning patterns from the domain. So in
 the end you get a valid flight plan, not indices into a list which doesn't mean
 anything.</p>
 <p><em>In my opinion</em>, it is important that we slowly move towards such a coding
@@ -292,17 +298,17 @@ this post.</p>
 <hr />
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>I was tempted to just refer to the style I am advocating for as
-&quot;Domain-Driven Design&quot; (DDD), but I don't think this term, as it has come to
+"Domain-Driven Design" (DDD), but I don't think this term, as it has come to
 be understood, is referring to quite the same idea. DDD, from what I've
 seen, is more about structuring interfaces, for example <em>naming</em> methods.
-I'm not sure &quot;DDD&quot; really prescribes <em>how</em> those methods should be written,
+I'm not sure "DDD" really prescribes <em>how</em> those methods should be written,
 in a more technical sense.</p>
 </div>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
-<p>Closer conceptually, and in terms of the call graph/code. Failing close to the root cause is why assertions are useful for example, even though this can be counter-intuitive at first (&quot;why instruct the progam to fail more?&quot;). This is also why JavaScript can be so hard to debug: it does its damdest to not fail at all at every turn.</p>
+<p>Closer conceptually, and in terms of the call graph/code. Failing close to the root cause is why assertions are useful for example, even though this can be counter-intuitive at first ("why instruct the progam to fail more?"). This is also why JavaScript can be so hard to debug: it does its damdest to not fail at all at every turn.</p>
 </div>
 <div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
-<p>Of course I know it's impossible for me to know what I would have coded had someone not shouted &quot;DUPLICATE WAYPOINTS&quot; in my ear, but I am trying my best.</p>
+<p>Of course I know it's impossible for me to know what I would have coded had someone not shouted "DUPLICATE WAYPOINTS" in my ear, but I am trying my best.</p>
 </div>
 
     </div>
@@ -315,6 +321,27 @@ in a more technical sense.</p>
                     Published by James Haydon
                 
                 
+                    
+                    in <a href="https://jameshaydon.github.io/categories/programming/">programming</a>
+                
+                
+                    and
+                    tagged
+                    
+                        <a href="https://jameshaydon.github.io/tags/bugs/">bugs</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/nats/">NATS</a>
+                        
+                            
+                        
+                    
                 
             </p>
             
@@ -324,6 +351,35 @@ in a more technical sense.</p>
 </article>
 
 
-    </body>
+
+  <!-- optional scripts -->
+  
+  
+  <script src="https://jameshaydon.github.io/js/codeblock.js"></script>
+  
+
+  
+<!-- MathJax script for rendering LaTeX math equations -->
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"],
+      ],
+      displayMath: [
+        ["$$", "$$"],
+        ["\\[", "\\]"],
+      ],
+    },
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+
+  
+
+  
+</body>
 
 </html>

@@ -1,79 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-    <!-- Enable responsiveness on mobile devices-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-    <!-- google fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  
+  
+  <meta name="description" content="UK air traffic control meltdown. So, really though, what went wrong?" />
+  
+  
+
+  <title>
     
-      
-      <meta name="description" content="UK air traffic control meltdown. So, really though, what went wrong?" />
-      
+    UK ATC meltdown and swiss cheese
     
+</title>
+  <link rel="alternate" type="application/atom+xml" title="James Haydon Atom Feed" href="https://jameshaydon.github.io/atom.xml" />
 
-      <title>James Haydon - UK ATC meltdown and swiss cheese </title>
+  
+  <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
+  
 
-      
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="https://jameshaydon.github.io/atom.xml">
-      
+  
+  
+</head>
 
-      
-          <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
-      
-
-      
-      
-
-          <!-- Google tag (gtag.js) -->
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-X4MP59NZ35"></script>
-          <script>
-           window.dataLayer = window.dataLayer || [];
-           function gtag(){dataLayer.push(arguments);}
-           gtag('js', new Date());
-
-           gtag('config', 'G-X4MP59NZ35');
-          </script>
-  </head>
-
-    <body class="hack dark main container">
-        
+<body class="hack dark main container">
+  
     
         
-                
-                    <header>
-                        <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://jameshaydon.github.io">
-                                <span itemprop="name">Home</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://github.com/jameshaydon">
-                                <span itemprop="name">GitHub</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://jameshaydon.github.io/papers">
-                                <span itemprop="name">Papers</span></a>
-                        
-                            <a itemprop="url"
-                               class=""
-                               href="https://github.com/jameshaydon/lawvere">
-                                <span itemprop="name">lawvere-lang</span></a>
-                        
-                        </nav>
-                    </header>
-                
-            
+  
+  <header class="nav-header">
+    <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="navbar">
+      <div class="nav-links">
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io/">
+          <span itemprop="name">Home</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon">
+          <span itemprop="name">GitHub</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//papers">
+          <span itemprop="name">Papers</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//categories">
+          <span itemprop="name">Categories</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//tags">
+          <span itemprop="name">Tags</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://imiron.io/">
+          <span itemprop="name">Imiron</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon/lawvere">
+          <span itemprop="name">lawvere-lang</span></a>
+        
+      </div>
+    </nav>
+    
+
+  </header>
+  
+  
     
 
 <article itemscope itemtype="http://schema.org/BlogPosting">
@@ -103,13 +109,13 @@ You might want to first read <a href="/nats-fail">part one</a>.</p>
 <a href="https://www.reddit.com/r/programming/comments/16fhmuq/a_deep_dive_into_the_bug_that_caused_the_uk_air/?utm_source=share&amp;utm_medium=web2x&amp;context=3">lot</a>
 of <a href="https://news.ycombinator.com/item?id=37461695">comments</a>. What was most
 discussed was:</p>
-<p><strong><em>&quot;But really though, what was the one thing that went wrong?&quot;</em></strong></p>
+<p><strong><em>"But really though, what was the one thing that went wrong?"</em></strong></p>
 <span id="continue-reading"></span>
 <p>Well, that depends who you ask. There was a bit of everything in the comments:</p>
 <ul>
 <li>If you ask someone who's job it is to gather requirements, and write specs,
-they are saying: &quot;It wasn't made clear that waypoint names are not unique!&quot;.</li>
-<li>If you ask a programmer, they will say: &quot;ha! writing buggy code!&quot;. I guess my
+they are saying: "It wasn't made clear that waypoint names are not unique!".</li>
+<li>If you ask a programmer, they will say: "ha! writing buggy code!". I guess my
 post fell into this category; having spent a disproportionate amount of words
 on the bug, and a possible fix. To be clear, I've coded more than my fair
 share of bugs.</li>
@@ -136,7 +142,7 @@ model</a>:</p>
 <p>It likens human systems to multiple slices of Swiss cheese, which has randomly
 placed and sized holes in each slice, stacked side by side, in which the risk
 of a threat becoming a reality is mitigated by the differing layers and types
-of defenses which are &quot;layered&quot; behind each other. Therefore, in theory,
+of defenses which are "layered" behind each other. Therefore, in theory,
 lapses and weaknesses in one defense do not allow a risk to materialize (e.g.
 a hole in each slice in the stack aligning with holes in all other slices),
 since other defenses also exist (e.g. other slices of cheese), to prevent a
@@ -145,7 +151,7 @@ single point of failure.</p>
 <p>For example, if code must be coded by one programmer, reviewed by another, and
 tested by a third person in order to make it into production, then that's 3
 slices of swiss cheese. If the probability that each of these people doesn't
-know about some requirement (e.g. &quot;there can be duplicate waypoints&quot;) is 1/5,
+know about some requirement (e.g. "there can be duplicate waypoints") is 1/5,
 then (assuming independence)<sup class="footnote-reference"><a href="#1">1</a></sup>, the probability that this lack of knowledge
 causes a bug to be coded that makes it through these three slices is 1/125.</p>
 <p>It took several failures for the crisis to manifest. What went wrong was that
@@ -171,6 +177,27 @@ three</a>.</p>
                     Published by James Haydon
                 
                 
+                    
+                    in <a href="https://jameshaydon.github.io/categories/programming/">programming</a>
+                
+                
+                    and
+                    tagged
+                    
+                        <a href="https://jameshaydon.github.io/tags/bugs/">bugs</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/nats/">NATS</a>
+                        
+                            
+                        
+                    
                 
             </p>
             
@@ -180,6 +207,35 @@ three</a>.</p>
 </article>
 
 
-    </body>
+
+  <!-- optional scripts -->
+  
+  
+  <script src="https://jameshaydon.github.io/js/codeblock.js"></script>
+  
+
+  
+<!-- MathJax script for rendering LaTeX math equations -->
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"],
+      ],
+      displayMath: [
+        ["$$", "$$"],
+        ["\\[", "\\]"],
+      ],
+    },
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+
+  
+
+  
+</body>
 
 </html>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
-    <title>James Haydon</title>
-    <link rel="self" type="application/atom+xml" href="https://jameshaydon.github.io/atom.xml"/>
+    <title>James Haydon - haskell</title>
+    <link rel="self" type="application/atom+xml" href="https://jameshaydon.github.io/tags/haskell/atom.xml"/>
     <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
     <updated>2025-06-27T00:00:00+00:00</updated>
-    <id>https://jameshaydon.github.io/atom.xml</id>
+    <id>https://jameshaydon.github.io/tags/haskell/atom.xml</id>
     <entry xml:lang="en">
         <title>Solving `Passport Application` with Haskell</title>
         <published>2025-06-27T00:00:00+00:00</published>
@@ -262,94 +262,6 @@ $\text{birthCirt}(\text{father}^3(\text{applicant}))$. One admitted they didn&#x
         
     </entry>
     <entry xml:lang="en">
-        <title>Domain structured programming (UK ATC meltdown)</title>
-        <published>2023-09-15T00:00:00+00:00</published>
-        <updated>2023-09-15T00:00:00+00:00</updated>
-        
-        <author>
-          <name>
-            
-              Unknown
-            
-          </name>
-        </author>
-        
-        <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/programming-style-and-bugs/"/>
-        <id>https://jameshaydon.github.io/programming-style-and-bugs/</id>
-        
-        <summary type="html">&lt;p&gt;This is part 3 of my blog posts about the UK air traffic control meltdown. You
-might want to read &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;part one&lt;&#x2F;a&gt; and &lt;a href=&quot;&#x2F;what-went-wrong&quot;&gt;part two&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
-&lt;p&gt;Having had some time to process some of the comments about my first post, I
-realise now that I was not clear in communicating my thoughts about the
-programming style, and how that contributed to the existence of the bug. I will
-have another go now. The point I was trying to make was:&lt;&#x2F;p&gt;
-&lt;p&gt;With a better programming style, the bug might not have been made &lt;strong&gt;even if the
-code is only meant for flight plans with no duplicate waypoints&lt;&#x2F;strong&gt;.&amp;hellip;
-&lt;&#x2F;p&gt;
-</summary>
-        
-    </entry>
-    <entry xml:lang="en">
-        <title>UK ATC meltdown and swiss cheese</title>
-        <published>2023-09-13T00:00:00+00:00</published>
-        <updated>2023-09-13T00:00:00+00:00</updated>
-        
-        <author>
-          <name>
-            
-              Unknown
-            
-          </name>
-        </author>
-        
-        <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/what-went-wrong/"/>
-        <id>https://jameshaydon.github.io/what-went-wrong/</id>
-        
-        <summary type="html">&lt;p&gt;This is a short follow-up of my post about the UK air traffic control meltdown.
-You might want to first read &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;part one&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
-&lt;p&gt;So my first post got a lot of attention, and that generates a
-&lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;programming&#x2F;comments&#x2F;16fhmuq&#x2F;a_deep_dive_into_the_bug_that_caused_the_uk_air&#x2F;?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&quot;&gt;lot&lt;&#x2F;a&gt;
-of &lt;a href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37461695&quot;&gt;comments&lt;&#x2F;a&gt;. What was most
-discussed was:&lt;&#x2F;p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;&quot;But really though, what was the one thing that went wrong?&quot;&lt;&#x2F;em&gt;&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;</summary>
-        
-    </entry>
-    <entry xml:lang="en">
-        <title>UK air traffic control meltdown</title>
-        <published>2023-09-08T00:00:00+00:00</published>
-        <updated>2023-09-08T00:00:00+00:00</updated>
-        
-        <author>
-          <name>
-            
-              Unknown
-            
-          </name>
-        </author>
-        
-        <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/nats-fail/"/>
-        <id>https://jameshaydon.github.io/nats-fail/</id>
-        
-        <summary type="html">&lt;p&gt;Comments on &lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;programming&#x2F;comments&#x2F;16fhmuq&#x2F;a_deep_dive_into_the_bug_that_caused_the_uk_air&#x2F;?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&quot;&gt;reddit&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37461695&quot;&gt;Hacker News&lt;&#x2F;a&gt;. Other posts: &lt;a href=&quot;&#x2F;what-went-wrong&quot;&gt;part two&lt;&#x2F;a&gt; and &lt;a href=&quot;&#x2F;programming-style-and-bugs&quot;&gt;part
-three&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
-&lt;p&gt;&lt;em&gt;UPDATE:&lt;&#x2F;em&gt; The flight plan which triggered the chaos (but was valid) has been
-&lt;a href=&quot;https:&#x2F;&#x2F;chaos.social&#x2F;@russss&#x2F;111048524540643971&quot;&gt;identified&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
-&lt;hr &#x2F;&gt;
-&lt;p&gt;On 28 August 2023 &lt;em&gt;NATS&lt;&#x2F;em&gt;, the UK&#x27;s air traffic control operator, suffered a
-&lt;strong&gt;major&lt;&#x2F;strong&gt; technical incident. The BBC reports that more than &lt;a href=&quot;https:&#x2F;&#x2F;www.bbc.com&#x2F;news&#x2F;uk-66685349&quot;&gt;2000 flights were
-cancelled&lt;&#x2F;a&gt; and the cost has been estimated
-at over &lt;em&gt;£100 million&lt;&#x2F;em&gt; GBP. The incident probably affected hundreds of thousands
-of people.&lt;&#x2F;p&gt;
-&lt;p&gt;The press initially reported the cause was a faulty flight plan: &lt;em&gt;&quot;UK air traffic
-control: inquiry into whether French error caused failure&quot;&lt;&#x2F;em&gt; (The Times) and in
-typical &lt;em&gt;Mail Online&lt;&#x2F;em&gt; reporting style: &lt;em&gt;&quot;Did blunder by French airline spark air
-traffic control issues? Officials probe if a single badly filed travel plan
-caused UK&#x27;s entire flight-control system to collapse in worst outage for a
-decade - with 1,000 flights cancelled and chaos set to last DAYS&quot;&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
-&lt;p&gt;So what happened? These are notes on my reading of the incident report:&lt;&#x2F;p&gt;</summary>
-        
-    </entry>
-    <entry xml:lang="en">
         <title>Why (some) Python programmers don&#x27;t want Haskell</title>
         <published>2023-07-16T00:00:00+00:00</published>
         <updated>2023-07-16T00:00:00+00:00</updated>
@@ -369,40 +281,6 @@ decade - with 1,000 flights cancelled and chaos set to last DAYS&quot;&lt;&#x2F;
 thread&lt;&#x2F;a&gt;
 asks why more Python developers couldn&#x27;t instead be using Haskell.&lt;&#x2F;p&gt;
 &lt;p&gt;One of the points made in this thread, is that there is a sizeable class of Python programmers for which the trope &quot;Python programmers will be scared of monads!&quot; doesn&#x27;t apply. I thought I would ask some of the people I know that use Python why they don&#x27;t use Haskell.&lt;&#x2F;p&gt;</summary>
-        
-    </entry>
-    <entry xml:lang="en">
-        <title>Publications</title>
-        <published>2022-01-03T00:00:00+00:00</published>
-        <updated>2022-01-03T00:00:00+00:00</updated>
-        
-        <author>
-          <name>
-            
-              Unknown
-            
-          </name>
-        </author>
-        
-        <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/papers/"/>
-        <id>https://jameshaydon.github.io/papers/</id>
-        
-        <content type="html" xml:base="https://jameshaydon.github.io/papers/">&lt;ul&gt;
-&lt;li&gt;J. Haydon, M. Bondu, C. Eberhart, J. Dubut, and I. Hasuo. &lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2308.06785.pdf&quot;&gt;Formal Verification
-of Intersection Safety for Automated
-Driving&lt;&#x2F;a&gt;, ITSC, IEEE, 2023.&lt;&#x2F;li&gt;
-&lt;li&gt;I. Hasuo, C. Eberhart, J. Haydon, J. Dubut, R. Bohrer, T. Kobayashi, S.
-Pruekprasert, X. Zhang, E. Pallas, A. Yamada, K. Suenaga, F. Ishikawa, K.
-Kamijo, Y. Shinya, and T. Suetomi. &lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2207.02387.pdf&quot; title=&quot;arxiv&quot;&gt;Goal-Aware RSS for Complex Scenarios via
-Program Logic&lt;&#x2F;a&gt;, IEEE T-IV, vol.8
-(4), 3040–3072, 2023&lt;&#x2F;li&gt;
-&lt;li&gt;Clovis Eberhart, Jérémy Dubut, James Haydon, and Ichiro Hasuo. Formal Verification of
-Safety Architectures for Automated Driving, IV 2023&lt;&#x2F;li&gt;
-&lt;li&gt;Clovis Eberhart, James Haydon, Jérémy Dubut, Ahmet Cetinkaya, Sasinee Pruekprasert. &lt;a href=&quot;&#x2F;papers&#x2F;mu-tgl.pdf&quot;&gt;Logic
-for Timed Agent Network Topologies&lt;&#x2F;a&gt;, CDC 2022&lt;&#x2F;li&gt;
-&lt;li&gt;James Haydon. &lt;a href=&quot;&#x2F;papers&#x2F;thesis.pdf&quot;&gt;Étale homotopy sections of algebraic varieties&lt;&#x2F;a&gt;. Thesis, University of Oxford, 2014.&lt;&#x2F;li&gt;
-&lt;&#x2F;ul&gt;
-</content>
         
     </entry>
 </feed>
