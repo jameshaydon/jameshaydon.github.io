@@ -243,7 +243,13 @@ $$\text{birthCirt}(\text{father}^3(\text{applicant})).$$ One admitted they had n
 </span><span style="color:#abb2bf;">        (britBornAbroad p)
 </span><span style="color:#abb2bf;">    naturalised </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> evidence (</span><span style="color:#db9d63;">Naturalised</span><span style="color:#abb2bf;"> p)
 </span></code></pre>
-<p>The <code>check</code> function here interacts with the user, to avoid launching into an investigation if the user knows that person is not british.</p>
+<p>The <code>check</code> function here interacts with the user, to avoid launching into an investigation if the user knows that person is not british:</p>
+<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- | Ask about a predicate, failing if the answer is a sure no.
+</span><span style="color:#5cb3fa;">check </span><span style="color:#cd74e8;">:: Predicate -&gt; M </span><span style="color:#abb2bf;">()
+</span><span style="color:#abb2bf;">check q </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">do
+</span><span style="color:#abb2bf;">  answer </span><span style="color:#adb7c9;">&lt;-</span><span style="color:#abb2bf;"> question q
+</span><span style="color:#abb2bf;">  guard (answer </span><span style="color:#adb7c9;">/= </span><span style="color:#db9d63;">SureNo</span><span style="color:#abb2bf;">)
+</span></code></pre>
 <p>A person is <code>brit</code> either <code>byBirth</code> or <code>naturalised</code>. Naturalisation is the simplest, as a single certificate is then the sole document needed. Britishness by birth forks mainly on whether or not the person was born in the UK, and we go to sub-routines:</p>
 <pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- | UK-born citizenship (pre-1983 or via parent)
 </span><span style="color:#5cb3fa;">britBornInUk </span><span style="color:#cd74e8;">:: Person -&gt; M Proof
