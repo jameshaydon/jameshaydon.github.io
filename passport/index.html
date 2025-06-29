@@ -264,8 +264,7 @@ $$\text{birthCirt}(\text{father}^3(\text{applicant})).$$ One admitted they had n
 </span><span style="font-style:italic;color:#5f697a;">-- | British otherwise than by descent (BOTD)
 </span><span style="color:#5cb3fa;">britOtbd </span><span style="color:#cd74e8;">:: Person -&gt; M Proof
 </span><span style="color:#abb2bf;">britOtbd p </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">do
-</span><span style="color:#abb2bf;">  a </span><span style="color:#adb7c9;">&lt;-</span><span style="color:#abb2bf;"> question (</span><span style="color:#db9d63;">IsBritOtbd</span><span style="color:#abb2bf;"> p)
-</span><span style="color:#abb2bf;">  guard (a </span><span style="color:#adb7c9;">/= </span><span style="color:#db9d63;">SureNo</span><span style="color:#abb2bf;">)
+</span><span style="color:#abb2bf;">  check (</span><span style="color:#db9d63;">IsBritOtbd</span><span style="color:#abb2bf;"> p)
 </span><span style="color:#abb2bf;">  evidence (</span><span style="color:#db9d63;">Naturalised</span><span style="color:#abb2bf;"> p) </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">orElse</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> britOtbdUkBorn </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">orElse</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> bornCrownService p
 </span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">where
 </span><span style="color:#abb2bf;">    britOtbdUkBorn </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> evidence (</span><span style="color:#db9d63;">BornInUK</span><span style="color:#abb2bf;"> p) </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">and</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> britBornInUk p
