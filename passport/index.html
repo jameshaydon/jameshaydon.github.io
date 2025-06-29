@@ -113,7 +113,7 @@
 </span>
     </header>
     <div itemprop="articleBody">
-      <p>(Comments on <a href="https://news.ycombinator.com/item?id=44408872">HackerNews</a> and <a href="https://www.reddit.com/r/programming/comments/1lmzw5s/solving_uk_passport_application_with_haskell/">Reddit</a>)</p>
+      <p>(Comments on <a href="https://news.ycombinator.com/item?id=44408872">HackerNews</a> and <a href="https://www.reddit.com/r/haskell/comments/1lmzvus/solving_uk_passport_application_with_haskell/">Reddit</a>)</p>
 <p>There's a trend at the moment of <a href="https://news.ycombinator.com/item?id=44363696">solving</a> online <a href="https://news.ycombinator.com/item?id=44273489">games</a> with <a href="https://news.ycombinator.com/item?id=44259476">programming</a>, let's do one from the UK called <em>Passport Application</em>, which is developed by <a href="https://www.gov.uk/government/organisations/hm-passport-office">"His Majesty's Passport Office"</a> or HMPO. It's a cultural phenomenon in the UK: despite being quite expensive (about £100 just to start) for the standard online version (a masterpiece of minimalist design, entirely text-based), most British play the game, and do so every 10 years or so.</p>
 <p>It's an adventure puzzle document collection game. The premise is to collect enough artefacts, scattered throughout various bureaucratic institutions, until you can prove the statement "Applicant is British" according to an extremely complex set of rules, written in arcane language, in various texts called "acts of parliament". The prize for winning is a little booklet with a date inside that indicates when you can play again.</p>
 <span id="continue-reading"></span>
@@ -140,7 +140,7 @@ Quite a lot of documents, most of which seemed quite unrelated to the main objec
 </blockquote>
 <p>One of these documents is almost 100 years old! Of course <code>applicant's Paternal great grandfather</code> is ambiguous, since most people have 2 of them, but this is standard misdirection at this point and all part of the fun. After decrypting this to <code>applicant's father's father's father's birth certificate</code> I started to wonder why such a distant document would be requested. Engaging the advice agents didn't help much, one launched into explanations as to why
 $$\text{birthCirt}(\text{father}^2(\text{applicant}))$$ was needed even though this document was already in their possession, and I was asking about
-$$\text{birthCirt}(\text{father}^3(\text{applicant})).$$ One admitted they had no idea why the document was requested.</p>
+$$\text{birthCirt}(\text{father}^3(\text{applicant}))$$, then admitted they couldn't quite say why the was needed.</p>
 <p>So what's going on here? It's important to understand the sort of logic used by HMPO in the <em>Passport Application</em> game. It's called <strong>Bureaucratic Logic</strong>, it derives from <a href="https://en.wikipedia.org/wiki/Constructive_logic">Constructive Logic</a>, in that one cannot just make valid arguments, that would be too easy, one has to construct proofs of a particular nature to back them up. Constructive logic has witnesses, Bureaucratic logic has original documents.</p>
 <p>For example, like constructive logic, HMPO doesn't allow you to use excluded middle: $P \lor \lnot P$ ($P$ or not $P$) is not in general valid. The gameplay is greatly influenced by answers to questions such as "was applicant's father's father born in the UK or not born in the UK?" But you can't just say "yes one of those is true" and then provide documents for both resulting scenarios. That would be using excluded middle. You <em>must</em> commit to one alternative <em>and</em> provide a document for that. This is were it's important to remember that it's not about actually demonstrating citizenship, for which excluded middle would be a perfectly valid argument, <em>Passport Application</em> is about having fun gathering documents. Don't question the rules too much or you'll stop having fun.</p>
 <p>The second piece of the puzzle is in the guidance that accompanies the document requests:</p>
@@ -412,7 +412,7 @@ $$\text{birthCirt}(\text{father}^3(\text{applicant})).$$ One admitted they had n
 <hr />
 <p>I've still not finished my current game of PassportApplication, I'm trying to get through proofs 2 and 3 simultaneously, and failing that will try proof 1.</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>This situation is actually more complex than presented here, you have to prove living in the UK for 3 consecutive years, with absences of not more thatn 270 consecutive days, and then this launches into another process called "Registration of Minors".</p>
+<p>This situation is actually more complex than presented here, you have to prove living in the UK for 3 consecutive years, with absences of not more than 270 consecutive days, and then this launches into another process called "Registration of Minors".</p>
 </div>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">3</sup>
 <p>Or maybe it's invalid because of some historical sexist rules I didn't encode?</p>
