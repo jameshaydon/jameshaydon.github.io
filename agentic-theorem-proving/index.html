@@ -237,10 +237,10 @@ also its location in the wider plan. In Lean this definition is:</p>
 <span class="giallo-l"><span>  factor : pre ≫ middle ≫ post = whole</span></span></code></pre><h3 id="least-uk-sub-plan">Least UK sub-plan</h3>
 <p>We say that a plan is "atomic" if it is a point (identity) or a leg. We assume
 that "touches the UK" is a predicate that is defined for atomic plans, and the
-goal is to lift this definition to a definition of <code>CoversUK</code> for arbitrary
-plans. The concepts we already have in place allow us to express this very
-intuitively: we say <code>CoversUK sub</code> holds for some sub-plan <code>sub</code> when every
-atomic UK sub-plan <code>a</code> satisfies <code>a ≤ sub</code>:</p>
+goal is to lift this to a definition of <code>CoversUK</code> for arbitrary plans. The
+concepts we already have in place allow us to express this very intuitively: we
+say <code>CoversUK sub</code> holds for some sub-plan <code>sub</code> when every atomic UK sub-plan
+<code>a</code> satisfies <code>a ≤ sub</code>:</p>
 <pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>∀ a : AtomicOccurrence S whole,</span></span>
 <span class="giallo-l"><span>  AtomHasUK a -&gt; a.subplan ≤ sub</span></span></code></pre>
 <p>The full spec is now pretty easy to state: Given a plan <code>whole</code>, we seek the
@@ -253,7 +253,7 @@ from Mathlib.</p>
 <p>The above spec is defined over the reconciled plan, for which one can decide
 <code>AtomHasUK</code> (via the ADEXP data). But first the ICAO and ADEXP plans must be
 reconciled. This also admits a neat specification in Lean. Given three plan
-types <code>Icao</code>, <code>Adexp</code> and <code>Combined</code>, and the projections:</p>
+types <code>Icao</code>, <code>Adexp</code>, and <code>Combined</code>, and the projections:</p>
 <pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>toIcao  : Combined -&gt; Icao</span></span>
 <span class="giallo-l"><span>toAdexp : Combined -&gt; Adexp</span></span></code></pre>
 <p>we say that <code>combi</code> is a reconciliation of <code>icao : Icao</code> and <code>adexp : Adexp</code>
@@ -486,7 +486,7 @@ path categories), and asked the agent to define and prove things only against
 that abstraction. This worked much better, and was also much more stable. This
 is true for humans too: If I ask someone to prove a statement about <code>5 × 5</code>
 matrices that is in fact already true in any monoid, then they might get
-completely lost is matrix calculations.</p>
+completely lost in matrix calculations.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>I started this experiment trying to see how much LLM coding agents could help
 automate proving code to be correct. My conclusion here was mixed: they are
