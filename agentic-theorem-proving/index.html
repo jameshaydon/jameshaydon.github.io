@@ -114,13 +114,14 @@
     </header>
     <div itemprop="articleBody">
       <p>Formal verification has, until now, been a very laborious process. Therefore it
-is only considered for critical software, where bugs can cost lives. But LLM
-coding agents may be tipping the scales; formally verifying code might become
-viable for a much larger class of software. To test this, I picked a real bug,
-the <a href="/nats-fail">2023 UK air traffic control meltdown</a>, and tried to prove a fix
-correct in <a rel="external" href="https://lean-lang.org/">Lean</a>.</p>
+is only considered for critical software, where bugs can cost lives or a lot of
+money. But LLM coding agents may be tipping the scales; formally verifying code
+might become viable for a much larger class of software. To test this, I picked
+a real bug, the <a href="/nats-fail">2023 UK air traffic control meltdown</a>, and tried to
+prove a fix correct in <a rel="external" href="https://lean-lang.org/">Lean</a>.</p>
 <p>tl;dr: LLMs are not great at specs, excellent at grinding routine proofs, and
-the whole thing only became tractable once I restated the problem in algebraic terms.</p>
+the whole thing only became tractable once I restated the problem in algebraic
+terms.</p>
 <span id="continue-reading"></span><h2 id="the-problem-in-one-paragraph">The problem, in one paragraph</h2>
 <p>The very short summary of the problem from the <a href="/nats-fail">original blog post</a>:</p>
 <p>A flight plan arrives in two forms: the <em>ICAO</em> form is the short plan that
@@ -135,7 +136,7 @@ correct way to solve this is to: reconcile the two plans into one structure that
 has both ICAO routes and ADEXP waypoints, check that the reconciliation is
 unique, and then extract the smallest UK portion.</p>
 <h2 id="false-starts">False starts</h2>
-<p>I started off by asking the agent to specify the function, given a natural
+<p>I started off by asking the agent to specify the function given a natural
 language description. The specs it came up with had problems though.</p>
 <p>For example it proposed things like: <code>∀ point, point ∈ wholeADEXP → uk point = true → point ∈ adexpPart</code>. This says, for any UK waypoint of the ADEXP plan, it
 is present in the ADEXP part of the computed sub-plan. But this is wrong when
@@ -163,11 +164,12 @@ and the waypoint and route identifiers should alternate,</li>
 <li>a structure with a <code>start</code> waypoint, and a list of <code>(route, waypoint)</code> pairs.</li>
 </ul>
 <p>Indexing into such structures is unnatural and error-prone.</p>
-<p>The LLM erred in other ways too, sometimes wasting quite a bit of time. For example,
-one specification it came up with involved a conjunction of various properties:
-<code>P1 /\ P2 /\ ...</code>. Hidden in several of these there was some existential
-quantification <code>∃ x, ∃ u, ...</code>. This seemed fine, but the spec actually
-needed the same witness for all the conjuncts, that is: <code>∃ x, ∃ y, P1(x, y) /\ P2(x, y) /\ ...</code>. This took a long time to debug.</p>
+<p>The LLM erred in semantic ways too. For example, one specification it came up
+with involved a conjunction of various properties: <code>P1 /\ P2 /\ ...</code>. Hidden in
+several of these there was some existential quantification <code>∃ x, ∃ u, ...</code>. This
+seemed fine, but the spec actually needed the same witness for all the
+conjuncts, that is: <code>∃ x, ∃ y, P1(x, y) /\ P2(x, y) /\ ...</code>. This took a long
+time to debug.</p>
 <p>In general the specs proposed by the LLM were quite "low level" and not
 obviously correct. Asking an agent to prove them correct never seemed to
 succeed, it would just get mired in details. Unless prompted and guided to do
@@ -176,9 +178,10 @@ so, it would not try to create useful abstractions.</p>
 problem). When you've got a spec and an implementation that don't quite agree,
 or a proof that is hard to finish, the LLM will sometimes <em>change the spec</em> to
 match the implementation rather than fix the implementation, without telling
-you. Here is a quote:</p>
+you. Here is a quote after I complained it cheated by changing the spec:</p>
 <blockquote>
-<p>But your instinct is right: it is too implementation-shaped for a clean
+<p>LLM:
+But your instinct is right: it is too implementation-shaped for a clean
 spec. I copied the trimming structure into <code>ReconcileSpec.lean</code> to make
 the proof true quickly and to close the repeated-anchor hole, but that
 makes the "spec" mirror the executable algorithm instead of stating the
@@ -304,7 +307,8 @@ theorems:</p>
 <li>No duplicates: Each reconciliation appears exactly once.</li>
 </ul>
 <p>Each of these is quite substantial, but the coding agent managed to get through
-them without too much difficulty once the algebra was exposed. Here are some highlights.</p>
+them without too much difficulty once the algebra was exposed. Here are some
+highlights.</p>
 <p>For soundness, the key fact is that the projections <code>toIcao</code> and <code>toAdexp</code> are
 <em>functors</em>:</p>
 <pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>toIcao.map (x ≫ y) = toIcao.map x ≫ toIcao.map y</span></span>

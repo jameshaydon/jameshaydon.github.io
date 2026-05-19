@@ -23,13 +23,14 @@
         <id>https://jameshaydon.github.io/agentic-theorem-proving/</id>
         
         <summary type="html">&lt;p&gt;Formal verification has, until now, been a very laborious process. Therefore it
-is only considered for critical software, where bugs can cost lives. But LLM
-coding agents may be tipping the scales; formally verifying code might become
-viable for a much larger class of software. To test this, I picked a real bug,
-the &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;2023 UK air traffic control meltdown&lt;&#x2F;a&gt;, and tried to prove a fix
-correct in &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;lean-lang.org&#x2F;&quot;&gt;Lean&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+is only considered for critical software, where bugs can cost lives or a lot of
+money. But LLM coding agents may be tipping the scales; formally verifying code
+might become viable for a much larger class of software. To test this, I picked
+a real bug, the &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;2023 UK air traffic control meltdown&lt;&#x2F;a&gt;, and tried to
+prove a fix correct in &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;lean-lang.org&#x2F;&quot;&gt;Lean&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;tl;dr: LLMs are not great at specs, excellent at grinding routine proofs, and
-the whole thing only became tractable once I restated the problem in algebraic terms.&lt;&#x2F;p&gt;</summary>
+the whole thing only became tractable once I restated the problem in algebraic
+terms.&lt;&#x2F;p&gt;</summary>
         
     </entry>
 </feed>
