@@ -289,15 +289,6 @@ search manner.</p>
 where <code>l</code> is the initial leg, and then try to reconcile <code>l</code> with all prefixes
 <code>p</code> of the <code>adexp</code> plan.</li>
 </ul>
-<p>Note that this search can just as well proceed "from the right" instead: we
-decompose <code>icao</code> into <code>icao_init ≫ l</code>. This process produces exactly the same
-enumeration, but in reverse.</p>
-<p><em>Possible optimization</em>: one can in fact search "from the
-left", and also "from the right", stopping when we have found our first
-reconciliation (no backtracking). We can then check that these both return the
-same reconciliation. The idea is that this produces the first and last item of
-the whole enumeration, and so, if they are equal, this enumeration must be a
-singleton list.</p>
 <p>In order to check that the reconciliation phase matches the spec, that is,
 returns a reconciliation iff it is the unique one to exist, we need to prove 3
 theorems:</p>
@@ -372,24 +363,35 @@ when:</p>
 produces distinct total reconciliations.</li>
 <li>Different splits of ADEXP produce disjoint reconciliation lists.</li>
 </ul>
-<p><em>The optimization</em>: This is a good example of how much work formal verification
-can be: this optimization seems simple, but it triggers many additional proof
-obligations. To prove it is correct one must:</p>
+<p><em>Possible optimization</em>: The search above is "from the left" but one can also do
+it "from the right". You can also stop when we have found the first
+reconciliation (no backtracking). If you do both of these searches at the same
+time you can then check that these both return the same reconciliation. If they
+do, that must be the unique one. The idea is that this produces the first and
+last item of the whole enumeration, and so, if they are equal, this enumeration
+must be a singleton list.</p>
+<p>Proving this optimization to be correct is a good example of how much work
+formal verification can be: this optimization seems simple, but it triggers many
+additional proof obligations.</p>
 <ul>
-<li>Show that the "from the left" search produces the first item of the full enumeration, or none if it is empty,</li>
-<li>Show that the "from the right" search produces the last item of the full enumeration, or none if it is empty,</li>
-<li>Prove this theorem about lists: if a list with no duplicates has a first and a last item, and they are equal, then it is a singleton list.</li>
+<li>Show that the "from the left" search produces the first item of the full
+enumeration, or none if it is empty,</li>
+<li>Show that the "from the right" search produces the last item of the full
+enumeration, or none if it is empty,</li>
+<li>Prove this theorem about lists: if a list with no duplicates has a first and a
+last item, and they are equal, then it is a singleton list.</li>
 </ul>
-<p>And then combine these to the full theorem, that checking equality of those two
-searches is the same as checking uniqueness of the sought after reconciliation.
+<p>And then combine these to the full theorem that the optimization is correct.
 It's a lot of work for what seems like a simple optimization.</p>
 <h3 id="trimming">Trimming</h3>
 <p>Once we have our hands on the <code>whole</code> reconciled plan, we can iteratively trim
 it down to the least sub-plan covering the UK. So we are maintaining a sub-plan
 <code>current</code> of <code>whole</code> with the invariant that <code>current</code> contains all the UK
 atoms. Of course this holds at the start when <code>current = whole</code>.</p>
-<p>At each step we try to shrink it by chopping off a leg from the front,
-or a leg from the back. Iteration terminates in one of two cases: either there are no legs to chop off (the sub-plan is a point and minimal), or it is still a non-trivial sub-plan, in which case it starts and ends with UK legs:</p>
+<p>At each step we try to shrink it by chopping off a leg from the front, or a leg
+from the back. Iteration terminates in one of two cases: either there are no
+legs to chop off (the sub-plan is a point and minimal), or it is still a
+non-trivial sub-plan, in which case it starts and ends with UK legs:</p>
 <pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>current = start_uk_leg ≫ a</span></span>
 <span class="giallo-l"><span>current = b ≫ end_uk_leg</span></span></code></pre>
 <p>This is now the least sub-plan covering all the UK atoms. This relies on a
