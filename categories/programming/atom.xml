@@ -33,25 +33,6 @@ the whole thing only became tractable once I restated the problem in algebraic t
         
     </entry>
     <entry xml:lang="en">
-        <title>What even is agentic programming?</title>
-        <published>2026-02-08T00:00:00+00:00</published>
-        <updated>2026-02-08T00:00:00+00:00</updated>
-        
-        <author>
-          <name>
-            
-              Unknown
-            
-          </name>
-        </author>
-        
-        <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/agentic/"/>
-        <id>https://jameshaydon.github.io/agentic/</id>
-        
-        <summary type="html">&lt;p&gt;&quot;Agents&quot;, &quot;agentic AI&quot; are all the rage right now, but surprisingly little clarity about what it means from a programming perspective. In this post I want to survey current agentic architectures and patterns, and then try to pin it down as a programming concept. Then I&#x27;ll speculate on how programming languages will evolve to fit this new paradigm.&lt;&#x2F;p&gt;</summary>
-        
-    </entry>
-    <entry xml:lang="en">
         <title>Solving `Passport Application` with Haskell</title>
         <published>2025-06-27T00:00:00+00:00</published>
         <updated>2025-06-27T00:00:00+00:00</updated>
