@@ -170,11 +170,11 @@ indices. Judging its validity requires thought and it breaks down in the
 presence of duplicate waypoint names.</p>
 <p>I think what I'm advocating for here is basically what you get when you mix</p>
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/Structured_programming">Structured programming</a>, which advocates using the correct data-structures for solving a problem, and structuring the code in analogy with those data structures,</li>
-<li><a href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain-driven design</a>,
+<li><a rel="external" href="https://en.wikipedia.org/wiki/Structured_programming">Structured programming</a>, which advocates using the correct data-structures for solving a problem, and structuring the code in analogy with those data structures,</li>
+<li><a rel="external" href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain-driven design</a>,
 which argues that the language of the domain should be used in the programming
 source code<sup class="footnote-reference"><a href="#1">1</a></sup>,</li>
-<li><a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don’t
+<li><a rel="external" href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Parse, don’t
 validate</a>,
 or <em>"Type-driven design"</em>, which argues that properties/invariants should be
 represented by proper data-strctures ("make illegal state unrepresentable"),
@@ -210,19 +210,18 @@ This therefore involves a first step which works out how the ICAO and ADEXP
 plans "match up".</p>
 <p>In the original post this was achieved by a function <code>reconcile :: ICAO p r -&gt; [p] -&gt; [Combined p r]</code>. If waypoint names are unique then plans can only match
 up in at most one way, so I might<sup class="footnote-reference"><a href="#3">3</a></sup> have defined something like this instead:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#5cb3fa;">reconcile&#39; </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Eq </span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">=&gt; ICAO </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [</span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">] </span><span style="color:#cd74e8;">-&gt; Maybe</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Combined </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">)
-</span><span style="color:#abb2bf;">reconcile&#39; (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p) [p&#39;] </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> p </span><span style="color:#adb7c9;">==</span><span style="color:#abb2bf;"> p&#39; </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> pure (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p)
-</span><span style="color:#abb2bf;">reconcile&#39; (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p r rest) (p&#39; </span><span style="color:#adb7c9;">:</span><span style="color:#abb2bf;"> ps) </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> p </span><span style="color:#adb7c9;">==</span><span style="color:#abb2bf;"> p&#39; </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">do
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">let</span><span style="color:#abb2bf;"> (skipped, restAdexp) </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> span (</span><span style="color:#adb7c9;">\</span><span style="color:#abb2bf;">x </span><span style="color:#adb7c9;">-&gt;</span><span style="color:#abb2bf;"> x </span><span style="color:#adb7c9;">/=</span><span style="color:#abb2bf;"> start rest) ps
-</span><span style="color:#abb2bf;">  recoRest </span><span style="color:#adb7c9;">&lt;-</span><span style="color:#abb2bf;"> reconcile&#39; rest restAdexp
-</span><span style="color:#abb2bf;">  pure (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p </span><span style="color:#db9d63;">Via</span><span style="color:#abb2bf;"> {route </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> r, through </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> skipped} recoRest)
-</span><span style="color:#abb2bf;">reconcile&#39; _ _ </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Nothing
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #61AFEF;">reconcile&#39;</span><span> :: (</span><span style="color: #D19A66;">Eq</span><span style="color: #C678DD;"> p</span><span>) =&gt;</span><span style="color: #D19A66;"> ICAO</span><span style="color: #C678DD;"> p r</span><span> -&gt; [</span><span style="color: #C678DD;">p</span><span>] -&gt;</span><span style="color: #D19A66;"> Maybe</span><span> (</span><span style="color: #D19A66;">Combined</span><span style="color: #C678DD;"> p r</span><span>)</span></span>
+<span class="giallo-l"><span>reconcile&#39; (</span><span style="color: #D19A66;">End</span><span> p) [p&#39;] | p == p&#39; = pure (</span><span style="color: #D19A66;">End</span><span> p)</span></span>
+<span class="giallo-l"><span>reconcile&#39; (</span><span style="color: #D19A66;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; =</span><span style="color: #C678DD;"> do</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  let</span><span> (skipped, restAdexp) = span (\x -&gt; x /= start rest) ps</span></span>
+<span class="giallo-l"><span>  recoRest &lt;- reconcile&#39; rest restAdexp</span></span>
+<span class="giallo-l"><span>  pure (</span><span style="color: #D19A66;">Leg</span><span> p </span><span style="color: #D19A66;">Via</span><span> {</span><span style="color: #E06C75;">route</span><span> = r,</span><span style="color: #E06C75;"> through</span><span> = skipped} recoRest)</span></span>
+<span class="giallo-l"><span>reconcile&#39; _ _ =</span><span style="color: #D19A66;"> Nothing</span></span></code></pre>
 <p>This function is simpler than <code>reconcile</code> from the original post and does the
 obvious thing: when reconciling a leg of the ICAO plan with the ADEXP list, it
 will skip all the ADEXP points that are not equal to the next point in the ICAO
 plan, and then reconciles the rest of the plan recursively.</p>
-<p>This function is an example of <a href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">"Parse, don’t
+<p>This function is an example of <a rel="external" href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">"Parse, don’t
 validate"</a>.
 Parsing is how semantically meaningful domain values are produced from less
 meaningful data, and so is often a necessary first step in structuring the
@@ -245,23 +244,19 @@ far more understandable: the input data is ambiguous.</li>
 post, this is quite simple once we have the version of the flight plan which
 combines all the information we need. All that changes is pattern matching on a
 <code>Maybe</code>-value instead of a list:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#5cb3fa;">ukPartOfICAO&#39; </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Eq </span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">=&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#eb6772;">p </span><span style="color:#cd74e8;">-&gt; Bool</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">-&gt; ICAO </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [</span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">] </span><span style="color:#cd74e8;">-&gt; Either Err</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">ICAO </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">)
-</span><span style="color:#abb2bf;">ukPartOfICAO&#39; uk icao adexp </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">case</span><span style="color:#abb2bf;"> reconcile&#39; icao adexp </span><span style="color:#cd74e8;">of
-</span><span style="color:#abb2bf;">  </span><span style="color:#db9d63;">Just</span><span style="color:#abb2bf;"> plan </span><span style="color:#adb7c9;">-&gt;</span><span style="color:#abb2bf;"> projectICAO </span><span style="color:#adb7c9;">&lt;$&gt;</span><span style="color:#abb2bf;"> ukSegment uk plan
-</span><span style="color:#abb2bf;">  _ </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#db9d63;">Left CannotReconcileIcaoAdexp
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #61AFEF;">ukPartOfICAO&#39;</span><span> :: (</span><span style="color: #D19A66;">Eq</span><span style="color: #C678DD;"> p</span><span>) =&gt; (</span><span style="color: #C678DD;">p</span><span> -&gt;</span><span style="color: #D19A66;"> Bool</span><span>) -&gt;</span><span style="color: #D19A66;"> ICAO</span><span style="color: #C678DD;"> p r</span><span> -&gt; [</span><span style="color: #C678DD;">p</span><span>] -&gt;</span><span style="color: #D19A66;"> Either Err</span><span> (</span><span style="color: #D19A66;">ICAO</span><span style="color: #C678DD;"> p r</span><span>)</span></span>
+<span class="giallo-l"><span>ukPartOfICAO&#39; uk icao adexp =</span><span style="color: #C678DD;"> case</span><span> reconcile&#39; icao adexp </span><span style="color: #C678DD;">of</span></span>
+<span class="giallo-l"><span style="color: #D19A66;">  Just</span><span> plan -&gt; projectICAO &lt;$&gt; ukSegment uk plan</span></span>
+<span class="giallo-l"><span>  _ -&gt;</span><span style="color: #D19A66;"> Left CannotReconcileIcaoAdexp</span></span></code></pre>
 <p>For the original example this version of the code simply <em>works correctly</em>:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#abb2bf;">λ</span><span style="color:#adb7c9;">&gt;</span><span style="color:#abb2bf;"> ukPortionOfICAO&#39; inUK icao adexp
-</span><span style="color:#db9d63;">Right</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">Leg </span><span style="color:#9acc76;">&quot;T&quot; </span><span style="color:#db9d63;">8</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">Leg </span><span style="color:#9acc76;">&quot;O&quot; </span><span style="color:#db9d63;">5</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">Leg </span><span style="color:#9acc76;">&quot;P&quot; </span><span style="color:#db9d63;">1</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">End </span><span style="color:#9acc76;">&quot;Y&quot;</span><span style="color:#abb2bf;">))))
-</span></code></pre>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">                                 UK portion of ICAO
-</span><span style="color:#abb2bf;">                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-</span><span style="color:#abb2bf;">           4       2        8         5              1           9
-</span><span style="color:#abb2bf;">ICAO:  F------Q--------T--------O-----------P---------------Y--------U
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
-</span><span style="color:#abb2bf;">                       UK  UK   UK UK UK    UK  UK
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span>λ&gt; ukPortionOfICAO&#39; inUK icao adexp</span></span>
+<span class="giallo-l"><span style="color: #D19A66;">Right</span><span> (</span><span style="color: #D19A66;">Leg</span><span style="color: #98C379;"> &quot;T&quot;</span><span style="color: #D19A66;"> 8</span><span> (</span><span style="color: #D19A66;">Leg</span><span style="color: #98C379;"> &quot;O&quot;</span><span style="color: #D19A66;"> 5</span><span> (</span><span style="color: #D19A66;">Leg</span><span style="color: #98C379;"> &quot;P&quot;</span><span style="color: #D19A66;"> 1</span><span> (</span><span style="color: #D19A66;">End</span><span style="color: #98C379;"> &quot;Y&quot;</span><span>))))</span></span></code></pre><pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>                                 UK portion of ICAO</span></span>
+<span class="giallo-l"><span>                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫</span></span>
+<span class="giallo-l"><span>           4       2        8         5              1           9</span></span>
+<span class="giallo-l"><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U</span></span>
+<span class="giallo-l"><span>                       UK  UK   UK UK UK    UK  UK</span></span></code></pre>
 <p>The bug would therefore have been completely avoided even though the spec might
 not have mentioned the duplicate waypoint issue. The reason it still works is
 that the the duplicate waypoint doesn't get in the way of reconciling the
@@ -279,7 +274,7 @@ at <code>w2</code>. Since waypoints with duplicate names are supposed to be very
 and flight plan legs are <em>not</em> supposed to be over very long distances, this
 shouldn't happen. Indeed this requirement is in place precisely to avoid flight
 plans being ambiguous.</p>
-<p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.</p>
+<p>Full code <a rel="external" title="GitHub" href="https://github.com/jameshaydon/uk-portion-of-ICAO">here</a>.</p>
 <p><strong>To summarise:</strong><br/> This coding style represents the objects of the domain
 with data-structures. It operates on these values with semantically meaningful
 operations, e.g. "removing the first leg of a flight plan results in a flight
@@ -299,11 +294,11 @@ than others.</li>
 <li>There are many other techniques/tools to prevent bugs.</li>
 <li>Static types are <em>not</em> a prerequisite to this style (though they do help in my
 opinion). I've seen these ideas espoused by the
-<a href="https://clojure.org/">Clojure</a> community, for example.</li>
+<a rel="external" href="https://clojure.org/">Clojure</a> community, for example.</li>
 </ul>
 <hr />
-<p>Many thanks to <a href="http://assert-false.science/arnaud/">Arnaud Spiwack</a> and
-<a href="https://blog.csongor.co.uk/">Csongor Kiss</a> for providing feedback on a draft of
+<p>Many thanks to <a rel="external" href="http://assert-false.science/arnaud/">Arnaud Spiwack</a> and
+<a rel="external" href="https://blog.csongor.co.uk/">Csongor Kiss</a> for providing feedback on a draft of
 this post.</p>
 <hr />
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>

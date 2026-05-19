@@ -113,13 +113,13 @@
 </span>
     </header>
     <div itemprop="articleBody">
-      <p>Comments on <a href="https://www.reddit.com/r/programming/comments/16fhmuq/a_deep_dive_into_the_bug_that_caused_the_uk_air/?utm_source=share&amp;utm_medium=web2x&amp;context=3">reddit</a> and <a href="https://news.ycombinator.com/item?id=37461695">Hacker News</a>. Other posts: <a href="/what-went-wrong">part two</a> and <a href="/programming-style-and-bugs">part
+      <p>Comments on <a rel="external" href="https://www.reddit.com/r/programming/comments/16fhmuq/a_deep_dive_into_the_bug_that_caused_the_uk_air/?utm_source=share&amp;utm_medium=web2x&amp;context=3">reddit</a> and <a rel="external" href="https://news.ycombinator.com/item?id=37461695">Hacker News</a>. Other posts: <a href="/what-went-wrong">part two</a> and <a href="/programming-style-and-bugs">part
 three</a>.</p>
 <p><em>UPDATE:</em> The flight plan which triggered the chaos (but was valid) has been
-<a href="https://chaos.social/@russss/111048524540643971">identified</a>!</p>
+<a rel="external" href="https://chaos.social/@russss/111048524540643971">identified</a>!</p>
 <hr />
 <p>On 28 August 2023 <em>NATS</em>, the UK's air traffic control operator, suffered a
-<strong>major</strong> technical incident. The BBC reports that more than <a href="https://www.bbc.com/news/uk-66685349">2000 flights were
+<strong>major</strong> technical incident. The BBC reports that more than <a rel="external" href="https://www.bbc.com/news/uk-66685349">2000 flights were
 cancelled</a> and the cost has been estimated
 at over <em>£100 million</em> GBP. The incident probably affected hundreds of thousands
 of people.</p>
@@ -134,7 +134,7 @@ decade - with 1,000 flights cancelled and chaos set to last DAYS"</em>.</p>
 <blockquote>
 <p>NATS Major Incident Preliminary Report<br/>
 Flight Plan Reception Suite Automated (FPRSA-R) Sub-system Incident 28th August 2023 <br/>
-<a href="https://publicapps.caa.co.uk/docs/33/NERL%20Major%20Incident%20Investigation%20Preliminary%20Report.pdf">pdf</a>.</p>
+<a rel="external" href="https://publicapps.caa.co.uk/docs/33/NERL%20Major%20Incident%20Investigation%20Preliminary%20Report.pdf">pdf</a>.</p>
 </blockquote>
 <p><em>NATS</em> is a "public-private" company in the UK that is responsible for all of
 the UK's air traffic control:</p>
@@ -198,33 +198,31 @@ change. Still, this results in flight plans being received by NATS sometimes
 <p>[On] 28 August the airline submitted an ICAO4444 compliant flight plan into
 Eurocontrol’s flight planning distribution system, IFPS.</p>
 </blockquote>
-<p>ICAO stands for <a href="https://en.wikipedia.org/wiki/International_Civil_Aviation_Organization" title="wikipedia">International Civil Aviation
+<p>ICAO stands for <a rel="external" title="wikipedia" href="https://en.wikipedia.org/wiki/International_Civil_Aviation_Organization">International Civil Aviation
 Organization</a>, a United Nations agency.
 An ICAO4444 flight plan looks like this:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">(FPL-TTT123-IS
-</span><span style="color:#abb2bf;">-C550/L-SDE1E2GHIJ3J5RWZ/SB1D1
-</span><span style="color:#abb2bf;">-KPWM1225
-</span><span style="color:#abb2bf;">-N0440F310 SSOXS5 SSOXS DCT BUZRD
-</span><span style="color:#abb2bf;">DCT SEY DCT HTO J174 ORF J121
-</span><span style="color:#abb2bf;">CHS EESNT LUNNI1
-</span><span style="color:#abb2bf;">-KJAX0214 KMCO
-</span><span style="color:#abb2bf;">-PBN/A1L1B1C1D1O1T1 NAV/Z1 GBAS
-</span><span style="color:#abb2bf;">DAT/1FANS2PDC SUR/260B RSP180
-</span><span style="color:#abb2bf;">DOF/220501 REG/N123A SEL/BPAM
-</span><span style="color:#abb2bf;">CODE/A05ED7)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>(FPL-TTT123-IS</span></span>
+<span class="giallo-l"><span>-C550/L-SDE1E2GHIJ3J5RWZ/SB1D1</span></span>
+<span class="giallo-l"><span>-KPWM1225</span></span>
+<span class="giallo-l"><span>-N0440F310 SSOXS5 SSOXS DCT BUZRD</span></span>
+<span class="giallo-l"><span>DCT SEY DCT HTO J174 ORF J121</span></span>
+<span class="giallo-l"><span>CHS EESNT LUNNI1</span></span>
+<span class="giallo-l"><span>-KJAX0214 KMCO</span></span>
+<span class="giallo-l"><span>-PBN/A1L1B1C1D1O1T1 NAV/Z1 GBAS</span></span>
+<span class="giallo-l"><span>DAT/1FANS2PDC SUR/260B RSP180</span></span>
+<span class="giallo-l"><span>DOF/220501 REG/N123A SEL/BPAM</span></span>
+<span class="giallo-l"><span>CODE/A05ED7)</span></span></code></pre>
 <p>Such messages are in a format that is meant to be read by machines, but also by
 humans if necessary. The format is spec'd over many many pages of PDF, but is
 roughly:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">( FPL-ACID-Flt Rules Flight Type
-</span><span style="color:#abb2bf;">- AC Type/Wake Cat-
-</span><span style="color:#abb2bf;">Equip.&amp;Capability
-</span><span style="color:#abb2bf;">- Departure EOBT
-</span><span style="color:#abb2bf;">- Speed Altitude [sp] Route
-</span><span style="color:#abb2bf;">- Destination ETE [sp]
-</span><span style="color:#abb2bf;">Alternate(s)
-</span><span style="color:#abb2bf;">- Other Information )
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>( FPL-ACID-Flt Rules Flight Type</span></span>
+<span class="giallo-l"><span>- AC Type/Wake Cat-</span></span>
+<span class="giallo-l"><span>Equip.&amp;Capability</span></span>
+<span class="giallo-l"><span>- Departure EOBT</span></span>
+<span class="giallo-l"><span>- Speed Altitude [sp] Route</span></span>
+<span class="giallo-l"><span>- Destination ETE [sp]</span></span>
+<span class="giallo-l"><span>Alternate(s)</span></span>
+<span class="giallo-l"><span>- Other Information )</span></span></code></pre>
 <p>The route part (in this example: <code>N0440F310 SSOXS5 SSOXS DCT BUZRD DCT SEY DCT HTO J174 ORF J121 CHS EESNT LUNNI1</code>) encodes an overall speed (here <code>N0440</code>
 meaning <code>440 knots</code>), an overall altitude (here <code>F310</code> which means "Flight
 Level 310" which means <code>310 × 100 ft</code> (can also be in <code>km</code>)), and a sequence of
@@ -251,157 +249,152 @@ other aspects, the original ICAO4444 flight plan plus an additional list of
 waypoints and other data.</p>
 </blockquote>
 <p>ADEXP looks like this:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">-TITLE IFPL
-</span><span style="color:#abb2bf;">-BEGIN ADDR
-</span><span style="color:#abb2bf;">  -FAC LIIRZEZX
-</span><span style="color:#abb2bf;">  [...]
-</span><span style="color:#abb2bf;">  -FAC LYZZEBXX
-</span><span style="color:#abb2bf;">-END ADDR
-</span><span style="color:#abb2bf;">-ADEP EDDF
-</span><span style="color:#abb2bf;">-ADES LGTS
-</span><span style="color:#abb2bf;">-ARCID KIM1
-</span><span style="color:#abb2bf;">-ARCTYP B738
-</span><span style="color:#abb2bf;">-CEQPT SDGRWY
-</span><span style="color:#abb2bf;">-EOBD 170729
-</span><span style="color:#abb2bf;">-EOBT 0715
-</span><span style="color:#abb2bf;">-FILTIM 280832
-</span><span style="color:#abb2bf;">-IFPLID AT00441635
-</span><span style="color:#abb2bf;">-ORIGIN -NETWORKTYPE SITA -FAC FRAOXLH
-</span><span style="color:#abb2bf;">-SEQPT C
-</span><span style="color:#abb2bf;">-WKTRC M
-</span><span style="color:#abb2bf;">-PBN B2
-</span><span style="color:#abb2bf;">-REG DABHM
-</span><span style="color:#abb2bf;">-SEL KMGJ
-</span><span style="color:#abb2bf;">-SRC FPL
-</span><span style="color:#abb2bf;">-TTLEET 0210
-</span><span style="color:#abb2bf;">-RFL F330
-</span><span style="color:#abb2bf;">-SPEED N0417
-</span><span style="color:#abb2bf;">-FLTRUL I
-</span><span style="color:#abb2bf;">-FLTTYP S
-</span><span style="color:#abb2bf;">-ROUTE N0417F330 ANEKI8L ANEKI Y163 NATOR UN850 TRA UP131 RESIA Q333
-</span><span style="color:#abb2bf;">BABAG UN606 PEVAL DCT PETAK UL607 PINDO UM603 EDASI
-</span><span style="color:#abb2bf;">-ALTRNT1 LBSF
-</span><span style="color:#abb2bf;">-BEGIN RTEPTS
-</span><span style="color:#abb2bf;">  -PT -PTID EDDF -FL F004 -ETO 170729073000
-</span><span style="color:#abb2bf;">  -PT -PTID RID -FL F100 -ETO 170729073404
-</span><span style="color:#abb2bf;">  -PT -PTID ANEKI -FL F210 -ETO 170729073856
-</span><span style="color:#abb2bf;">  -PT -PTID NEKLO -FL F214 -ETO 170729073911
-</span><span style="color:#abb2bf;">  -PT -PTID BADLI -FL F248 -ETO 170729074118
-</span><span style="color:#abb2bf;">  -PT -PTID PABLA -FL F279 -ETO 170729074348
-</span><span style="color:#abb2bf;">  -PT -PTID HERBI -FL F308 -ETO 170729074624
-</span><span style="color:#abb2bf;">  -PT -PTID NATOR -FL F330 -ETO 170729074911
-</span><span style="color:#abb2bf;">  -PT -PTID TITIX -FL F330 -ETO 170729075154
-</span><span style="color:#abb2bf;">  -PT -PTID TRA -FL F330 -ETO 170729075323
-</span><span style="color:#abb2bf;">  -PT -PTID ARGAX -FL F330 -ETO 170729080055
-</span><span style="color:#abb2bf;">  -PT -PTID RESIA -FL F330 -ETO 170729080731
-</span><span style="color:#abb2bf;">  -PT -PTID UNTAD -FL F330 -ETO 170729081243
-</span><span style="color:#abb2bf;">  -PT -PTID DIKEM -FL F330 -ETO 170729081627
-</span><span style="color:#abb2bf;">  -PT -PTID ROKIB -FL F330 -ETO 170729081824
-</span><span style="color:#abb2bf;">  -PT -PTID BABAG -FL F330 -ETO 170729082816
-</span><span style="color:#abb2bf;">  -PT -PTID PEVAL -FL F330 -ETO 170729082916
-</span><span style="color:#abb2bf;">  -PT -PTID PETAK -FL F330 -ETO 170729091754
-</span><span style="color:#abb2bf;">  -PT -PTID PINDO -FL F330 -ETO 170729093322
-</span><span style="color:#abb2bf;">  -PT -PTID EDASI -FL F165 -ETO 170729094347
-</span><span style="color:#abb2bf;">  -PT -PTID LGTS -FL F000 -ETO 170729095713
-</span><span style="color:#abb2bf;">-END RTEPTS
-</span><span style="color:#abb2bf;">-SID ANEKI8L
-</span><span style="color:#abb2bf;">-ATSRT Y163 ANEKI NATOR
-</span><span style="color:#abb2bf;">-ATSRT UN850 NATOR TRA
-</span><span style="color:#abb2bf;">-ATSRT UP131 TRA RESIA
-</span><span style="color:#abb2bf;">-ATSRT Q333 RESIA BABAG
-</span><span style="color:#abb2bf;">-ATSRT UN606 BABAG PEVAL
-</span><span style="color:#abb2bf;">-DCT PEVAL PETAK
-</span><span style="color:#abb2bf;">-ATSRT UL607 PETAK PINDO
-</span><span style="color:#abb2bf;">n -ATSRT UM603 PINDO EDASI
-</span></code></pre>
-<p>You can read about ADEXP in the <a href="https://www.eurocontrol.int/sites/default/files/2023-06/eurocontrol-released-specification-adexp-3-4.pdf" title="pdf">official spec</a>.
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>-TITLE IFPL</span></span>
+<span class="giallo-l"><span>-BEGIN ADDR</span></span>
+<span class="giallo-l"><span>  -FAC LIIRZEZX</span></span>
+<span class="giallo-l"><span>  [...]</span></span>
+<span class="giallo-l"><span>  -FAC LYZZEBXX</span></span>
+<span class="giallo-l"><span>-END ADDR</span></span>
+<span class="giallo-l"><span>-ADEP EDDF</span></span>
+<span class="giallo-l"><span>-ADES LGTS</span></span>
+<span class="giallo-l"><span>-ARCID KIM1</span></span>
+<span class="giallo-l"><span>-ARCTYP B738</span></span>
+<span class="giallo-l"><span>-CEQPT SDGRWY</span></span>
+<span class="giallo-l"><span>-EOBD 170729</span></span>
+<span class="giallo-l"><span>-EOBT 0715</span></span>
+<span class="giallo-l"><span>-FILTIM 280832</span></span>
+<span class="giallo-l"><span>-IFPLID AT00441635</span></span>
+<span class="giallo-l"><span>-ORIGIN -NETWORKTYPE SITA -FAC FRAOXLH</span></span>
+<span class="giallo-l"><span>-SEQPT C</span></span>
+<span class="giallo-l"><span>-WKTRC M</span></span>
+<span class="giallo-l"><span>-PBN B2</span></span>
+<span class="giallo-l"><span>-REG DABHM</span></span>
+<span class="giallo-l"><span>-SEL KMGJ</span></span>
+<span class="giallo-l"><span>-SRC FPL</span></span>
+<span class="giallo-l"><span>-TTLEET 0210</span></span>
+<span class="giallo-l"><span>-RFL F330</span></span>
+<span class="giallo-l"><span>-SPEED N0417</span></span>
+<span class="giallo-l"><span>-FLTRUL I</span></span>
+<span class="giallo-l"><span>-FLTTYP S</span></span>
+<span class="giallo-l"><span>-ROUTE N0417F330 ANEKI8L ANEKI Y163 NATOR UN850 TRA UP131 RESIA Q333</span></span>
+<span class="giallo-l"><span>BABAG UN606 PEVAL DCT PETAK UL607 PINDO UM603 EDASI</span></span>
+<span class="giallo-l"><span>-ALTRNT1 LBSF</span></span>
+<span class="giallo-l"><span>-BEGIN RTEPTS</span></span>
+<span class="giallo-l"><span>  -PT -PTID EDDF -FL F004 -ETO 170729073000</span></span>
+<span class="giallo-l"><span>  -PT -PTID RID -FL F100 -ETO 170729073404</span></span>
+<span class="giallo-l"><span>  -PT -PTID ANEKI -FL F210 -ETO 170729073856</span></span>
+<span class="giallo-l"><span>  -PT -PTID NEKLO -FL F214 -ETO 170729073911</span></span>
+<span class="giallo-l"><span>  -PT -PTID BADLI -FL F248 -ETO 170729074118</span></span>
+<span class="giallo-l"><span>  -PT -PTID PABLA -FL F279 -ETO 170729074348</span></span>
+<span class="giallo-l"><span>  -PT -PTID HERBI -FL F308 -ETO 170729074624</span></span>
+<span class="giallo-l"><span>  -PT -PTID NATOR -FL F330 -ETO 170729074911</span></span>
+<span class="giallo-l"><span>  -PT -PTID TITIX -FL F330 -ETO 170729075154</span></span>
+<span class="giallo-l"><span>  -PT -PTID TRA -FL F330 -ETO 170729075323</span></span>
+<span class="giallo-l"><span>  -PT -PTID ARGAX -FL F330 -ETO 170729080055</span></span>
+<span class="giallo-l"><span>  -PT -PTID RESIA -FL F330 -ETO 170729080731</span></span>
+<span class="giallo-l"><span>  -PT -PTID UNTAD -FL F330 -ETO 170729081243</span></span>
+<span class="giallo-l"><span>  -PT -PTID DIKEM -FL F330 -ETO 170729081627</span></span>
+<span class="giallo-l"><span>  -PT -PTID ROKIB -FL F330 -ETO 170729081824</span></span>
+<span class="giallo-l"><span>  -PT -PTID BABAG -FL F330 -ETO 170729082816</span></span>
+<span class="giallo-l"><span>  -PT -PTID PEVAL -FL F330 -ETO 170729082916</span></span>
+<span class="giallo-l"><span>  -PT -PTID PETAK -FL F330 -ETO 170729091754</span></span>
+<span class="giallo-l"><span>  -PT -PTID PINDO -FL F330 -ETO 170729093322</span></span>
+<span class="giallo-l"><span>  -PT -PTID EDASI -FL F165 -ETO 170729094347</span></span>
+<span class="giallo-l"><span>  -PT -PTID LGTS -FL F000 -ETO 170729095713</span></span>
+<span class="giallo-l"><span>-END RTEPTS</span></span>
+<span class="giallo-l"><span>-SID ANEKI8L</span></span>
+<span class="giallo-l"><span>-ATSRT Y163 ANEKI NATOR</span></span>
+<span class="giallo-l"><span>-ATSRT UN850 NATOR TRA</span></span>
+<span class="giallo-l"><span>-ATSRT UP131 TRA RESIA</span></span>
+<span class="giallo-l"><span>-ATSRT Q333 RESIA BABAG</span></span>
+<span class="giallo-l"><span>-ATSRT UN606 BABAG PEVAL</span></span>
+<span class="giallo-l"><span>-DCT PEVAL PETAK</span></span>
+<span class="giallo-l"><span>-ATSRT UL607 PETAK PINDO</span></span>
+<span class="giallo-l"><span>n -ATSRT UM603 PINDO EDASI</span></span></code></pre>
+<p>You can read about ADEXP in the <a rel="external" title="pdf" href="https://www.eurocontrol.int/sites/default/files/2023-06/eurocontrol-released-specification-adexp-3-4.pdf">official spec</a>.
 Some notable fields (page 48):</p>
 <table><thead><tr><th>Adexp Primary Field</th><th>Kind</th><th>Syntax</th><th>Semantic</th></tr></thead><tbody>
 <tr><td>route</td><td>b</td><td><code>'-' "ROUTE" {LIM_CHAR}</code></td><td>Complete ICAO Field 15 information containing speed, RFL and route (conforming to the syntax given in Ref. [3]).</td></tr>
 <tr><td>rtepts</td><td>c</td><td><code>'-' "BEGIN" "RTEPTS" { pt I ad / vec} '-' "END" "RTEPTS"</code></td><td>List of route points. May also contain an aerodrome identifier.</td></tr>
 </tbody></table>
 <p>In the example, we have the ICAO route:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">-ROUTE N0417F330 ANEKI8L ANEKI Y163 NATOR UN850 TRA UP131 RESIA Q333 BABAG UN606 PEVAL DCT PETAK UL607 PINDO UM603 EDASI
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>-ROUTE N0417F330 ANEKI8L ANEKI Y163 NATOR UN850 TRA UP131 RESIA Q333 BABAG UN606 PEVAL DCT PETAK UL607 PINDO UM603 EDASI</span></span></code></pre>
 <p>(9 waypoints, 11 if you add the start and end waypoints)</p>
 <p>Visually, routes look like:
 <img src="https://jameshaydon.github.io/nats-fail/flight_plan.png" alt="some route" title="A flight plan route" /></p>
 <p>(You can play around with flight plans at
-<a href="https://flightplandatabase.com">flightplandatabase.com</a>, a website for people
+<a rel="external" href="https://flightplandatabase.com">flightplandatabase.com</a>, a website for people
 who like playing with flight simulators.)</p>
 <p>We can indent the "route" parts between the waypoints in the ICAO plan to make
 things clearer:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">N0417F330
-</span><span style="color:#abb2bf;">  ANEKI8L 
-</span><span style="color:#abb2bf;">  ANEKI 
-</span><span style="color:#abb2bf;">    Y163
-</span><span style="color:#abb2bf;">  NATOR
-</span><span style="color:#abb2bf;">    UN850
-</span><span style="color:#abb2bf;">  TRA
-</span><span style="color:#abb2bf;">    UP131
-</span><span style="color:#abb2bf;">  RESIA
-</span><span style="color:#abb2bf;">    Q333
-</span><span style="color:#abb2bf;">  BABAG
-</span><span style="color:#abb2bf;">    UN606
-</span><span style="color:#abb2bf;">  PEVAL
-</span><span style="color:#abb2bf;">    DCT
-</span><span style="color:#abb2bf;">  PETAK
-</span><span style="color:#abb2bf;">    UL607
-</span><span style="color:#abb2bf;">  PINDO
-</span><span style="color:#abb2bf;">    UM603
-</span><span style="color:#abb2bf;">  EDASI
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>N0417F330</span></span>
+<span class="giallo-l"><span>  ANEKI8L </span></span>
+<span class="giallo-l"><span>  ANEKI </span></span>
+<span class="giallo-l"><span>    Y163</span></span>
+<span class="giallo-l"><span>  NATOR</span></span>
+<span class="giallo-l"><span>    UN850</span></span>
+<span class="giallo-l"><span>  TRA</span></span>
+<span class="giallo-l"><span>    UP131</span></span>
+<span class="giallo-l"><span>  RESIA</span></span>
+<span class="giallo-l"><span>    Q333</span></span>
+<span class="giallo-l"><span>  BABAG</span></span>
+<span class="giallo-l"><span>    UN606</span></span>
+<span class="giallo-l"><span>  PEVAL</span></span>
+<span class="giallo-l"><span>    DCT</span></span>
+<span class="giallo-l"><span>  PETAK</span></span>
+<span class="giallo-l"><span>    UL607</span></span>
+<span class="giallo-l"><span>  PINDO</span></span>
+<span class="giallo-l"><span>    UM603</span></span>
+<span class="giallo-l"><span>  EDASI</span></span></code></pre>
 <p>E.g. <code>ANEKI Y163 NATOR</code> means "go from waypoint <code>ANEKI</code> to waypoint <code>NATOR</code> via
 the route <code>Y163</code>". <code>DCT</code> means "direct".</p>
 <p>The <code>ADEXP</code> format has more waypoints, along with more precision about altitude and estimated time at each waypoint:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">-BEGIN RTEPTS
-</span><span style="color:#abb2bf;">-PT -PTID EDDF  -FL F004 -ETO 170729073000
-</span><span style="color:#abb2bf;">-PT -PTID RID   -FL F100 -ETO 170729073404
-</span><span style="color:#abb2bf;">-PT -PTID ANEKI -FL F210 -ETO 170729073856
-</span><span style="color:#abb2bf;">-PT -PTID NEKLO -FL F214 -ETO 170729073911
-</span><span style="color:#abb2bf;">-PT -PTID BADLI -FL F248 -ETO 170729074118
-</span><span style="color:#abb2bf;">-PT -PTID PABLA -FL F279 -ETO 170729074348
-</span><span style="color:#abb2bf;">-PT -PTID HERBI -FL F308 -ETO 170729074624
-</span><span style="color:#abb2bf;">-PT -PTID NATOR -FL F330 -ETO 170729074911
-</span><span style="color:#abb2bf;">-PT -PTID TITIX -FL F330 -ETO 170729075154
-</span><span style="color:#abb2bf;">-PT -PTID TRA   -FL F330 -ETO 170729075323
-</span><span style="color:#abb2bf;">-PT -PTID ARGAX -FL F330 -ETO 170729080055
-</span><span style="color:#abb2bf;">-PT -PTID RESIA -FL F330 -ETO 170729080731
-</span><span style="color:#abb2bf;">-PT -PTID UNTAD -FL F330 -ETO 170729081243
-</span><span style="color:#abb2bf;">-PT -PTID DIKEM -FL F330 -ETO 170729081627
-</span><span style="color:#abb2bf;">-PT -PTID ROKIB -FL F330 -ETO 170729081824
-</span><span style="color:#abb2bf;">-PT -PTID BABAG -FL F330 -ETO 170729082816
-</span><span style="color:#abb2bf;">-PT -PTID PEVAL -FL F330 -ETO 170729082916
-</span><span style="color:#abb2bf;">-PT -PTID PETAK -FL F330 -ETO 170729091754
-</span><span style="color:#abb2bf;">-PT -PTID PINDO -FL F330 -ETO 170729093322
-</span><span style="color:#abb2bf;">-PT -PTID EDASI -FL F165 -ETO 170729094347
-</span><span style="color:#abb2bf;">-PT -PTID LGTS  -FL F000 -ETO 170729095713
-</span><span style="color:#abb2bf;">-END RTEPTS
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>-BEGIN RTEPTS</span></span>
+<span class="giallo-l"><span>-PT -PTID EDDF  -FL F004 -ETO 170729073000</span></span>
+<span class="giallo-l"><span>-PT -PTID RID   -FL F100 -ETO 170729073404</span></span>
+<span class="giallo-l"><span>-PT -PTID ANEKI -FL F210 -ETO 170729073856</span></span>
+<span class="giallo-l"><span>-PT -PTID NEKLO -FL F214 -ETO 170729073911</span></span>
+<span class="giallo-l"><span>-PT -PTID BADLI -FL F248 -ETO 170729074118</span></span>
+<span class="giallo-l"><span>-PT -PTID PABLA -FL F279 -ETO 170729074348</span></span>
+<span class="giallo-l"><span>-PT -PTID HERBI -FL F308 -ETO 170729074624</span></span>
+<span class="giallo-l"><span>-PT -PTID NATOR -FL F330 -ETO 170729074911</span></span>
+<span class="giallo-l"><span>-PT -PTID TITIX -FL F330 -ETO 170729075154</span></span>
+<span class="giallo-l"><span>-PT -PTID TRA   -FL F330 -ETO 170729075323</span></span>
+<span class="giallo-l"><span>-PT -PTID ARGAX -FL F330 -ETO 170729080055</span></span>
+<span class="giallo-l"><span>-PT -PTID RESIA -FL F330 -ETO 170729080731</span></span>
+<span class="giallo-l"><span>-PT -PTID UNTAD -FL F330 -ETO 170729081243</span></span>
+<span class="giallo-l"><span>-PT -PTID DIKEM -FL F330 -ETO 170729081627</span></span>
+<span class="giallo-l"><span>-PT -PTID ROKIB -FL F330 -ETO 170729081824</span></span>
+<span class="giallo-l"><span>-PT -PTID BABAG -FL F330 -ETO 170729082816</span></span>
+<span class="giallo-l"><span>-PT -PTID PEVAL -FL F330 -ETO 170729082916</span></span>
+<span class="giallo-l"><span>-PT -PTID PETAK -FL F330 -ETO 170729091754</span></span>
+<span class="giallo-l"><span>-PT -PTID PINDO -FL F330 -ETO 170729093322</span></span>
+<span class="giallo-l"><span>-PT -PTID EDASI -FL F165 -ETO 170729094347</span></span>
+<span class="giallo-l"><span>-PT -PTID LGTS  -FL F000 -ETO 170729095713</span></span>
+<span class="giallo-l"><span>-END RTEPTS</span></span></code></pre>
 <p>(21 waypoints)</p>
 <p>We can mark which of the ADEXP waypoints have a corresponding waypoint in the ICAO plan (with a <code>+</code>) and which are implicit (with a <code>|</code>):</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">EDDF   |
-</span><span style="color:#abb2bf;">RID    |
-</span><span style="color:#abb2bf;">ANEKI  + 
-</span><span style="color:#abb2bf;">NEKLO  |
-</span><span style="color:#abb2bf;">BADLI  |
-</span><span style="color:#abb2bf;">PABLA  |
-</span><span style="color:#abb2bf;">HERBI  |
-</span><span style="color:#abb2bf;">NATOR  +
-</span><span style="color:#abb2bf;">TITIX  |
-</span><span style="color:#abb2bf;">TRA    +
-</span><span style="color:#abb2bf;">ARGAX  |
-</span><span style="color:#abb2bf;">RESIA  +
-</span><span style="color:#abb2bf;">UNTAD  |
-</span><span style="color:#abb2bf;">DIKEM  |
-</span><span style="color:#abb2bf;">ROKIB  |
-</span><span style="color:#abb2bf;">BABAG  +
-</span><span style="color:#abb2bf;">PEVAL  |
-</span><span style="color:#abb2bf;">PETAK  +
-</span><span style="color:#abb2bf;">PINDO  +
-</span><span style="color:#abb2bf;">EDASI  +
-</span><span style="color:#abb2bf;">LGTS   |
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>EDDF   |</span></span>
+<span class="giallo-l"><span>RID    |</span></span>
+<span class="giallo-l"><span>ANEKI  + </span></span>
+<span class="giallo-l"><span>NEKLO  |</span></span>
+<span class="giallo-l"><span>BADLI  |</span></span>
+<span class="giallo-l"><span>PABLA  |</span></span>
+<span class="giallo-l"><span>HERBI  |</span></span>
+<span class="giallo-l"><span>NATOR  +</span></span>
+<span class="giallo-l"><span>TITIX  |</span></span>
+<span class="giallo-l"><span>TRA    +</span></span>
+<span class="giallo-l"><span>ARGAX  |</span></span>
+<span class="giallo-l"><span>RESIA  +</span></span>
+<span class="giallo-l"><span>UNTAD  |</span></span>
+<span class="giallo-l"><span>DIKEM  |</span></span>
+<span class="giallo-l"><span>ROKIB  |</span></span>
+<span class="giallo-l"><span>BABAG  +</span></span>
+<span class="giallo-l"><span>PEVAL  |</span></span>
+<span class="giallo-l"><span>PETAK  +</span></span>
+<span class="giallo-l"><span>PINDO  +</span></span>
+<span class="giallo-l"><span>EDASI  +</span></span>
+<span class="giallo-l"><span>LGTS   |</span></span></code></pre>
 <p>Note that the ICAO waypoints do not contain the start and end, since in the
 original ICAO format these are specified in other fields (so it would waste
 space to list them again in this list).</p>
@@ -410,8 +403,7 @@ space to list them again in this list).</p>
 geographically distinct but which have the same designator.</p>
 </blockquote>
 <p>This means there were two lines like:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">-PT -PTID RESIA -FL F330 -ETO 170729080731
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>-PT -PTID RESIA -FL F330 -ETO 170729080731</span></span></code></pre>
 <p>that had the same <code>PTID</code> string like <code>"RESIA"</code>.</p>
 <blockquote>
 <p>Although there has been work by ICAO and other bodies to eradicate non-unique
@@ -449,7 +441,7 @@ the ADEXP file.</p>
 <p>It seems at this point, having identified the entry and exit points from the
 list of ADEXP waypoints, it will try to extract the UK portion of the flight
 plan from the ICAO route. Why does it do this? User <code>t0mas88</code> on Hacker News
-<a href="https://news.ycombinator.com/item?id=37475075" title="HackerNews">explains</a>:</p>
+<a rel="external" title="HackerNews" href="https://news.ycombinator.com/item?id=37475075">explains</a>:</p>
 <blockquote>
 <p>They use the ADEXP to determine which part of the route is in the UK. Because
 the auto generated points are ATC area handover points. So this data is the
@@ -485,12 +477,11 @@ next nearest point beyond the UK exit point. This was also not present.</p>
 </blockquote>
 <p>OK, so I think this is what is going on, the situation looked something like
 this:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">           4       2        8         5              1           9
-</span><span style="color:#abb2bf;">ICAO:  F------Q--------T--------O-----------P---------------Y--------U
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
-</span><span style="color:#abb2bf;">                       UK  UK   UK UK UK    UK  UK
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>           4       2        8         5              1           9</span></span>
+<span class="giallo-l"><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U</span></span>
+<span class="giallo-l"><span>                       UK  UK   UK UK UK    UK  UK</span></span></code></pre>
 <p>Here the ICAO route has waypoints (represented by capital letters) separated by
 known routes (numbers). On the bottom we have the ADEXP waypoints. The ADEXP
 waypoints that are located in the UK airspace are marked with <code>UK</code>.</p>
@@ -554,12 +545,11 @@ last resort after exploring all other handling options. Critical exceptions
 can be raised as a result of software logic or hardware faults, but
 essentially mark the point at which the affected system cannot continue.</p>
 </blockquote>
-<pre data-lang="Java" style="background-color:#2b303b;color:#6c7079;" class="language-Java "><code class="language-Java" data-lang="Java"><span style="color:#cd74e8;">if </span><span style="color:#abb2bf;">(end_idx </span><span style="color:#adb7c9;">&lt;</span><span style="color:#abb2bf;"> start_idx) {
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">throw new </span><span style="color:#f0c678;">Exception</span><span style="color:#abb2bf;">(</span><span style="color:#9acc76;">&quot;This should never happen&quot;</span><span style="color:#abb2bf;">);
-</span><span style="color:#abb2bf;">} </span><span style="color:#cd74e8;">else </span><span style="color:#abb2bf;">{
-</span><span style="color:#abb2bf;">  ...
-</span><span style="color:#abb2bf;">}
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="java"><span class="giallo-l"><span style="color: #C678DD;">if</span><span style="color: #E06C75;"> (end_idx </span><span style="color: #56B6C2;">&lt;</span><span style="color: #E06C75;"> start_idx) {</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  throw new</span><span style="color: #61AFEF;"> Exception</span><span style="color: #E06C75;">(</span><span style="color: #98C379;">&quot;This should never happen&quot;</span><span style="color: #E06C75;">)</span><span>;</span></span>
+<span class="giallo-l"><span style="color: #E06C75;">}</span><span style="color: #C678DD;"> else</span><span style="color: #E06C75;"> {</span></span>
+<span class="giallo-l"><span>  ...</span></span>
+<span class="giallo-l"><span style="color: #E06C75;">}</span></span></code></pre>
 <p>It sounds like the exception was raised in a later portion of the code, which
 converts the plan to an internal format for <em>NAS</em>. This part probable failed
 because the <code>entry</code>/<code>exit</code> pair doesn't specify a valid portion of the ICAO
@@ -607,7 +597,7 @@ to restore the service, which were unsuccessful, the 2nd Line engineering team
 was mobilised and supported the on-site engineers remotely via video link.</p>
 </blockquote>
 <p><img src="https://jameshaydon.github.io/nats-fail/off-and-on-again.jpg" alt="have you tried turning it off and on again?" /></p>
-<p>As sharp-eyed reddit user <code>voidstarcpp</code> <a href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k03tlx8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points
+<p>As sharp-eyed reddit user <code>voidstarcpp</code> <a rel="external" href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k03tlx8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points
 out</a>,
 it's interesting to contrast these two parts of the report:</p>
 <blockquote>
@@ -647,7 +637,7 @@ and safe manner.</p>
 </blockquote>
 <p>The system was eventually restored, but unfortunately the knock-on effects by
 that point were already disastrous.</p>
-<p>The manufacturer is an Austrian company, <a href="https://en.wikipedia.org/wiki/Frequentis">Frequentis
+<p>The manufacturer is an Austrian company, <a rel="external" href="https://en.wikipedia.org/wiki/Frequentis">Frequentis
 AG</a>:</p>
 <blockquote>
 <p>An FPRSA sub-system has existed in NATS for many years and in 2018 the
@@ -659,7 +649,7 @@ and they hold a world-leading position in aeronautical information management
 </blockquote>
 <p>The "Nobody ever gets fired for buying IBM" defence.</p>
 <p>We can find a few job ads related to air traffic control systems at Frequentis
-AG on their <a href="https://jobs.frequentis.com/careers/SearchJobs/air?listFilterMode=1">careers
+AG on their <a rel="external" href="https://jobs.frequentis.com/careers/SearchJobs/air?listFilterMode=1">careers
 page</a>
 Programming languages used: <code>Ada</code>, <code>C++</code>, <code>Java</code>, <code>Python</code>, with <code>Java</code> being
 the most common. The code above sounds like it could have been written in any of
@@ -670,7 +660,7 @@ these languages, but Ada would at least be safer than the others in other ways.<
 <li>The software that processes flight plans (<code>FPRSA-R</code>) was written in a buggy
 way.</li>
 <li>The software and system are not properly tested.</li>
-<li>The <code>FPRSA-R</code> system has bad <a href="https://en.wikipedia.org/wiki/Failure_mode_and_effects_analysis" title="wikipedia">failure modes</a></li>
+<li>The <code>FPRSA-R</code> system has bad <a rel="external" title="wikipedia" href="https://en.wikipedia.org/wiki/Failure_mode_and_effects_analysis">failure modes</a></li>
 </ol>
 <h3 id="the-software-was-buggy">The software was buggy</h3>
 <p>The software was incapable of extracting the UK portion of the ICAO flight plan,
@@ -729,7 +719,7 @@ a single flight plan with two identically labelled markers caused the chaos.</p>
 <p>"This was a one in 15 million chance. We've processed 15 million flight plans
 with this system up until this point and never seen this before," NATS CEO
 Martin Rolfe told the BBC, as airlines stepped up calls for compensation for
-the breakdown. <a href="https://www.reuters.com/world/uk/uk-aviation-regulator-review-air-traffic-control-failure-2023-09-06/">Reuters</a></p>
+the breakdown. <a rel="external" href="https://www.reuters.com/world/uk/uk-aviation-regulator-review-air-traffic-control-failure-2023-09-06/">Reuters</a></p>
 </blockquote>
 <p>The system was put in place in 2018, so what Martin Rolfe is saying here is that
 this sort of thing only had a chance of occurring "once every 5 years", which is
@@ -740,7 +730,7 @@ meltdown.</p>
 the flight plan to be tested, and extracting the UK part of a flight plan is
 quite an important step. Testing failed to expose the bug in this case, maybe
 because the testing also did not consider duplicate waypoint names.</p>
-<p><a href="https://en.wikipedia.org/wiki/Fuzzing">Fuzzing</a> may have prevented this this
+<p><a rel="external" href="https://en.wikipedia.org/wiki/Fuzzing">Fuzzing</a> may have prevented this this
 bug/crash. By bombarding such a system with randomly generated flight plans, you
 can see if any of them cause bad failure modes: a crashed system where one
 doesn't know immediately what went wrong. By inspecting which sorts of flight
@@ -800,7 +790,7 @@ restrictions.</p>
 feeds <code>FPRSA-R</code>; if it did, then one of the attempts to restart the system
 (after some flight plans had been manually processed) would have succeeded.</p>
 <h3 id="possible-lack-of-formal-verification">Possible lack of formal verification</h3>
-<p>As reddit user <code>DontWannaMissAFling</code> <a href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k02o6n8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points out</a>:</p>
+<p>As reddit user <code>DontWannaMissAFling</code> <a rel="external" href="https://www.reddit.com/r/programming/comments/16fhmuq/comment/k02o6n8/?utm_source=share&amp;utm_medium=web2x&amp;context=3">points out</a>:</p>
 <blockquote>
 <p>But what's wild to me is that something as safety critical as air traffic
 control apparently isn't using proven techniques like formal verification,
@@ -874,38 +864,35 @@ them, updating them with vague and wrong invariants in the background of the
 programmer's mind. This is a recipe for bugs. Instead, the first thing to do is
 to reconcile the data and then carefully extract the UK portion from that.</p>
 <p>So we create a data structure for a plan:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- A flight plan, with segments between points &#39;p&#39; via routes &#39;r&#39;.
-</span><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Plan</span><span style="color:#abb2bf;"> p r
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p r (</span><span style="color:#db9d63;">Plan</span><span style="color:#abb2bf;"> p r)
-</span></code></pre>
-<p>(This is <a href="https://www.haskell.org/">Haskell</a> code, but the ideas apply to most languages. Full code is in <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">this repo</a>.)</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- A flight plan, with segments between points &#39;p&#39; via routes &#39;r&#39;.</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Plan</span><span style="color: #C678DD;"> p r</span></span>
+<span class="giallo-l"><span>  =</span><span style="color: #D19A66;"> End</span><span style="color: #C678DD;"> p</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> Leg</span><span style="color: #C678DD;"> p r</span><span> (</span><span style="color: #D19A66;">Plan</span><span style="color: #C678DD;"> p r</span><span>)</span></span></code></pre>
+<p>(This is <a rel="external" href="https://www.haskell.org/">Haskell</a> code, but the ideas apply to most languages. Full code is in <a rel="external" title="GitHub" href="https://github.com/jameshaydon/uk-portion-of-ICAO">this repo</a>.)</p>
 <p>This says that a <code>Plan p r</code> has either arrived at its destination <code>End p</code>, or
 consists of a segment starting from <code>p</code>, via <code>r</code>, and the <code>rest</code> of the plan:
 <code>Leg p r rest</code>.</p>
 <p>We can now define all the sorts of flight plan data we will deal with:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#cd74e8;">type </span><span style="color:#db9d63;">ICAO</span><span style="color:#abb2bf;">     p r </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Plan</span><span style="color:#abb2bf;"> p r         </span><span style="font-style:italic;color:#5f697a;">-- points and routes, no intermediate waypoints
-</span><span style="color:#cd74e8;">type </span><span style="color:#db9d63;">ADEXP</span><span style="color:#abb2bf;">    p   </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Plan</span><span style="color:#abb2bf;"> p [p]       </span><span style="font-style:italic;color:#5f697a;">-- points and intermediate waypoints, no route data
-</span><span style="color:#cd74e8;">type </span><span style="color:#db9d63;">Combined</span><span style="color:#abb2bf;"> p r </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Plan</span><span style="color:#abb2bf;"> p (</span><span style="color:#db9d63;">Via</span><span style="color:#abb2bf;"> p r) </span><span style="font-style:italic;color:#5f697a;">-- all the data combined
-</span><span style="color:#abb2bf;">
-</span><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Via</span><span style="color:#abb2bf;"> p r </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Via
-</span><span style="color:#abb2bf;">  { route   </span><span style="color:#adb7c9;">::</span><span style="color:#abb2bf;"> r,
-</span><span style="color:#abb2bf;">    </span><span style="color:#5cb3fa;">through </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> [</span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">]
-</span><span style="color:#abb2bf;">  }
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">deriving</span><span style="color:#abb2bf;"> stock (</span><span style="color:#db9d63;">Show</span><span style="color:#abb2bf;">)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #C678DD;">type</span><span style="color: #D19A66;"> ICAO</span><span style="color: #C678DD;">     p r</span><span> =</span><span style="color: #D19A66;"> Plan</span><span style="color: #C678DD;"> p r</span><span style="color: #7F848E;font-style: italic;">         -- points and routes, no intermediate waypoints</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">type</span><span style="color: #D19A66;"> ADEXP</span><span style="color: #C678DD;">    p</span><span>   =</span><span style="color: #D19A66;"> Plan</span><span style="color: #C678DD;"> p</span><span> [</span><span style="color: #C678DD;">p</span><span>]</span><span style="color: #7F848E;font-style: italic;">       -- points and intermediate waypoints, no route data</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">type</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span><span> =</span><span style="color: #D19A66;"> Plan</span><span style="color: #C678DD;"> p</span><span> (</span><span style="color: #D19A66;">Via</span><span style="color: #C678DD;"> p r</span><span>)</span><span style="color: #7F848E;font-style: italic;"> -- all the data combined</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Via</span><span style="color: #C678DD;"> p r</span><span> =</span><span style="color: #D19A66;"> Via</span></span>
+<span class="giallo-l"><span>  {</span><span style="color: #E06C75;"> route</span><span>   ::</span><span style="color: #C678DD;"> r</span><span>,</span></span>
+<span class="giallo-l"><span style="color: #E06C75;">    through</span><span> :: [</span><span style="color: #C678DD;">p</span><span>]</span></span>
+<span class="giallo-l"><span>  }</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  deriving stock</span><span> (</span><span style="color: #D19A66;">Show</span><span>)</span></span></code></pre>
 <p>Here <code>Combined</code> is our reconciled flight plan, it combined all the information
 form ICAO and ADEXP. We can project a <code>Plan</code> back down to <code>ICAO</code> or <code>ADEXP</code>:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#5cb3fa;">projectICAO </span><span style="color:#cd74e8;">:: Combined </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt; ICAO </span><span style="color:#eb6772;">p r
-</span><span style="color:#abb2bf;">projectICAO </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> mapRoutes (</span><span style="color:#adb7c9;">.</span><span style="color:#abb2bf;">route)
-</span><span style="color:#abb2bf;">
-</span><span style="color:#5cb3fa;">projectADEXP </span><span style="color:#cd74e8;">:: Combined </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt; ADEXP </span><span style="color:#eb6772;">p
-</span><span style="color:#abb2bf;">projectADEXP </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> mapRoutes (</span><span style="color:#adb7c9;">.</span><span style="color:#abb2bf;">through)
-</span><span style="color:#abb2bf;">
-</span><span style="color:#5cb3fa;">mapRoutes </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#eb6772;">r </span><span style="color:#cd74e8;">-&gt; </span><span style="color:#eb6772;">r</span><span style="color:#abb2bf;">&#39;) </span><span style="color:#cd74e8;">-&gt; Plan </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt; Plan </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">&#39;
-</span><span style="color:#abb2bf;">mapRoutes _ (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p) </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p
-</span><span style="color:#abb2bf;">mapRoutes f (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p r rest) </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p (f r) (mapRoutes f rest)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #61AFEF;">projectICAO</span><span> ::</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span><span> -&gt;</span><span style="color: #D19A66;"> ICAO</span><span style="color: #C678DD;"> p r</span></span>
+<span class="giallo-l"><span>projectICAO = mapRoutes (.route)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #61AFEF;">projectADEXP</span><span> ::</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span><span> -&gt;</span><span style="color: #D19A66;"> ADEXP</span><span style="color: #C678DD;"> p</span></span>
+<span class="giallo-l"><span>projectADEXP = mapRoutes (.through)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #61AFEF;">mapRoutes</span><span> :: (</span><span style="color: #C678DD;">r</span><span> -&gt;</span><span style="color: #C678DD;"> r&#39;</span><span>) -&gt;</span><span style="color: #D19A66;"> Plan</span><span style="color: #C678DD;"> p r</span><span> -&gt;</span><span style="color: #D19A66;"> Plan</span><span style="color: #C678DD;"> p r&#39;</span></span>
+<span class="giallo-l"><span>mapRoutes _ (</span><span style="color: #D19A66;">End</span><span> p) =</span><span style="color: #D19A66;"> End</span><span> p</span></span>
+<span class="giallo-l"><span>mapRoutes f (</span><span style="color: #D19A66;">Leg</span><span> p r rest) =</span><span style="color: #D19A66;"> Leg</span><span> p (f r) (mapRoutes f rest)</span></span></code></pre>
 <p>We'll assume we have already parsed the data into the data structures above.
 This is just a matter of reading the spec carefully and turning it into code,
 and hopefully something the <code>FPRSA-R</code> did correctly, though as noted previously
@@ -914,19 +901,18 @@ it might be working on the text version directly.</p>
 start and end points must match. When reconciling a leg of a flight plan, a
 certain amount of waypoints can be skipped in the ICAO plan, and the rest of
 them must reconcile with the rest of the flight plan:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#5cb3fa;">reconcile </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Eq </span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">=&gt; ICAO </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [</span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">] </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [</span><span style="color:#cd74e8;">Combined </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">]
-</span><span style="color:#abb2bf;">reconcile (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p) [p&#39;]             </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> p </span><span style="color:#adb7c9;">==</span><span style="color:#abb2bf;"> p&#39; </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> pure (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p)
-</span><span style="color:#abb2bf;">reconcile (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p r rest) (p&#39; </span><span style="color:#adb7c9;">:</span><span style="color:#abb2bf;"> ps) </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> p </span><span style="color:#adb7c9;">==</span><span style="color:#abb2bf;"> p&#39; </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">do
-</span><span style="color:#abb2bf;">  (through, restAdexp) </span><span style="color:#adb7c9;">&lt;-</span><span style="color:#abb2bf;"> splits ps
-</span><span style="color:#abb2bf;">  recoRest </span><span style="color:#adb7c9;">&lt;-</span><span style="color:#abb2bf;"> reconcile rest restAdexp
-</span><span style="color:#abb2bf;">  pure (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p </span><span style="color:#db9d63;">Via</span><span style="color:#abb2bf;"> {route </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> r, through} recoRest)
-</span><span style="color:#abb2bf;">reconcile _ _ </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">[]
-</span><span style="color:#abb2bf;">
-</span><span style="font-style:italic;color:#5f697a;">-- All the ways to snap a list in two. That is, &#39;split xs&#39; returns all pairs
-</span><span style="font-style:italic;color:#5f697a;">-- &#39;(ys, zs)&#39; where &#39;xs == ys ++ zs&#39;.
-</span><span style="color:#5cb3fa;">splits </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> [</span><span style="color:#eb6772;">a</span><span style="color:#abb2bf;">] </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [([</span><span style="color:#eb6772;">a</span><span style="color:#abb2bf;">], [</span><span style="color:#eb6772;">a</span><span style="color:#abb2bf;">])]
-</span><span style="color:#abb2bf;">splits xs </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> zip (inits xs) (tails xs)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #61AFEF;">reconcile</span><span> :: (</span><span style="color: #D19A66;">Eq</span><span style="color: #C678DD;"> p</span><span>) =&gt;</span><span style="color: #D19A66;"> ICAO</span><span style="color: #C678DD;"> p r</span><span> -&gt; [</span><span style="color: #C678DD;">p</span><span>] -&gt; [</span><span style="color: #D19A66;">Combined</span><span style="color: #C678DD;"> p r</span><span>]</span></span>
+<span class="giallo-l"><span>reconcile (</span><span style="color: #D19A66;">End</span><span> p) [p&#39;]             | p == p&#39; = pure (</span><span style="color: #D19A66;">End</span><span> p)</span></span>
+<span class="giallo-l"><span>reconcile (</span><span style="color: #D19A66;">Leg</span><span> p r rest) (p&#39; : ps) | p == p&#39; =</span><span style="color: #C678DD;"> do</span></span>
+<span class="giallo-l"><span>  (through, restAdexp) &lt;- splits ps</span></span>
+<span class="giallo-l"><span>  recoRest &lt;- reconcile rest restAdexp</span></span>
+<span class="giallo-l"><span>  pure (</span><span style="color: #D19A66;">Leg</span><span> p </span><span style="color: #D19A66;">Via</span><span> {</span><span style="color: #E06C75;">route</span><span> = r,</span><span style="color: #E06C75;"> through</span><span>} recoRest)</span></span>
+<span class="giallo-l"><span>reconcile _ _ =</span><span style="color: #D19A66;"> []</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- All the ways to snap a list in two. That is, &#39;split xs&#39; returns all pairs</span></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- &#39;(ys, zs)&#39; where &#39;xs == ys ++ zs&#39;.</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">splits</span><span> :: [</span><span style="color: #C678DD;">a</span><span>] -&gt; [([</span><span style="color: #C678DD;">a</span><span>], [</span><span style="color: #C678DD;">a</span><span>])]</span></span>
+<span class="giallo-l"><span>splits xs = zip (inits xs) (tails xs)</span></span></code></pre>
 <p>Note that the function produces <em>all</em> the possible reconciliations. This is
 because reconciliations are not necessarily unique because waypoints can appear
 more than once. By calculating all the possible reconciliations, we'll know if
@@ -941,85 +927,76 @@ the data is ambiguous, and flag those flight plans for manual processing.</p>
 <code>NonUkPlan</code> error when the system reaches the end of the plan without having
 found a UK part. By having a compiler which checks that pattern-matches are
 covering, the possible failures arise naturally while coding.</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- Extract the UK part of the flight.
-</span><span style="color:#5cb3fa;">ukSegment </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#eb6772;">p </span><span style="color:#cd74e8;">-&gt; Bool</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">-&gt; Combined </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt; Either Err</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Combined </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">)
-</span><span style="color:#abb2bf;">ukSegment uk (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p)
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> nonUkPlan uk (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p) </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Left NonUkPlan
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> otherwise </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> pure (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p)
-</span><span style="color:#abb2bf;">ukSegment uk plan@(</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> _ _ rest) </span><span style="color:#adb7c9;">=
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">if</span><span style="color:#abb2bf;"> nonUkLeg uk plan
-</span><span style="color:#abb2bf;">    </span><span style="color:#cd74e8;">then</span><span style="color:#abb2bf;"> ukSegment uk rest
-</span><span style="color:#abb2bf;">    </span><span style="color:#cd74e8;">else</span><span style="color:#abb2bf;"> pure (flyUK uk plan)
-</span><span style="color:#abb2bf;">
-</span><span style="font-style:italic;color:#5f697a;">-- Fly the UK part of the flight.
-</span><span style="color:#5cb3fa;">flyUK </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#eb6772;">p </span><span style="color:#cd74e8;">-&gt; Bool</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">-&gt; Combined </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt; Combined </span><span style="color:#eb6772;">p r
-</span><span style="color:#abb2bf;">flyUK _ (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> end) </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> end
-</span><span style="color:#abb2bf;">flyUK uk (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p v rest)
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> nonUkPlan uk rest </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p v (afterUK rest)
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">|</span><span style="color:#abb2bf;"> otherwise </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p v (flyUK uk rest)
-</span><span style="color:#abb2bf;">
-</span><span style="font-style:italic;color:#5f697a;">-- Skip the rest of the flight.
-</span><span style="color:#5cb3fa;">afterUK </span><span style="color:#cd74e8;">:: Combined </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt; Combined </span><span style="color:#eb6772;">p r
-</span><span style="color:#abb2bf;">afterUK plan </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> (start plan)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- Extract the UK part of the flight.</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">ukSegment</span><span> :: (</span><span style="color: #C678DD;">p</span><span> -&gt;</span><span style="color: #D19A66;"> Bool</span><span>) -&gt;</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span><span> -&gt;</span><span style="color: #D19A66;"> Either Err</span><span> (</span><span style="color: #D19A66;">Combined</span><span style="color: #C678DD;"> p r</span><span>)</span></span>
+<span class="giallo-l"><span>ukSegment uk (</span><span style="color: #D19A66;">End</span><span> p)</span></span>
+<span class="giallo-l"><span>  | nonUkPlan uk (</span><span style="color: #D19A66;">End</span><span> p) =</span><span style="color: #D19A66;"> Left NonUkPlan</span></span>
+<span class="giallo-l"><span>  | otherwise = pure (</span><span style="color: #D19A66;">End</span><span> p)</span></span>
+<span class="giallo-l"><span>ukSegment uk plan@(</span><span style="color: #D19A66;">Leg</span><span> _ _ rest) =</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  if</span><span> nonUkLeg uk plan</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">    then</span><span> ukSegment uk rest</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">    else</span><span> pure (flyUK uk plan)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- Fly the UK part of the flight.</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">flyUK</span><span> :: (</span><span style="color: #C678DD;">p</span><span> -&gt;</span><span style="color: #D19A66;"> Bool</span><span>) -&gt;</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span><span> -&gt;</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span></span>
+<span class="giallo-l"><span>flyUK _ (</span><span style="color: #D19A66;">End</span><span> end) =</span><span style="color: #D19A66;"> End</span><span> end</span></span>
+<span class="giallo-l"><span>flyUK uk (</span><span style="color: #D19A66;">Leg</span><span> p v rest)</span></span>
+<span class="giallo-l"><span>  | nonUkPlan uk rest =</span><span style="color: #D19A66;"> Leg</span><span> p v (afterUK rest)</span></span>
+<span class="giallo-l"><span>  | otherwise =</span><span style="color: #D19A66;"> Leg</span><span> p v (flyUK uk rest)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- Skip the rest of the flight.</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">afterUK</span><span> ::</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span><span> -&gt;</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span></span>
+<span class="giallo-l"><span>afterUK plan =</span><span style="color: #D19A66;"> End</span><span> (start plan)</span></span></code></pre>
 <p>These use some small functions:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- The next leg of the journey doesn&#39;t fly through the UK.
-</span><span style="color:#5cb3fa;">nonUkLeg </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#eb6772;">p </span><span style="color:#cd74e8;">-&gt; Bool</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">-&gt; Combined </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt; Bool
-</span><span style="color:#abb2bf;">nonUkLeg uk (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p) </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> not (uk p)
-</span><span style="color:#abb2bf;">nonUkLeg uk (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p v _) </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> not (uk p) &amp;&amp; not (any uk v</span><span style="color:#adb7c9;">.</span><span style="color:#abb2bf;">through)
-</span><span style="color:#abb2bf;">
-</span><span style="font-style:italic;color:#5f697a;">-- The whole plan isn&#39;t in the UK.
-</span><span style="color:#5cb3fa;">nonUkPlan </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#eb6772;">a </span><span style="color:#cd74e8;">-&gt; Bool</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">-&gt; Combined </span><span style="color:#eb6772;">a r </span><span style="color:#cd74e8;">-&gt; Bool
-</span><span style="color:#abb2bf;">nonUkPlan uk plan </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> all (nonUkLeg uk) (legs plan)
-</span><span style="color:#abb2bf;">
-</span><span style="color:#5cb3fa;">legs </span><span style="color:#cd74e8;">:: Plan </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [</span><span style="color:#cd74e8;">Plan </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">]
-</span><span style="color:#abb2bf;">legs (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p) </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> [</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p]
-</span><span style="color:#abb2bf;">legs plan@(</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> _ _ rest) </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> plan </span><span style="color:#adb7c9;">:</span><span style="color:#abb2bf;"> legs rest
-</span><span style="color:#abb2bf;">
-</span><span style="color:#5cb3fa;">start </span><span style="color:#cd74e8;">:: Plan </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt; </span><span style="color:#eb6772;">p
-</span><span style="color:#abb2bf;">start (</span><span style="color:#db9d63;">End</span><span style="color:#abb2bf;"> p) </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> p
-</span><span style="color:#abb2bf;">start (</span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p _ _) </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> p
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- The next leg of the journey doesn&#39;t fly through the UK.</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">nonUkLeg</span><span> :: (</span><span style="color: #C678DD;">p</span><span> -&gt;</span><span style="color: #D19A66;"> Bool</span><span>) -&gt;</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> p r</span><span> -&gt;</span><span style="color: #D19A66;"> Bool</span></span>
+<span class="giallo-l"><span>nonUkLeg uk (</span><span style="color: #D19A66;">End</span><span> p) = not (uk p)</span></span>
+<span class="giallo-l"><span>nonUkLeg uk (</span><span style="color: #D19A66;">Leg</span><span> p v _) = not (uk p) &amp;&amp; not (any uk v.through)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- The whole plan isn&#39;t in the UK.</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">nonUkPlan</span><span> :: (</span><span style="color: #C678DD;">a</span><span> -&gt;</span><span style="color: #D19A66;"> Bool</span><span>) -&gt;</span><span style="color: #D19A66;"> Combined</span><span style="color: #C678DD;"> a r</span><span> -&gt;</span><span style="color: #D19A66;"> Bool</span></span>
+<span class="giallo-l"><span>nonUkPlan uk plan = all (nonUkLeg uk) (legs plan)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #61AFEF;">legs</span><span> ::</span><span style="color: #D19A66;"> Plan</span><span style="color: #C678DD;"> p r</span><span> -&gt; [</span><span style="color: #D19A66;">Plan</span><span style="color: #C678DD;"> p r</span><span>]</span></span>
+<span class="giallo-l"><span>legs (</span><span style="color: #D19A66;">End</span><span> p) = [</span><span style="color: #D19A66;">End</span><span> p]</span></span>
+<span class="giallo-l"><span>legs plan@(</span><span style="color: #D19A66;">Leg</span><span> _ _ rest) = plan : legs rest</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #61AFEF;">start</span><span> ::</span><span style="color: #D19A66;"> Plan</span><span style="color: #C678DD;"> p r</span><span> -&gt;</span><span style="color: #C678DD;"> p</span></span>
+<span class="giallo-l"><span>start (</span><span style="color: #D19A66;">End</span><span> p) = p</span></span>
+<span class="giallo-l"><span>start (</span><span style="color: #D19A66;">Leg</span><span> p _ _) = p</span></span></code></pre>
 <p>Putting it all together, we get:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#5cb3fa;">ukPartOfICAO </span><span style="color:#cd74e8;">::</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Eq </span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">=&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#eb6772;">p </span><span style="color:#cd74e8;">-&gt; Bool</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">-&gt; ICAO </span><span style="color:#eb6772;">p r </span><span style="color:#cd74e8;">-&gt;</span><span style="color:#abb2bf;"> [</span><span style="color:#eb6772;">p</span><span style="color:#abb2bf;">] </span><span style="color:#cd74e8;">-&gt; Either Err</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">ICAO </span><span style="color:#eb6772;">p r</span><span style="color:#abb2bf;">)
-</span><span style="color:#abb2bf;">ukPartOfICAO uk icao adexp </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">case</span><span style="color:#abb2bf;"> reconcile icao adexp </span><span style="color:#cd74e8;">of
-</span><span style="color:#abb2bf;">  [plan] </span><span style="color:#adb7c9;">-&gt;</span><span style="color:#abb2bf;"> projectICAO </span><span style="color:#adb7c9;">&lt;$&gt;</span><span style="color:#abb2bf;"> ukSegment uk plan
-</span><span style="color:#abb2bf;">  </span><span style="color:#db9d63;">[]     </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#db9d63;">Left CannotReconcileIcaoAdexp
-</span><span style="color:#abb2bf;">  _      </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#db9d63;">Left AmbiguousReconciliationsOfIcaoAdexp
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #61AFEF;">ukPartOfICAO</span><span> :: (</span><span style="color: #D19A66;">Eq</span><span style="color: #C678DD;"> p</span><span>) =&gt; (</span><span style="color: #C678DD;">p</span><span> -&gt;</span><span style="color: #D19A66;"> Bool</span><span>) -&gt;</span><span style="color: #D19A66;"> ICAO</span><span style="color: #C678DD;"> p r</span><span> -&gt; [</span><span style="color: #C678DD;">p</span><span>] -&gt;</span><span style="color: #D19A66;"> Either Err</span><span> (</span><span style="color: #D19A66;">ICAO</span><span style="color: #C678DD;"> p r</span><span>)</span></span>
+<span class="giallo-l"><span>ukPartOfICAO uk icao adexp =</span><span style="color: #C678DD;"> case</span><span> reconcile icao adexp </span><span style="color: #C678DD;">of</span></span>
+<span class="giallo-l"><span>  [plan] -&gt; projectICAO &lt;$&gt; ukSegment uk plan</span></span>
+<span class="giallo-l"><span style="color: #D19A66;">  []</span><span>     -&gt;</span><span style="color: #D19A66;"> Left CannotReconcileIcaoAdexp</span></span>
+<span class="giallo-l"><span>  _      -&gt;</span><span style="color: #D19A66;"> Left AmbiguousReconciliationsOfIcaoAdexp</span></span></code></pre>
 <p>We collected the following errors while coding:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Err
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">NonUkPlan
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">CannotReconcileIcaoAdexp
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">AmbiguousReconciliationsOfIcaoAdexp
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Err</span></span>
+<span class="giallo-l"><span>  =</span><span style="color: #D19A66;"> NonUkPlan</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> CannotReconcileIcaoAdexp</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> AmbiguousReconciliationsOfIcaoAdexp</span></span></code></pre>
 <p>Let's test it with our example:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">           4       2        8         5              1           9
-</span><span style="color:#abb2bf;">ICAO:  F------Q--------T--------O-----------P---------------Y--------U
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
-</span><span style="color:#abb2bf;">                       UK  UK   UK UK UK    UK  UK
-</span></code></pre>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#abb2bf;">inUK </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">elem</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> [</span><span style="color:#9acc76;">&quot;T&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;A&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;O&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;E&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;X&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;P&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;W&quot;</span><span style="color:#abb2bf;">])
-</span><span style="color:#abb2bf;">icao </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">&quot;F&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#db9d63;">4</span><span style="color:#abb2bf;">) </span><span style="color:#adb7c9;">~&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">&quot;Q&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#db9d63;">2</span><span style="color:#abb2bf;">) </span><span style="color:#adb7c9;">~&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">&quot;T&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#db9d63;">8</span><span style="color:#abb2bf;">) </span><span style="color:#adb7c9;">~&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">&quot;O&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#db9d63;">5</span><span style="color:#abb2bf;">) </span><span style="color:#adb7c9;">~&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">&quot;P&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#db9d63;">1</span><span style="color:#abb2bf;">) </span><span style="color:#adb7c9;">~&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">&quot;Y&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#db9d63;">9</span><span style="color:#abb2bf;">) </span><span style="color:#adb7c9;">~&gt; </span><span style="color:#db9d63;">End </span><span style="color:#9acc76;">&quot;U&quot;
-</span><span style="color:#abb2bf;">adexp </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> [</span><span style="color:#9acc76;">&quot;F&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;S&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;Q&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;C&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;T&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;A&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;O&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;E&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;X&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;P&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;W&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;B&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;Q&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;Y&quot;</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">&quot;U&quot;</span><span style="color:#abb2bf;">]
-</span><span style="color:#abb2bf;">
-</span><span style="color:#adb7c9;">infixr </span><span style="color:#db9d63;">6 </span><span style="color:#adb7c9;">~&gt;
-</span><span style="color:#abb2bf;">(</span><span style="color:#adb7c9;">~&gt;</span><span style="color:#abb2bf;">) (p, r) </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Leg</span><span style="color:#abb2bf;"> p r
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>           4       2        8         5              1           9</span></span>
+<span class="giallo-l"><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U</span></span>
+<span class="giallo-l"><span>                       UK  UK   UK UK UK    UK  UK</span></span></code></pre><pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span>inUK = (`elem` [</span><span style="color: #98C379;">&quot;T&quot;</span><span>,</span><span style="color: #98C379;"> &quot;A&quot;</span><span>,</span><span style="color: #98C379;"> &quot;O&quot;</span><span>,</span><span style="color: #98C379;"> &quot;E&quot;</span><span>,</span><span style="color: #98C379;"> &quot;X&quot;</span><span>,</span><span style="color: #98C379;"> &quot;P&quot;</span><span>,</span><span style="color: #98C379;"> &quot;W&quot;</span><span>])</span></span>
+<span class="giallo-l"><span>icao = (</span><span style="color: #98C379;">&quot;F&quot;</span><span>,</span><span style="color: #D19A66;"> 4</span><span>) ~&gt; (</span><span style="color: #98C379;">&quot;Q&quot;</span><span>,</span><span style="color: #D19A66;"> 2</span><span>) ~&gt; (</span><span style="color: #98C379;">&quot;T&quot;</span><span>,</span><span style="color: #D19A66;"> 8</span><span>) ~&gt; (</span><span style="color: #98C379;">&quot;O&quot;</span><span>,</span><span style="color: #D19A66;"> 5</span><span>) ~&gt; (</span><span style="color: #98C379;">&quot;P&quot;</span><span>,</span><span style="color: #D19A66;"> 1</span><span>) ~&gt; (</span><span style="color: #98C379;">&quot;Y&quot;</span><span>,</span><span style="color: #D19A66;"> 9</span><span>) ~&gt;</span><span style="color: #D19A66;"> End</span><span style="color: #98C379;"> &quot;U&quot;</span></span>
+<span class="giallo-l"><span>adexp = [</span><span style="color: #98C379;">&quot;F&quot;</span><span>,</span><span style="color: #98C379;"> &quot;S&quot;</span><span>,</span><span style="color: #98C379;"> &quot;Q&quot;</span><span>,</span><span style="color: #98C379;"> &quot;C&quot;</span><span>,</span><span style="color: #98C379;"> &quot;T&quot;</span><span>,</span><span style="color: #98C379;"> &quot;A&quot;</span><span>,</span><span style="color: #98C379;"> &quot;O&quot;</span><span>,</span><span style="color: #98C379;"> &quot;E&quot;</span><span>,</span><span style="color: #98C379;"> &quot;X&quot;</span><span>,</span><span style="color: #98C379;"> &quot;P&quot;</span><span>,</span><span style="color: #98C379;"> &quot;W&quot;</span><span>,</span><span style="color: #98C379;"> &quot;B&quot;</span><span>,</span><span style="color: #98C379;"> &quot;Q&quot;</span><span>,</span><span style="color: #98C379;"> &quot;Y&quot;</span><span>,</span><span style="color: #98C379;"> &quot;U&quot;</span><span>]</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C678DD;">infixr</span><span style="color: #D19A66;"> 6</span><span> ~&gt;</span></span>
+<span class="giallo-l"><span>(</span><span style="color: #61AFEF;">~&gt;</span><span>) (p, r) =</span><span style="color: #D19A66;"> Leg</span><span> p r</span></span></code></pre>
 <p>And try this at the REPL:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">λ&gt; ukPortionOfICAO inUK icao adexp
-</span><span style="color:#abb2bf;">Right (Leg &quot;T&quot; 8 (Leg &quot;O&quot; 5 (Leg &quot;P&quot; 1 (End &quot;Y&quot;))))
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>λ&gt; ukPortionOfICAO inUK icao adexp</span></span>
+<span class="giallo-l"><span>Right (Leg &quot;T&quot; 8 (Leg &quot;O&quot; 5 (Leg &quot;P&quot; 1 (End &quot;Y&quot;))))</span></span></code></pre>
 <p>We can see that this is the correct result:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">                                 UK portion of ICAO
-</span><span style="color:#abb2bf;">                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫
-</span><span style="color:#abb2bf;">           4       2        8         5              1           9
-</span><span style="color:#abb2bf;">ICAO:  F------Q--------T--------O-----------P---------------Y--------U
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U
-</span><span style="color:#abb2bf;">                       UK  UK   UK UK UK    UK  UK
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>                                 UK portion of ICAO</span></span>
+<span class="giallo-l"><span>                       ┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫</span></span>
+<span class="giallo-l"><span>           4       2        8         5              1           9</span></span>
+<span class="giallo-l"><span>ICAO:  F------Q--------T--------O-----------P---------------Y--------U</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>ADEXP: F   S  Q    C   T   A    O  E  X     P   W   B   Q   Y        U</span></span>
+<span class="giallo-l"><span>                       UK  UK   UK UK UK    UK  UK</span></span></code></pre>
 <p>The waypoint <code>Q</code> is a duplicate in the ADEXP list, but the system still returns
 the correct portion of the ICAO flight path. Crisis averted! The fact that there
 is a duplicate identifier in this case is immaterial, the ICAO and ADEXP data
@@ -1029,9 +1006,9 @@ that contains a total of 158 waypoints, and about a third of them appear in the
 ICAO route:
 <img src="https://jameshaydon.github.io/nats-fail/london-sydney.png" alt="London to Sydney flight plan" />
 <code>ukPortionOfICAO</code> returns practically instantly for such a flight plan.</p>
-<p>Full code <a href="https://github.com/jameshaydon/uk-portion-of-ICAO" title="GitHub">here</a>.)</p>
+<p>Full code <a rel="external" title="GitHub" href="https://github.com/jameshaydon/uk-portion-of-ICAO">here</a>.)</p>
 <p><em>Edit 2023-09-13:</em>
-So the actual flight plan has been <a href="https://chaos.social/@russss/111048524540643971">identified</a>!</p>
+So the actual flight plan has been <a rel="external" href="https://chaos.social/@russss/111048524540643971">identified</a>!</p>
 <blockquote>
 <p>Tonight we were wondering why nobody had identified the flight which caused
 the UK air traffic control crash so we worked it out. It was FBU (French Bee)
@@ -1042,8 +1019,7 @@ Wisconsin, US, and Deauville, Normandy, FR (an intermediate on airway UN859).</p
 <p>Credit to @marksteward and @benelsen for doing much of the legwork here.</p>
 </blockquote>
 <p>It's flight plan was:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">ORCKA5 LAS Q70 BLIPP Q842 WINEN MLF J107 OCS CZI DIK DVL VBI VESRU YXL ELVEL PIGLA 5800N/07000W MIBNO MAXAR 6200N/05000W 6200N/04000W 6000N/03000W 5800N/02000W SUNOT KESIX APSOV SOSIM L15 KEPAD L151 KIDLI UN859 GWC UN859 LGL A34 BOBSA
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>ORCKA5 LAS Q70 BLIPP Q842 WINEN MLF J107 OCS CZI DIK DVL VBI VESRU YXL ELVEL PIGLA 5800N/07000W MIBNO MAXAR 6200N/05000W 6200N/04000W 6000N/03000W 5800N/02000W SUNOT KESIX APSOV SOSIM L15 KEPAD L151 KIDLI UN859 GWC UN859 LGL A34 BOBSA</span></span></code></pre>
 <p>I don't know what the actual ADEXP data was, but the above says that <code>DVL</code> is
 the duplicate identifier, and that it would appear when ADEXP expands the
 <code>UN859</code> route, near the end of the flight. So the example in the main text is consistent with this configuration:</p>
@@ -1051,7 +1027,7 @@ the duplicate identifier, and that it would appear when ADEXP expands the
 <li>One of the duplicates before UK airspace,</li>
 <li>One of the after UK airspace.</li>
 </ul>
-<p>Comments on <a href="https://www.reddit.com/r/programming/comments/16fhmuq/a_deep_dive_into_the_bug_that_caused_the_uk_air/?utm_source=share&amp;utm_medium=web2x&amp;context=3">reddit</a> and <a href="https://news.ycombinator.com/item?id=37461695">Hacker News</a><br/>
+<p>Comments on <a rel="external" href="https://www.reddit.com/r/programming/comments/16fhmuq/a_deep_dive_into_the_bug_that_caused_the_uk_air/?utm_source=share&amp;utm_medium=web2x&amp;context=3">reddit</a> and <a rel="external" href="https://news.ycombinator.com/item?id=37461695">Hacker News</a><br/>
 Other posts: <a href="/what-went-wrong">part two</a> and <a href="/programming-style-and-bugs">part
 three</a>.</p>
 

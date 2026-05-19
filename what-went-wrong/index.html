@@ -116,8 +116,8 @@
       <p>This is a short follow-up of my post about the UK air traffic control meltdown.
 You might want to first read <a href="/nats-fail">part one</a>.</p>
 <p>So my first post got a lot of attention, and that generates a
-<a href="https://www.reddit.com/r/programming/comments/16fhmuq/a_deep_dive_into_the_bug_that_caused_the_uk_air/?utm_source=share&amp;utm_medium=web2x&amp;context=3">lot</a>
-of <a href="https://news.ycombinator.com/item?id=37461695">comments</a>. What was most
+<a rel="external" href="https://www.reddit.com/r/programming/comments/16fhmuq/a_deep_dive_into_the_bug_that_caused_the_uk_air/?utm_source=share&amp;utm_medium=web2x&amp;context=3">lot</a>
+of <a rel="external" href="https://news.ycombinator.com/item?id=37461695">comments</a>. What was most
 discussed was:</p>
 <p><strong><em>"But really though, what was the one thing that went wrong?"</em></strong></p>
 <span id="continue-reading"></span>
@@ -131,21 +131,21 @@ on the bug, and a possible fix. To be clear, I've coded more than my fair
 share of bugs.</li>
 <li>If you ask a project manager or tech-lead, they might say the code review
 system was not thorough.</li>
-<li>If you ask a <a href="https://en.wikipedia.org/wiki/Quality_assurance">QA specialist</a>
+<li>If you ask a <a rel="external" href="https://en.wikipedia.org/wiki/Quality_assurance">QA specialist</a>
 they will say the system was badly tested.</li>
 <li>Formal methods engineers will say there was no formal verification.</li>
-<li>If you ask a <a href="https://en.wikipedia.org/wiki/Site_reliability_engineering" title="wikipedia">Site Reliability
+<li>If you ask a <a rel="external" title="wikipedia" href="https://en.wikipedia.org/wiki/Site_reliability_engineering">Site Reliability
 Engineer</a> they will say that the failure modes were not studied, and that
 the error were not traceable, etc. (There's a lot to say here.)</li>
 <li>If you ask a project manager, they will say the outsourcing was badly managed,
 that the there was not enough knowledge transfer, etc.</li>
-<li>If you ask a <a href="https://en.wikipedia.org/wiki/Crisis_management">crisis
+<li>If you ask a <a rel="external" href="https://en.wikipedia.org/wiki/Crisis_management">crisis
 management</a> specialist, they
 will say the situation wasn't escalated fast enough through the lines of
 support, or.. (I don't know, I'm not a crisis management specialist.)</li>
 </ul>
 <p>The point is, these systems are meant to not fail because they have lot of
-layers of protection. This is the <a href="https://en.wikipedia.org/wiki/Swiss_cheese_model">swiss cheese
+layers of protection. This is the <a rel="external" href="https://en.wikipedia.org/wiki/Swiss_cheese_model">swiss cheese
 model</a>:</p>
 <p><img src="https://jameshaydon.github.io/what-went-wrong/Swiss_cheese_model_textless.svg.png" alt="The Swiss cheese model of accident causation illustrates that, although many layers of defense lie between hazards and accidents, there are flaws in each layer that, if aligned, can allow the accident to occur. In this diagram, three hazard vectors are stopped by the defences, but one passes through where the &quot;holes&quot; are lined up." title="wikipedia" /></p>
 <blockquote>
@@ -167,7 +167,7 @@ causes a bug to be coded that makes it through these three slices is 1/125.</p>
 <p>It took several failures for the crisis to manifest. What went wrong was that
 <em>many things went wrong</em>.</p>
 <p>So that's the question that NATS, the
-<a href="https://www.gov.uk/government/news/statement-following-publication-of-nats-report-into-last-weeks-air-traffic-control-technical-failure">enquiry</a>,
+<a rel="external" href="https://www.gov.uk/government/news/statement-following-publication-of-nats-report-into-last-weeks-air-traffic-control-technical-failure">enquiry</a>,
 and the wider community has to grapple with: <em>what has gone wrong, to lead to a
 situation where many things can go wrong?</em></p>
 <p>Other posts: <a href="/nats-fail">part one</a> and <a href="/programming-style-and-bugs">part

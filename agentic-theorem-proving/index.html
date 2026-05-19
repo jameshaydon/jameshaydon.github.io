@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  
+  <meta name="description" content="My experience using coding agents to help formally verify the UK ATC meltdown solution in Lean." />
+  
+  
+
+  <title>
+    
+    Using algebra and LLMs to verify a flight-plan bug fix in Lean
+    
+</title>
+  <link rel="alternate" type="application/atom+xml" title="James Haydon Atom Feed" href="https://jameshaydon.github.io/atom.xml" />
+
+  
+  <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
+  
+
+  
+  
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X4MP59NZ35"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+
+ gtag('config', 'G-X4MP59NZ35');
+</script>
+
+
+<body class="hack dark main container">
+  
+    
+        
+  
+  <header class="nav-header">
+    <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="navbar">
+      <div class="nav-links">
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io/">
+          <span itemprop="name">Home</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon">
+          <span itemprop="name">GitHub</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//papers">
+          <span itemprop="name">Papers</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//categories">
+          <span itemprop="name">Categories</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//tags">
+          <span itemprop="name">Tags</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://imiron.io/">
+          <span itemprop="name">Imiron</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon/lawvere">
+          <span itemprop="name">lawvere-lang</span></a>
+        
+      </div>
+    </nav>
+    
+
+  </header>
+  
+  
+    
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">Using algebra and LLMs to verify a flight-plan bug fix in Lean</h1>
+        <span class="muted">
+    <svg class="icon i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>17 minute read</span>
+    <svg class="icon i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2026-05-19
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>Formal verification has, until now, been a very laborious process. Therefore it
+is only considered for critical software, where bugs can cost lives. But LLM
+coding agents may be tipping the scales; formally verifying code might become
+viable for a much larger class of software. To test this, I picked a real bug,
+the <a href="/nats-fail">2023 UK air traffic control meltdown</a>, and tried to prove a fix
+correct in <a rel="external" href="https://lean-lang.org/">Lean</a>.</p>
+<p>tl;dr: LLMs are not great at specs, excellent at grinding routine proofs, and
+the whole thing only became tractable once I restated the problem in algebraic terms.</p>
+<span id="continue-reading"></span><h2 id="the-problem-in-one-paragraph">The problem, in one paragraph</h2>
+<p>The very short summary of the problem from the <a href="/nats-fail">original blog post</a>:</p>
+<p>A flight plan arrives in two forms: the <em>ICAO</em> form is the short plan that
+pilots and controllers read: a sequence of waypoints separated by named routes.
+The <em>ADEXP</em> form is the more granular European plan, with more intermediate
+waypoints, including those inside UK airspace that don't appear in the ICAO
+form. The task is: given the ICAO and ADEXP plans, return the <em>smallest
+contiguous sub-plan of the ICAO route that contains every UK-relevant waypoint</em>.
+The bug that caused the meltdown was triggered by a flight plan with two
+identically named waypoints, both outside the UK, around 4000nm apart. The
+correct way to solve this is to: reconcile the two plans into one structure that
+has both ICAO routes and ADEXP waypoints, check that the reconciliation is
+unique, and then extract the smallest UK portion.</p>
+<h2 id="false-starts">False starts</h2>
+<p>I started off by asking the agent to specify the function, given a natural
+language description. The specs it came up with had problems though.</p>
+<p>For example it proposed things like: <code>∀ point, point ∈ wholeADEXP → uk point = true → point ∈ adexpPart</code>. This says, for any UK waypoint of the ADEXP plan, it
+is present in the ADEXP part of the computed sub-plan. But this is wrong when
+waypoints are (legitimately) duplicated. Consider for example a flight plan
+which goes round in a loop, crossing over the UK twice over waypoints <code>B</code> and
+<code>C</code>:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>A B C D B C E</span></span></code></pre>
+<p><img src="https://jameshaydon.github.io/agentic-theorem-proving/loopy.png" alt="a loopy flight plan" /></p>
+<p>Then a sub-plan <code>B C</code> has the property above, it contains <code>B</code> and <code>C</code> which are
+all the UK waypoints. But of course this is wrong, the correct answer is <code>B C D B C</code>. The problem is that we can't just talk about the content of a sub-plan, we
+must also situate it into the larger plan.</p>
+<p>One way to do this is to start using integer indices: a sub-plan of <code>p</code> is now
+defined to be a pair <code>(i, j)</code> of natural numbers such that <code>i &lt;= j</code> and <code>i</code> and
+<code>j</code> are both valid indices into the plan <code>p</code>. This is also the representation
+that an imperative version of the code is likely to use. For a spec though, this
+is unsatisfying. The spec suffers from index-indirection, and it's easy to make
+the sort of mistake one is trying to avoid by a formal proof in the first place:
+off-by-one errors, getting confused as to which index corresponds to which
+endpoint, etc. It also seems to make the proofs more complex.</p>
+<p>It was also confused as to how to represent flight plans. It tried the
+following:</p>
+<ul>
+<li>list of identifiers, with the understanding that it should have odd length,
+and the waypoint and route identifiers should alternate,</li>
+<li>a structure with a <code>start</code> waypoint, and a list of <code>(route, waypoint)</code> pairs.</li>
+</ul>
+<p>Indexing into such structures is unnatural and error-prone.</p>
+<p>The LLM erred in other ways too, sometimes wasting quite a bit of time. For example,
+one specification it came up with involved a conjunction of various properties:
+<code>P1 /\ P2 /\ ...</code>. Hidden in several of these there was some existential
+quantification <code>∃ x, ∃ u, ...</code>. This seemed fine, but the spec actually
+needed the same witness for all the conjuncts, that is: <code>∃ x, ∃ y, P1(x, y) /\ P2(x, y) /\ ...</code>. This took a long time to debug.</p>
+<p>In general the specs proposed by the LLM were quite "low level" and not
+obviously correct. Asking an agent to prove them correct never seemed to
+succeed, it would just get mired in details. Unless prompted and guided to do
+so, it would not try to create useful abstractions.</p>
+<p>Another problem is that LLMs are just hopelessly dishonest (an alignment
+problem). When you've got a spec and an implementation that don't quite agree,
+or a proof that is hard to finish, the LLM will sometimes <em>change the spec</em> to
+match the implementation rather than fix the implementation, without telling
+you. Here is a quote:</p>
+<blockquote>
+<p>But your instinct is right: it is too implementation-shaped for a clean
+spec. I copied the trimming structure into <code>ReconcileSpec.lean</code> to make
+the proof true quickly and to close the repeated-anchor hole, but that
+makes the "spec" mirror the executable algorithm instead of stating the
+desired property independently.</p>
+</blockquote>
+<p>You have to be hyper-vigilant, or the LLM will just move the goal posts.</p>
+<h2 id="algebraic-spec">Algebraic Spec</h2>
+<p>After a few attempts at writing down specs and implementations, and spawning
+agents to try to find proofs that were all unsuccessful, I decided to try to
+restate both the spec and the implementation in more algebraic terms, for which
+the proof shape would be clearer.</p>
+<p>The fundamental operation is composition of plans: if</p>
+<ul>
+<li>plan <code>p</code> starts at <code>a</code> and ends at <code>b</code>,</li>
+<li>plan <code>q</code> starts at <code>b</code> and ends at <code>c</code>,
+then they can be composed as <code>p ≫ q</code>, a plan that starts at <code>a</code> and ends at <code>c</code>.</li>
+</ul>
+<p>In Lean this composition can be made total: a <code>Plan a b</code> and a <code>Plan c d</code> can be
+composed when Lean has been convinced that <code>b = c</code>. The plan type is indexed on
+the start/end waypoints. A major part of the experimentation was deciding if
+this indexing was worthwhile.</p>
+<p>In other words, flight plans form a category, a <em>category of paths</em> in
+fact.<sup class="footnote-reference"><a href="#spielberg-paths">1</a></sup> It has properties like:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>p ≫ q = p ≫ r  implies  q = r       (left cancellation)</span></span>
+<span class="giallo-l"><span>q ≫ p = r ≫ p  implies  q = r       (right cancellation)</span></span>
+<span class="giallo-l"><span>p ≫ q = id     implies  p = q = id  (no factors of identity)</span></span></code></pre>
+<p>The category is generated by "legs", the one-step flight plans. This is encoded
+by another axiom: either a plan <code>p</code> is an identity (a trivial plan), or it must
+start and end with a leg (possibly the same one, if <code>p</code> is itself just a leg):</p>
+<ul>
+<li>There is a leg <code>l_first</code> such that <code>p = l_first ≫ rest</code>.</li>
+<li>There is a leg <code>l_last</code> such that <code>p = init ≫ l_last</code>.</li>
+</ul>
+<p>The last crucial bit of structure is that paths have <code>length</code>, and that <code>length (p ≫ q) = length p + length q</code>. This measure allows us to prove that our
+algorithms and proofs terminate.</p>
+<p>One now has a clear notion of sub-plan: <code>sub</code> is a <em>sub-plan</em> of <code>whole</code> if
+there exists <code>pre</code> and <code>post</code> such that:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>whole = pre ≫ sub ≫ post</span></span></code></pre>
+<p>We write this as <code>sub ≤ whole</code>, and now sub-plans of a plan form a partial order
+(after some proving). Note that <code>pre</code> and <code>post</code> are part of the sub-plan
+structure, this is what makes it not just about the content of the sub-plan, but
+also its location in the wider plan. In Lean this definition is:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span style="color: #C678DD;">structure</span><span style="color: #61AFEF;"> Subplan</span></span>
+<span class="giallo-l"><span>    {Point : </span><span style="color: #C678DD;">Type</span><span> _}</span></span>
+<span class="giallo-l"><span>    (C : Category Point)</span></span>
+<span class="giallo-l"><span>    {a b : Point}</span></span>
+<span class="giallo-l"><span>    (whole : C.Plan a b) </span><span style="color: #C678DD;">where</span></span>
+<span class="giallo-l"><span>  i : Point</span></span>
+<span class="giallo-l"><span>  j : Point</span></span>
+<span class="giallo-l"><span>  pre : C.Plan a i</span></span>
+<span class="giallo-l"><span>  middle : C.Plan i j</span></span>
+<span class="giallo-l"><span>  post : C.Plan j b</span></span>
+<span class="giallo-l"><span>  factor : pre ≫ middle ≫ post = whole</span></span></code></pre><h3 id="least-uk-sub-plan">Least UK sub-plan</h3>
+<p>We say that a plan is "atomic" if it is a point (identity) or a leg. We assume
+that "touches the UK" is a predicate that is defined for atomic plans, and the
+goal is to lift this definition to a definition of <code>CoversUK</code> for arbitrary
+plans. The concepts we already have in place allow us to express this very
+intuitively: we say <code>CoversUK sub</code> holds for some sub-plan <code>sub</code> when every
+atomic UK sub-plan <code>a</code> satisfies <code>a ≤ sub</code>:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>∀ a : AtomicOccurrence S whole,</span></span>
+<span class="giallo-l"><span>  AtomHasUK a -&gt; a.subplan ≤ sub</span></span></code></pre>
+<p>The full spec is now pretty easy to state: Given a plan <code>whole</code>, we seek the
+<em>least</em> sub-plan <code>sub</code> of <code>whole</code> such that <code>CoversUK sub</code>:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>IsLeast { t : Subplan S.cat whole | CoversUK t } sub</span></span></code></pre>
+<p>I tried as much as possible to use concepts like
+<a rel="external" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Order/Bounds/Defs.html#IsLeast"><code>IsLeast</code></a>
+from Mathlib.</p>
+<h3 id="reconciliation">Reconciliation</h3>
+<p>The above spec is defined over the reconciled plan, for which one can decide
+<code>AtomHasUK</code> (via the ADEXP data). But first the ICAO and ADEXP plans must be
+reconciled. This also admits a neat specification in Lean. Given three plan
+types <code>Icao</code>, <code>Adexp</code> and <code>Combined</code>, and the projections:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>toIcao  : Combined -&gt; Icao</span></span>
+<span class="giallo-l"><span>toAdexp : Combined -&gt; Adexp</span></span></code></pre>
+<p>we say that <code>combi</code> is a reconciliation of <code>icao : Icao</code> and <code>adexp : Adexp</code>
+whenever</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>toIcao.map combi = icao ∧ toAdexp.map combi = adexp</span></span></code></pre>
+<p>This definition then captures what it means to enumerate all the
+reconciliations, with no duplicates:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span style="color: #C678DD;">structure</span><span style="color: #61AFEF;"> ReconciliationEnumeration</span></span>
+<span class="giallo-l"><span>    (R : ReconciliationSystem.{u, v})</span></span>
+<span class="giallo-l"><span>    {a b : R.Point}</span></span>
+<span class="giallo-l"><span>    (icao : R.IcaoPlan a b)</span></span>
+<span class="giallo-l"><span>    (adexp : R.AdexpPlan a b) </span><span style="color: #C678DD;">where</span></span>
+<span class="giallo-l"><span>  candidates :</span></span>
+<span class="giallo-l"><span>    List (R.CombinedPlan a b)</span></span>
+<span class="giallo-l"><span>  sound :</span></span>
+<span class="giallo-l"><span>    ∀ c, c ∈ candidates -&gt; R.toIcao.map c = icao ∧ R.toAdexp.map c = adexp</span></span>
+<span class="giallo-l"><span>  complete :</span></span>
+<span class="giallo-l"><span>    ∀ c,</span></span>
+<span class="giallo-l"><span>      R.toIcao.map c = icao -&gt;</span></span>
+<span class="giallo-l"><span>      R.toAdexp.map c = adexp -&gt;</span></span>
+<span class="giallo-l"><span>        c ∈ candidates</span></span>
+<span class="giallo-l"><span>  nodup : candidates.Nodup</span></span></code></pre><h2 id="implementation-and-correctness">Implementation and Correctness</h2>
+<p>There are two main phases to the implementation: reconciliation and sub-plan
+trimming. The implementation uses the same algebraic abstraction of flight plans
+as the spec, and this is what makes it easier to prove correct.</p>
+<h3 id="reconciliation-1">Reconciliation</h3>
+<p>The reconciliation algorithm enumerates all the possible reconciliations, and
+checks that the resulting list is singleton. It does this in a depth-first
+search manner.</p>
+<ul>
+<li>The base case reconciles only identity plans.</li>
+<li>In the recursive case, we decompose the ICAO plan as <code>icao = l ≫ icao_rest</code>,
+where <code>l</code> is the initial leg, and then try to reconcile <code>l</code> with all prefixes
+<code>p</code> of the <code>adexp</code> plan.</li>
+</ul>
+<p>Note that this search can just as well proceed "from the right" instead: we
+decompose <code>icao</code> into <code>icao_init ≫ l</code>. This process produces exactly the same
+enumeration, but in reverse.</p>
+<p><em>Possible optimization</em>: one can in fact search "from the
+left", and also "from the right", stopping when we have found our first
+reconciliation (no backtracking). We can then check that these both return the
+same reconciliation. The idea is that this produces the first and last item of
+the whole enumeration, and so, if they are equal, this enumeration must be a
+singleton list.</p>
+<p>In order to check that the reconciliation phase matches the spec, that is,
+returns a reconciliation iff it is the unique one to exist, we need to prove 3
+theorems:</p>
+<ul>
+<li>Completeness: Our enumeration produces all reconciliations.</li>
+<li>Soundness: All items in our enumeration are reconciliations.</li>
+<li>No duplicates: Each reconciliation appears exactly once.</li>
+</ul>
+<p>Each of these is quite substantial, but the coding agent managed to get through
+them without too much difficulty once the algebra was exposed. Here are some highlights.</p>
+<p>For soundness, the key fact is that the projections <code>toIcao</code> and <code>toAdexp</code> are
+<em>functors</em>:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>toIcao.map (x ≫ y) = toIcao.map x ≫ toIcao.map y</span></span>
+<span class="giallo-l"><span>toAdexp.map (x ≫ y) = toAdexp.map x ≫ toAdexp.map y</span></span></code></pre>
+<p>Thanks to this, we can reconstruct a reconciliation from two pieces:</p>
+<ul>
+<li>Assume <code>adexp₁</code> and <code>icao₁</code> reconcile to <code>combi₁</code></li>
+<li>Assume <code>adexp₂</code> and <code>icao₂</code> reconcile to <code>combi₂</code></li>
+</ul>
+<p>Then:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>toIcao.map (combi₁ ≫ combi₂)</span></span>
+<span class="giallo-l"><span>  = toIcao.map combi₁ ≫ toIcao.map combi₂</span></span>
+<span class="giallo-l"><span>  = icao₁ ≫ icao₂</span></span></code></pre>
+<p>and</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>toAdexp.map (combi₁ ≫ combi₂)</span></span>
+<span class="giallo-l"><span>  = toAdexp.map combi₁ ≫ toAdexp.map combi₂</span></span>
+<span class="giallo-l"><span>  = adexp₁ ≫ adexp₂</span></span></code></pre>
+<p>And so <code>combi₁ ≫ combi₂</code> is a reconciliation of <code>icao₁ ≫ icao₂</code> and <code>adexp₁ ≫ adexp₂</code>.</p>
+<p>Here is that same theorem and proof in Lean:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span style="color: #C678DD;">theorem</span><span style="color: #61AFEF;"> comp_reconciles</span></span>
+<span class="giallo-l"><span>    (R : ReconciliationSystem.{u, v})</span></span>
+<span class="giallo-l"><span>    {a b c : R.Point}</span></span>
+<span class="giallo-l"><span>    {icao₁ : R.IcaoPlan a b}</span></span>
+<span class="giallo-l"><span>    {icao₂ : R.IcaoPlan b c}</span></span>
+<span class="giallo-l"><span>    {adexp₁ : R.AdexpPlan a b}</span></span>
+<span class="giallo-l"><span>    {adexp₂ : R.AdexpPlan b c}</span></span>
+<span class="giallo-l"><span>    {combi₁ : R.CombinedPlan a b}</span></span>
+<span class="giallo-l"><span>    {combi₂ : R.CombinedPlan b c}</span></span>
+<span class="giallo-l"><span>    (combi₁_reconciles : R.Reconciles combi₁ icao₁ adexp₁)</span></span>
+<span class="giallo-l"><span>    (combi₂_reconciles : R.Reconciles combi₂ icao₂ adexp₂) :</span></span>
+<span class="giallo-l"><span>    R.Reconciles (combi₁ ≫ combi₂) (icao₁ ≫ icao₂) (adexp₁ ≫ adexp₂) := </span><span style="color: #C678DD;">by</span></span>
+<span class="giallo-l"><span>  constructor</span></span>
+<span class="giallo-l"><span>  · </span><span style="color: #C678DD;">calc</span><span> R.toIcao.map (combi₁ ≫ combi₂)</span></span>
+<span class="giallo-l"><span>      _ = R.toIcao.map combi₁ ≫ R.toIcao.map combi₂   := </span><span style="color: #C678DD;">by</span><span> rw [R.toIcao.map_comp]</span></span>
+<span class="giallo-l"><span>      _ = icao₁ ≫ icao₂                               := </span><span style="color: #C678DD;">by</span><span> rw [combi₁_reconciles.</span><span style="color: #D19A66;">1</span><span>, combi₂_reconciles.</span><span style="color: #D19A66;">1</span><span>]</span></span>
+<span class="giallo-l"><span>  · </span><span style="color: #C678DD;">calc</span><span> R.toAdexp.map (combi₁ ≫ combi₂)</span></span>
+<span class="giallo-l"><span>      _ = R.toAdexp.map combi₁ ≫ R.toAdexp.map combi₂ := </span><span style="color: #C678DD;">by</span><span> rw [R.toAdexp.map_comp]</span></span>
+<span class="giallo-l"><span>      _ = adexp₁ ≫ adexp₂                             := </span><span style="color: #C678DD;">by</span><span> rw [combi₁_reconciles.</span><span style="color: #D19A66;">2</span><span>, combi₂_reconciles.</span><span style="color: #D19A66;">2</span><span>]</span></span></code></pre>
+<p>Soundness of the enumeration relies on this fact for the recursive step, after it has decomposed the <code>icao</code> plan as <code>leg ≫ rest</code>, and recursively reconciled the <code>rest</code>.</p>
+<p>I was interested in how induction would work here, given that the algorithm works against an abstract algebraic interface, rather than on an <code>inductive</code> type. But it works fine, Lean allows the proof to start:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>induction a, b, icao, adexp </span><span style="color: #C678DD;">using</span><span> candidates.induct frontSplits </span><span style="color: #C678DD;">with</span></span></code></pre>
+<p>This roughly means: "perform induction on the structure of the recursive definition of <code>candidates</code>, which has been shown to terminate".</p>
+<p>Proving that the enumeration contains no duplicates was the trickiest of the
+three. Thankfully <code>Mathlib</code> has a whole module dedicated to this:
+<a rel="external" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Data/List/Nodup.html">Mathlib.Data.List.Nodup</a>. Of particular use was:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span style="color: #C678DD;">theorem</span><span style="color: #61AFEF;"> nodup_flatMap</span><span> {l : List α} {f : α → List β} :</span></span>
+<span class="giallo-l"><span>    Nodup (l.flatMap f) ↔</span></span>
+<span class="giallo-l"><span>      (∀ x ∈ l, Nodup (f x)) ∧ Pairwise (Disjoint on f) l</span></span></code></pre>
+<p>This says that <code>flatMap l f</code> (the monadic bind on lists, so what is behind the
+scenes in the list-comprehension) will produce a list with no duplicates
+when:</p>
+<ul>
+<li><code>f x</code> has no duplicates, for all <code>x</code>,</li>
+<li>if <code>x</code> and <code>y</code> are distinct items of <code>l</code>, then <code>f x</code> and <code>f y</code> are disjoint.</li>
+</ul>
+<p>The key algebraic lemma is <code>front_comp_leg_no_confusion</code>, which says if:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>l₁ ≫ rest₁ = l₂ ≫ rest₂</span></span></code></pre>
+<p>where <code>l₁</code> and <code>l₂</code> are legs, then <code>l₁ = l₂</code> and <code>rest₁ = rest₂</code>. This ensures two things:</p>
+<ul>
+<li>For the same split of ADEXP, combining distinct recursively reconciled tails
+produces distinct total reconciliations.</li>
+<li>Different splits of ADEXP produce disjoint reconciliation lists.</li>
+</ul>
+<p><em>The optimization</em>: This is a good example of how much work formal verification
+can be: this optimization seems simple, but it triggers many additional proof
+obligations. To prove it is correct one must:</p>
+<ul>
+<li>Show that the "from the left" search produces the first item of the full enumeration, or none if it is empty,</li>
+<li>Show that the "from the right" search produces the last item of the full enumeration, or none if it is empty,</li>
+<li>Prove this theorem about lists: if a list with no duplicates has a first and a last item, and they are equal, then it is a singleton list.</li>
+</ul>
+<p>And then combine these to the full theorem, that checking equality of those two
+searches is the same as checking uniqueness of the sought after reconciliation.
+It's a lot of work for what seems like a simple optimization.</p>
+<h3 id="trimming">Trimming</h3>
+<p>Once we have our hands on the <code>whole</code> reconciled plan, we can iteratively trim
+it down to the least sub-plan covering the UK. So we are maintaining a sub-plan
+<code>current</code> of <code>whole</code> with the invariant that <code>current</code> contains all the UK
+atoms. Of course this holds at the start when <code>current = whole</code>.</p>
+<p>At each step we try to shrink it by chopping off a leg from the front,
+or a leg from the back. Iteration terminates in one of two cases: either there are no legs to chop off (the sub-plan is a point and minimal), or it is still a non-trivial sub-plan, in which case it starts and ends with UK legs:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>current = start_uk_leg ≫ a</span></span>
+<span class="giallo-l"><span>current = b ≫ end_uk_leg</span></span></code></pre>
+<p>This is now the least sub-plan covering all the UK atoms. This relies on a
+convexity theorem about sub-plans:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>-- In a path category, </span><span style="color: #C678DD;">if</span><span> a sub-path contains the endpoints of another, </span><span style="color: #C678DD;">then</span><span> it</span></span>
+<span class="giallo-l"><span>-- contains that whole sub-path.</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">theorem</span><span style="color: #61AFEF;"> subpath_convex</span></span>
+<span class="giallo-l"><span>    {C : </span><span style="color: #C678DD;">Type</span><span> u} [Category.{v} C] [IsPathCategory C]</span></span>
+<span class="giallo-l"><span>    {A B : C}</span></span>
+<span class="giallo-l"><span>    {whole : A ⟶ B}</span></span>
+<span class="giallo-l"><span>    {x y : Sub whole}</span></span>
+<span class="giallo-l"><span>    (h : Sub.EndpointsIn x y) :</span></span>
+<span class="giallo-l"><span>    x ≤ y</span></span></code></pre>
+<p>Any smaller sub-plan containing all UK atoms must in particular contain
+<code>start_uk_leg</code> and <code>end_uk_leg</code>, and hence contain <code>current</code>. QED.</p>
+<h2 id="the-concrete-model">The concrete model</h2>
+<p>The whole implementation and proof was coded against an abstract algebraic
+theory. To get something executable out of it, we need to specialise it to a
+concrete model. For this we can use
+<a rel="external" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Combinatorics/Quiver/Path.html#Quiver.Path"><code>Quiver.Path</code></a>
+from <code>Mathlib</code>, or just define inductive types directly:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span style="color: #C678DD;">inductive</span><span style="color: #61AFEF;"> Plan</span><span> (Point : </span><span style="color: #C678DD;">Type</span><span> u) (Route : Point -&gt; Point -&gt; </span><span style="color: #C678DD;">Type</span><span> v) :</span></span>
+<span class="giallo-l"><span>    Point -&gt; Point -&gt; </span><span style="color: #C678DD;">Type</span><span> (max u v) </span><span style="color: #C678DD;">where</span></span>
+<span class="giallo-l"><span>  | nil (point : Point) :</span></span>
+<span class="giallo-l"><span>      Plan Point Route point point</span></span>
+<span class="giallo-l"><span>  | cons</span></span>
+<span class="giallo-l"><span>      {start mid finish : Point}</span></span>
+<span class="giallo-l"><span>      (here : Route start mid)</span></span>
+<span class="giallo-l"><span>      (rest : Plan Point Route mid finish) :</span></span>
+<span class="giallo-l"><span>      Plan Point Route start finish</span></span></code></pre>
+<p>All that's left to do to get the concrete function is prove that this satisfies
+all the axioms we assumed. The coding agent was able to do that fully
+autonomously.</p>
+<p>The cons-list model is a convenient first executable model, but it is not the
+only one. I also added a second concrete model just for the extraction phase,
+after reconciliation has already produced a single combined plan.</p>
+<p>In this model the whole combined plan is stored separately, conceptually as two
+arrays:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>points : Fin (n + </span><span style="color: #D19A66;">1</span><span>) -&gt; Point</span></span>
+<span class="giallo-l"><span>legs   : Fin n -&gt; ViaData</span></span></code></pre>
+<p>The path category for this one fixed plan has boundary indices as objects:
+<code>0, 1, ..., n</code>. A morphism from <code>i</code> to <code>j</code> is just the interval <code>[i, j]</code>,
+represented in Lean by the proof <code>i &lt;= j</code>. Composition is therefore:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>[i, j] ≫ [j, k] = [i, k]</span></span></code></pre>
+<p>and the front/back decompositions are just:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>[i, j] = [i, i+</span><span style="color: #D19A66;">1</span><span>] ≫ [i+</span><span style="color: #D19A66;">1</span><span>, j]</span></span>
+<span class="giallo-l"><span>[i, j] = [i, j</span><span style="color: #D19A66;">-1</span><span>] ≫ [j</span><span style="color: #D19A66;">-1</span><span>, j]</span></span></code></pre>
+<p>So composition, length, front chopping, and back chopping are all constant time
+operations on indices. Duplicate waypoint names are also no problem, because
+sub-plans are located by position in the plan, not by waypoint identity. We
+prove that this model satisfies the same <code>FreeFinitePlanSystem</code> interface as the
+cons-list model. The implementation then becomes the efficient "maintain two
+pointers" one, with the same proof of correctness.</p>
+<p>It's possible to come up with efficient representations of a reconciliation too,
+but I did not attempt this.</p>
+<h2 id="remarks">Remarks</h2>
+<p><em>LLMs are very useful for exploring the design space</em></p>
+<p>This was genuinely useful. The agent might not find a good abstraction for you,
+but once you have one or two candidates, it is extraordinarily cheap to ask
+"create a new branch, change the representation to <code>X</code>, see how far you get".
+This was useful for example for deciding if plan types should index over
+start/end points, or if the presentation was clearer with partial composition,
+etc. Experimentation is cheap.</p>
+<p><em>LLM agents work bottom-up when they should work top-down</em></p>
+<p>Faced with a non-trivial theorem to prove, coding agents mainly just attempt to
+one-shot it. They don't seem very good at scaffolding a large proof, splitting
+it into lemmas, and leaving <code>sorry</code>s in strategic places. I think there is
+missing training data: they are mainly trained on Lean files and math papers,
+which only contain finished proofs. They don't know what unfinished proof
+exploration looks like.</p>
+<p><em>Truth heuristics are still useful</em></p>
+<p>Counter-example tools (PBT, fuzzing, SMT solvers, etc.) are still essential,
+because a lot of the effort in writing a spec, and splitting off lemmas during
+proofs, is aided by good heuristics on what statements are true. A serious
+project which formally verifies all code would still benefit from a property
+based testing setup, and hooking this up to the coding agent to aid it during
+proof exploration.</p>
+<p><em>Specification is useful even without proof</em></p>
+<p>When writing the spec for a problem such as the above, the process guides you
+almost immediately to consider questions such as "can waypoint identifiers be
+duplicated?". In my case, before any proofs had been completed, the process
+found a small specification gap in the solution from my previous blog post: It's not
+entirely clear what the program should do for an input flight plan that
+intersects the UK at only a single point. The process of specification forces
+one to consider this.</p>
+<p><em>Abstract interfaces are good</em></p>
+<p>When the type of plans was a concrete inductive type, the coding agents kept
+trying to prove anything and everything by induction for that type, and often
+not getting anywhere fast. At some point I <em>deleted</em> the concrete type entirely,
+and created the algebraic abstraction above (which turned out to be mainly just
+path categories), and asked the agent to define and prove things only against
+that abstraction. This worked much better, and was also much more stable. This
+is true for humans too: If I ask someone to prove a statement about <code>5 × 5</code>
+matrices that is in fact already true in any monoid, then they might get
+completely lost is matrix calculations.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I started this experiment trying to see how much LLM coding agents could help
+automate proving code to be correct. My conclusion here was mixed: they are
+not yet very good at producing high-quality specs, but they are <em>very good</em> at
+grinding through all the mundane proofs. For example, I didn't even look at the
+proofs that my chosen representation of flight plans was indeed a path category,
+I just let the LLM take care of these details.</p>
+<p>But my real conclusion from this experiment is the power of algebra for proving
+programs correct. Before I arrived at a nice algebraic presentation of flight
+plans, the proofs were complex and hard to push through. Once I stated things
+algebraically, things went through much more easily, and furthermore one can
+start using the vast power of Mathlib. This makes sense: Mathematics is the
+discipline of proof, and mathematicians have spent thousands of years figuring
+out which forms of argument are efficient. Algebraic thinking has been at the
+centre of that effort: linear algebra, algebraic topology, algebraic geometry,
+algebraic number theory, etc.</p>
+<p>So if you need to prove your program correct, turn it into algebra.</p>
+<p>The code is at
+<a rel="external" href="https://github.com/jameshaydon/uk-portion-of-ICAO">github.com/jameshaydon/uk-portion-of-ICAO</a>.</p>
+<p>Thanks to <a rel="external" href="https://assert-false.science/arnaud/">Arnaud Spiwack</a> for reviewing
+this post.</p>
+<div class="footnote-definition" id="spielberg-paths"><sup class="footnote-definition-label">1</sup>
+<p>Jack Spielberg, <a rel="external" href="https://arxiv.org/pdf/1111.6924"><em>Groupoids and C*-Algebras for Categories of Paths</em></a>.</p>
+</div>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by James Haydon
+                
+                
+                    
+                    in <a href="https://jameshaydon.github.io/categories/programming/">programming</a>
+                
+                
+                    and
+                    tagged
+                    
+                        <a href="https://jameshaydon.github.io/tags/bugs/">bugs</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/formal-verification/">formal verification</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/lean/">Lean</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/llms/">LLMs</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/algebra/">algebra</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+            
+            
+        </footer>
+    
+</article>
+
+
+
+  <!-- optional scripts -->
+  
+  
+  <script src="https://jameshaydon.github.io/js/codeblock.js"></script>
+  
+
+  
+<!-- MathJax script for rendering LaTeX math equations -->
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"],
+      ],
+      displayMath: [
+        ["$$", "$$"],
+        ["\\[", "\\]"],
+      ],
+    },
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+
+  
+
+  
+</body>
+
+</html>

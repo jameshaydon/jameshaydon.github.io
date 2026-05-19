@@ -113,8 +113,8 @@
 </span>
     </header>
     <div itemprop="articleBody">
-      <p>(Comments on <a href="https://news.ycombinator.com/item?id=44408872">HackerNews</a>, <a href="https://www.reddit.com/r/haskell/comments/1lmzvus/solving_uk_passport_application_with_haskell/">Reddit</a> and <a href="https://lobste.rs/s/wfz7qh/solving_uk_passport_application_with">Lobste.rs</a>)</p>
-<p>There's a trend at the moment of <a href="https://news.ycombinator.com/item?id=44363696">solving</a> online <a href="https://news.ycombinator.com/item?id=44273489">games</a> with <a href="https://news.ycombinator.com/item?id=44259476">programming</a>, let's do one from the UK called <em>Passport Application</em>, which is developed by <a href="https://www.gov.uk/government/organisations/hm-passport-office">"His Majesty's Passport Office"</a> or HMPO. It's a cultural phenomenon in the UK: despite being quite expensive (about £100 just to start) for the standard online version (a masterpiece of minimalist design, entirely text-based), most British play the game, and do so every 10 years or so.</p>
+      <p>(Comments on <a rel="external" href="https://news.ycombinator.com/item?id=44408872">HackerNews</a>, <a rel="external" href="https://www.reddit.com/r/haskell/comments/1lmzvus/solving_uk_passport_application_with_haskell/">Reddit</a> and <a rel="external" href="https://lobste.rs/s/wfz7qh/solving_uk_passport_application_with">Lobste.rs</a>)</p>
+<p>There's a trend at the moment of <a rel="external" href="https://news.ycombinator.com/item?id=44363696">solving</a> online <a rel="external" href="https://news.ycombinator.com/item?id=44273489">games</a> with <a rel="external" href="https://news.ycombinator.com/item?id=44259476">programming</a>, let's do one from the UK called <em>Passport Application</em>, which is developed by <a rel="external" href="https://www.gov.uk/government/organisations/hm-passport-office">"His Majesty's Passport Office"</a> or HMPO. It's a cultural phenomenon in the UK: despite being quite expensive (about £100 just to start) for the standard online version (a masterpiece of minimalist design, entirely text-based), most British play the game, and do so every 10 years or so.</p>
 <p>It's an adventure puzzle document collection game. The premise is to collect enough artefacts, scattered throughout various bureaucratic institutions, until you can prove the statement "Applicant is British" according to an extremely complex set of rules, written in arcane language, in various texts called "acts of parliament". The prize for winning is a little booklet with a date inside that indicates when you can play again.</p>
 <span id="continue-reading"></span>
 <p>Hardcore players opt for an entirely paper-based version that relies entirely on postal mail. The puzzle-sheets for that look like this:</p>
@@ -123,7 +123,7 @@
 <p><img src="https://jameshaydon.github.io/passport/docs-table.jpg" alt="Documents Table" title="Documents Table" /></p>
 <p>The game starts easy enough, you just need to enter basic facts about the applicant, and take a photo of them. But things get tougher from there, with various side-quests, all designed to be fun:</p>
 <ul>
-<li>HMPO sometimes decides to send you on an <a href="https://www.gov.uk/confirm-identity-online-for-passport-application">"identity confirmation"</a> side quest. This involves finding someone who "works in (or is retired from) a ‘recognised profession’"<sup class="footnote-reference"><a href="#4">1</a></sup>, a term they only define by a long non-exhaustive list, that contains things like "accountant" or "civil servant", but they also have some fun ones like "chiropodist", "funeral director" and "airline pilot". Once you've managed to track down such a person, preferably one who knows you, you must socially engineer them into filling in some webforms.</li>
+<li>HMPO sometimes decides to send you on an <a rel="external" href="https://www.gov.uk/confirm-identity-online-for-passport-application">"identity confirmation"</a> side quest. This involves finding someone who "works in (or is retired from) a ‘recognised profession’"<sup class="footnote-reference"><a href="#4">1</a></sup>, a term they only define by a long non-exhaustive list, that contains things like "accountant" or "civil servant", but they also have some fun ones like "chiropodist", "funeral director" and "airline pilot". Once you've managed to track down such a person, preferably one who knows you, you must socially engineer them into filling in some webforms.</li>
 <li>The main mechanic of the game involves sending in "original" documents. Documents that are not in english need to be paired with an "officially certified translation", which triggered some cool side-quests in my case like "how to get a certified translation of a French marriage certificate, which is in my possession in Japan, and have both sent to HMPO by mail".</li>
 <li>Some documents relate to family members, and so you need to start getting the whole family involved in a co-op mode.</li>
 <li>And of course the bureaucratic institutions you must request some documents from have their own arcane gameplay.</li>
@@ -141,7 +141,7 @@ Quite a lot of documents, most of which seemed quite unrelated to the main objec
 <p>One of these documents is almost 100 years old! Of course <code>applicant's Paternal great grandfather</code> is ambiguous, since most people have 2 of them, but this is standard misdirection at this point and all part of the fun. After decrypting this to <code>applicant's father's father's father's birth certificate</code> I started to wonder why such a distant document would be requested. Engaging the advice agents didn't help much, one launched into explanations as to why
 $$\text{birthCirt}(\text{father}^2(\text{applicant}))$$ was needed even though this document was already in their possession, and I was asking about
 $$\text{birthCirt}(\text{father}^3(\text{applicant}))$$, then admitted they couldn't quite say why the was needed.</p>
-<p>So what's going on here? It's important to understand the sort of logic used by HMPO in the <em>Passport Application</em> game. It's called <strong>Bureaucratic Logic</strong>, it derives from <a href="https://en.wikipedia.org/wiki/Constructive_logic">Constructive Logic</a>, in that one cannot just make valid arguments, that would be too easy, one has to construct proofs of a particular nature to back them up. Constructive logic has witnesses, Bureaucratic logic has original documents.</p>
+<p>So what's going on here? It's important to understand the sort of logic used by HMPO in the <em>Passport Application</em> game. It's called <strong>Bureaucratic Logic</strong>, it derives from <a rel="external" href="https://en.wikipedia.org/wiki/Constructive_logic">Constructive Logic</a>, in that one cannot just make valid arguments, that would be too easy, one has to construct proofs of a particular nature to back them up. Constructive logic has witnesses, Bureaucratic logic has original documents.</p>
 <p>For example, like constructive logic, HMPO doesn't allow you to use excluded middle: $P \lor \lnot P$ ($P$ or not $P$) is not in general valid. The gameplay is greatly influenced by answers to questions such as "was applicant's father's father born in the UK or not born in the UK?" But you can't just say "yes one of those is true" and then provide documents for both resulting scenarios. That would be using excluded middle. You <em>must</em> commit to one alternative <em>and</em> provide a document for that. This is were it's important to remember that it's not about actually demonstrating citizenship, for which excluded middle would be a perfectly valid argument, <em>Passport Application</em> is about having fun gathering documents. Don't question the rules too much or you'll stop having fun.</p>
 <p>The second piece of the puzzle is in the guidance that accompanies the document requests:</p>
 <blockquote>
@@ -176,22 +176,21 @@ $$\text{birthCirt}(\text{father}^3(\text{applicant}))$$, then admitted they coul
 <p>Note that the recursion is playing out via email.</p>
 <p>At this point I did what any sane person would do, I reached for a logic programming language and decided to encode the rules in the hope of figuring out what was going on. Is it possible to write some code which could have produced the full list of required documents upfront, with no confusion, and perfect explanations? Of course this would ruin all the fun of the game, which is why HMPO doesn't do it, but let's forge ahead.</p>
 <h2 id="haskell-code">Haskell code</h2>
-<p>(Full code is on <a href="https://github.com/jameshaydon/uk-passport/blob/main/src/Lib.hs">GitHub</a>.)</p>
+<p>(Full code is on <a rel="external" href="https://github.com/jameshaydon/uk-passport/blob/main/src/Lib.hs">GitHub</a>.)</p>
 <p>At first I started encoding the rules in Prolog, but switched to Haskell's <code>LogicT</code> monad after a while. The basic goal here is to produce the full list of documents required for the application. But this isn't quite right: because there are several ways one can claim Britishness, there are several sets of documents that can work, and you only need one of them. So really one is looking for a function that returns <code>Set (Set Document)</code>, where</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Parent </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Mother </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Father
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">deriving</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">Show</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">Eq</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">Ord</span><span style="color:#abb2bf;">)
-</span><span style="color:#abb2bf;">
-</span><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Person </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Applicant </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Parent Parent Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">deriving</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">Show</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">Eq</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">Ord</span><span style="color:#abb2bf;">)
-</span><span style="color:#abb2bf;">  
-</span><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Document
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">BirthCertificate Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">MarriageCertificate Person Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">NaturalizationCertificate Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Passport Person
-</span><span style="color:#abb2bf;">  </span><span style="font-style:italic;color:#5f697a;">-- more documents
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">deriving</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">Show</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">Eq</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">Ord</span><span style="color:#abb2bf;">)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Parent</span><span> =</span><span style="color: #D19A66;"> Mother</span><span> |</span><span style="color: #D19A66;"> Father</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  deriving</span><span> (</span><span style="color: #D19A66;">Show</span><span>,</span><span style="color: #D19A66;"> Eq</span><span>,</span><span style="color: #D19A66;"> Ord</span><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Person</span><span> =</span><span style="color: #D19A66;"> Applicant</span><span> |</span><span style="color: #D19A66;"> Parent Parent Person</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  deriving</span><span> (</span><span style="color: #D19A66;">Show</span><span>,</span><span style="color: #D19A66;"> Eq</span><span>,</span><span style="color: #D19A66;"> Ord</span><span>)</span></span>
+<span class="giallo-l"><span>  </span></span>
+<span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Document</span></span>
+<span class="giallo-l"><span>  =</span><span style="color: #D19A66;"> BirthCertificate Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> MarriageCertificate Person Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> NaturalizationCertificate Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> Passport Person</span></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">  -- more documents</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  deriving</span><span> (</span><span style="color: #D19A66;">Show</span><span>,</span><span style="color: #D19A66;"> Eq</span><span>,</span><span style="color: #D19A66;"> Ord</span><span>)</span></span></code></pre>
 <p>But this is also unsatisfying, because you want to know <em>why</em> a certain document set is enough. So this is really a proof-search problem, and we proceed in two stages:</p>
 <ul>
 <li>we use <code>LogicT</code> to enumerate all the <code>Proof</code>s of Britishness for the applicant, given some information about them, and</li>
@@ -199,203 +198,190 @@ $$\text{birthCirt}(\text{father}^3(\text{applicant}))$$, then admitted they coul
 </ul>
 <p>This two-staged approach is what made me switch to Haskell, though I'm sure someone more experienced with Prolog would have made it work.</p>
 <p>So we define a simple proof type:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Proof
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">= </span><span style="font-style:italic;color:#5f697a;">-- Deriving britishness via a parent, and their proof of britishness
-</span><span style="color:#abb2bf;">    </span><span style="color:#db9d63;">ViaParent Person Proof
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="font-style:italic;color:#5f697a;">-- Britishness via two claims.
-</span><span style="color:#abb2bf;">    </span><span style="color:#db9d63;">And Proof Proof
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="font-style:italic;color:#5f697a;">-- Foundational evidence.
-</span><span style="color:#abb2bf;">    </span><span style="color:#db9d63;">Evidence Predicate
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">deriving</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">Show</span><span style="color:#abb2bf;">)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Proof</span></span>
+<span class="giallo-l"><span>  =</span><span style="color: #7F848E;font-style: italic;"> -- Deriving britishness via a parent, and their proof of britishness</span></span>
+<span class="giallo-l"><span style="color: #D19A66;">    ViaParent Person Proof</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #7F848E;font-style: italic;"> -- Britishness via two claims.</span></span>
+<span class="giallo-l"><span style="color: #D19A66;">    And Proof Proof</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #7F848E;font-style: italic;"> -- Foundational evidence.</span></span>
+<span class="giallo-l"><span style="color: #D19A66;">    Evidence Predicate</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  deriving</span><span> (</span><span style="color: #D19A66;">Show</span><span>)</span></span></code></pre>
 <p>This type could be made much more complex, detailing each rule that was used, but this simpler type was at least enough for my purposes. One feature I wanted was that one would not need to provide all the information upfront, instead questions would be asked interactively, and only if needed. Furthermore, previous facts should be retained and used for all branches, backtracking, etc. So we need <code>IO</code> and <code>State</code>, and we want the state to be global across all branches:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Knowledge </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">SureYes </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">SureNo </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Unsure
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">deriving</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">Eq</span><span style="color:#abb2bf;">)
-</span><span style="color:#abb2bf;">
-</span><span style="color:#cd74e8;">type </span><span style="color:#db9d63;">Claims </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">Map Predicate Knowledge
-</span><span style="color:#abb2bf;">
-</span><span style="color:#cd74e8;">type </span><span style="color:#db9d63;">M</span><span style="color:#abb2bf;"> a </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">LogicT</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">StateT Claims IO</span><span style="color:#abb2bf;">) a
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Knowledge</span><span> =</span><span style="color: #D19A66;"> SureYes</span><span> |</span><span style="color: #D19A66;"> SureNo</span><span> |</span><span style="color: #D19A66;"> Unsure</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  deriving</span><span> (</span><span style="color: #D19A66;">Eq</span><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C678DD;">type</span><span style="color: #D19A66;"> Claims</span><span> =</span><span style="color: #D19A66;"> Map Predicate Knowledge</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #C678DD;">type</span><span style="color: #D19A66;"> M</span><span style="color: #C678DD;"> a</span><span> =</span><span style="color: #D19A66;"> LogicT</span><span> (</span><span style="color: #D19A66;">StateT Claims IO</span><span>)</span><span style="color: #C678DD;"> a</span></span></code></pre>
 <p>Here <code>Predicate</code>s are the sorts of things that are true of a person and affect how the rules of the game play out:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#cd74e8;">data </span><span style="color:#db9d63;">Predicate
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">IsBritish Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Settled Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">BornBefore Int Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">BornInUK Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">BornAfter Int Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Naturalized Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Years3LivingInUK Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">IsBritOtbd Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#adb7c9;">| </span><span style="color:#db9d63;">Married Person Person
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">deriving</span><span style="color:#abb2bf;"> (</span><span style="color:#9acc76;">Show</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">Eq</span><span style="color:#abb2bf;">, </span><span style="color:#9acc76;">Ord</span><span style="color:#abb2bf;">)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #C678DD;">data</span><span style="color: #D19A66;"> Predicate</span></span>
+<span class="giallo-l"><span>  =</span><span style="color: #D19A66;"> IsBritish Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> Settled Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> BornBefore Int Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> BornInUK Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> BornAfter Int Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> Naturalized Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> Years3LivingInUK Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> IsBritOtbd Person</span></span>
+<span class="giallo-l"><span>  |</span><span style="color: #D19A66;"> Married Person Person</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  deriving</span><span> (</span><span style="color: #D19A66;">Show</span><span>,</span><span style="color: #D19A66;"> Eq</span><span>,</span><span style="color: #D19A66;"> Ord</span><span>)</span></span></code></pre>
 <p>Here is then the root function for Britishness:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- | Is a person british?
-</span><span style="color:#5cb3fa;">brit </span><span style="color:#cd74e8;">:: Person -&gt; M Proof
-</span><span style="color:#abb2bf;">brit p </span><span style="color:#adb7c9;">=
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">do
-</span><span style="color:#abb2bf;">    check (</span><span style="color:#db9d63;">IsBritish</span><span style="color:#abb2bf;"> p)
-</span><span style="color:#abb2bf;">    byBirth </span><span style="color:#adb7c9;">&lt;|&gt;</span><span style="color:#abb2bf;"> naturalised
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">where
-</span><span style="color:#abb2bf;">    byBirth </span><span style="color:#adb7c9;">=
-</span><span style="color:#abb2bf;">      ifThenElse
-</span><span style="color:#abb2bf;">        (evidence (</span><span style="color:#db9d63;">BornInUK</span><span style="color:#abb2bf;"> p))
-</span><span style="color:#abb2bf;">        (britBornInUk p)
-</span><span style="color:#abb2bf;">        (britBornAbroad p)
-</span><span style="color:#abb2bf;">    naturalised </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> evidence (</span><span style="color:#db9d63;">Naturalised</span><span style="color:#abb2bf;"> p)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- | Is a person british?</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">brit</span><span> ::</span><span style="color: #D19A66;"> Person</span><span> -&gt;</span><span style="color: #D19A66;"> M Proof</span></span>
+<span class="giallo-l"><span>brit p =</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  do</span></span>
+<span class="giallo-l"><span>    check (</span><span style="color: #D19A66;">IsBritish</span><span> p)</span></span>
+<span class="giallo-l"><span>    byBirth &lt;|&gt; naturalised</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  where</span></span>
+<span class="giallo-l"><span>    byBirth =</span></span>
+<span class="giallo-l"><span>      ifThenElse</span></span>
+<span class="giallo-l"><span>        (evidence (</span><span style="color: #D19A66;">BornInUK</span><span> p))</span></span>
+<span class="giallo-l"><span>        (britBornInUk p)</span></span>
+<span class="giallo-l"><span>        (britBornAbroad p)</span></span>
+<span class="giallo-l"><span>    naturalised = evidence (</span><span style="color: #D19A66;">Naturalised</span><span> p)</span></span></code></pre>
 <p>The <code>check</code> function here interacts with the user, to avoid launching into an investigation if the user knows that person is not british:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- | Ask about a predicate, failing if the answer is a sure no.
-</span><span style="color:#5cb3fa;">check </span><span style="color:#cd74e8;">:: Predicate -&gt; M </span><span style="color:#abb2bf;">()
-</span><span style="color:#abb2bf;">check q </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">do
-</span><span style="color:#abb2bf;">  answer </span><span style="color:#adb7c9;">&lt;-</span><span style="color:#abb2bf;"> question q
-</span><span style="color:#abb2bf;">  guard (answer </span><span style="color:#adb7c9;">/= </span><span style="color:#db9d63;">SureNo</span><span style="color:#abb2bf;">)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- | Ask about a predicate, failing if the answer is a sure no.</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">check</span><span> ::</span><span style="color: #D19A66;"> Predicate</span><span> -&gt;</span><span style="color: #D19A66;"> M</span><span> ()</span></span>
+<span class="giallo-l"><span>check q =</span><span style="color: #C678DD;"> do</span></span>
+<span class="giallo-l"><span>  answer &lt;- question q</span></span>
+<span class="giallo-l"><span>  guard (answer /=</span><span style="color: #D19A66;"> SureNo</span><span>)</span></span></code></pre>
 <p>A person is <code>brit</code> either <code>byBirth</code> or <code>naturalised</code>. Naturalisation is the simplest, as a single certificate is then the sole document needed. Britishness by birth forks mainly on whether or not the person was born in the UK, and we go to sub-routines:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- | UK-born citizenship (pre-1983 or via parent)
-</span><span style="color:#5cb3fa;">britBornInUk </span><span style="color:#cd74e8;">:: Person -&gt; M Proof
-</span><span style="color:#abb2bf;">britBornInUk p </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> evidence (</span><span style="color:#db9d63;">BornBefore 1983</span><span style="color:#abb2bf;"> p) </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">orElse</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> britBornInUkViaParent p
-</span><span style="color:#abb2bf;">
-</span><span style="font-style:italic;color:#5f697a;">-- | UK-born citizenship via parent (used for post-1983 births)
-</span><span style="color:#5cb3fa;">britBornInUkViaParent </span><span style="color:#cd74e8;">:: Person -&gt; M Proof
-</span><span style="color:#abb2bf;">britBornInUkViaParent p </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> viaParent p (</span><span style="color:#adb7c9;">\</span><span style="color:#abb2bf;">parent </span><span style="color:#adb7c9;">-&gt;</span><span style="color:#abb2bf;"> brit parent </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">orElse</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> settled parent)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- | UK-born citizenship (pre-1983 or via parent)</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">britBornInUk</span><span> ::</span><span style="color: #D19A66;"> Person</span><span> -&gt;</span><span style="color: #D19A66;"> M Proof</span></span>
+<span class="giallo-l"><span>britBornInUk p = evidence (</span><span style="color: #D19A66;">BornBefore 1983</span><span> p) `orElse` britBornInUkViaParent p</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- | UK-born citizenship via parent (used for post-1983 births)</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">britBornInUkViaParent</span><span> ::</span><span style="color: #D19A66;"> Person</span><span> -&gt;</span><span style="color: #D19A66;"> M Proof</span></span>
+<span class="giallo-l"><span>britBornInUkViaParent p = viaParent p (\parent -&gt; brit parent `orElse` settled parent)</span></span></code></pre>
 <p>People born in the UK before <code>1983</code> are a base case, they are unconditionally British. Otherwise they acquire it via at least one their parents, who must be either British themselves or "settled" at time of birth. The <code>orElse</code> function here is similar to <code>&lt;|&gt;</code>, but doesn't include proofs from the second branch at all if the first is successful (<code>&lt;|&gt;</code> always accumulates proofs from both branches). E.g. if <code>brit parent</code> is true then <code>settled parent</code> doesn't apply: there is no notion of "settled in the UK" for British people.</p>
 <p>When not born in the UK things are more complex:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="font-style:italic;color:#5f697a;">-- | British citizenship for those born abroad
-</span><span style="color:#5cb3fa;">britBornAbroad </span><span style="color:#cd74e8;">:: Person -&gt; M Proof
-</span><span style="color:#abb2bf;">britBornAbroad p </span><span style="color:#adb7c9;">=
-</span><span style="color:#abb2bf;">  viaParent p </span><span style="color:#adb7c9;">$ \</span><span style="color:#abb2bf;">parent </span><span style="color:#adb7c9;">-&gt;
-</span><span style="color:#abb2bf;">    britOtbd parent </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">orElse</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> (brit parent </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">and</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> evidence (</span><span style="color:#db9d63;">Years3LivingInUK</span><span style="color:#abb2bf;"> parent))
-</span><span style="color:#abb2bf;">
-</span><span style="font-style:italic;color:#5f697a;">-- | British otherwise than by descent (BOTD)
-</span><span style="color:#5cb3fa;">britOtbd </span><span style="color:#cd74e8;">:: Person -&gt; M Proof
-</span><span style="color:#abb2bf;">britOtbd p </span><span style="color:#adb7c9;">= </span><span style="color:#cd74e8;">do
-</span><span style="color:#abb2bf;">  check (</span><span style="color:#db9d63;">IsBritOtbd</span><span style="color:#abb2bf;"> p)
-</span><span style="color:#abb2bf;">  evidence (</span><span style="color:#db9d63;">Naturalised</span><span style="color:#abb2bf;"> p) </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">orElse</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> britOtbdUkBorn </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">orElse</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> bornCrownService p
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">where
-</span><span style="color:#abb2bf;">    britOtbdUkBorn </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> evidence (</span><span style="color:#db9d63;">BornInUK</span><span style="color:#abb2bf;"> p) </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">and</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> britBornInUk p
-</span><span style="color:#abb2bf;">
-</span><span style="color:#5cb3fa;">bornCrownService </span><span style="color:#cd74e8;">:: Person -&gt; M Proof
-</span><span style="color:#abb2bf;">bornCrownService p </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> viaParent p </span><span style="color:#adb7c9;">$ \</span><span style="color:#abb2bf;">parent </span><span style="color:#adb7c9;">-&gt; </span><span style="color:#cd74e8;">do
-</span><span style="color:#abb2bf;">  check (</span><span style="color:#db9d63;">CrownService</span><span style="color:#abb2bf;"> parent)
-</span><span style="color:#abb2bf;">  brit parent </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">and</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> evidence (</span><span style="color:#db9d63;">CrownService</span><span style="color:#abb2bf;"> parent)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- | British citizenship for those born abroad</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">britBornAbroad</span><span> ::</span><span style="color: #D19A66;"> Person</span><span> -&gt;</span><span style="color: #D19A66;"> M Proof</span></span>
+<span class="giallo-l"><span>britBornAbroad p =</span></span>
+<span class="giallo-l"><span>  viaParent p $ \parent -&gt;</span></span>
+<span class="giallo-l"><span>    britOtbd parent `orElse` (brit parent `and` evidence (</span><span style="color: #D19A66;">Years3LivingInUK</span><span> parent))</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- | British otherwise than by descent (BOTD)</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">britOtbd</span><span> ::</span><span style="color: #D19A66;"> Person</span><span> -&gt;</span><span style="color: #D19A66;"> M Proof</span></span>
+<span class="giallo-l"><span>britOtbd p =</span><span style="color: #C678DD;"> do</span></span>
+<span class="giallo-l"><span>  check (</span><span style="color: #D19A66;">IsBritOtbd</span><span> p)</span></span>
+<span class="giallo-l"><span>  evidence (</span><span style="color: #D19A66;">Naturalised</span><span> p) `orElse` britOtbdUkBorn `orElse` bornCrownService p</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  where</span></span>
+<span class="giallo-l"><span>    britOtbdUkBorn = evidence (</span><span style="color: #D19A66;">BornInUK</span><span> p) `and` britBornInUk p</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #61AFEF;">bornCrownService</span><span> ::</span><span style="color: #D19A66;"> Person</span><span> -&gt;</span><span style="color: #D19A66;"> M Proof</span></span>
+<span class="giallo-l"><span>bornCrownService p = viaParent p $ \parent -&gt;</span><span style="color: #C678DD;"> do</span></span>
+<span class="giallo-l"><span>  check (</span><span style="color: #D19A66;">CrownService</span><span> parent)</span></span>
+<span class="giallo-l"><span>  brit parent `and` evidence (</span><span style="color: #D19A66;">CrownService</span><span> parent)</span></span></code></pre>
 <p>When not born in the UK, you get citizenship from your parents in the usual way only if there is evidence of 3 years of consecutive living in the UK<sup class="footnote-reference"><a href="#1">2</a></sup>, or if born from a person that is <em>British otherwise than by descent</em> (BOTBD). This is a person with "super Britishness", they can confer citizenship to their children unconditionally (well, apart from having to play hard games of <code>Passport Application</code>). The basic idea is that someone is BOTBD if they didn't become British purely via a parent. E.g. they were naturalised, or born in the UK, etc. There are <em>many</em> edge-cases in the rules, and I've only coded those that are most relevant to my case. One of them is <code>bornCrownService</code>, this says that one is still BOTBD if born abroad <em>because a parent was working in "Crown Service"</em>, e.g. in an embassy. This happens to be the case of $\text{father}^3(\text{applicant})$ during the birth of $\text{father}^2(\text{applicant})$, but is this relevant? We'll have to wait till we've coded enough to run this program.</p>
 <p>A lot of these functions rely on a higher order function <code>viaParent</code>, which mediates how citizenship is passed down to children:</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#5cb3fa;">viaParent </span><span style="color:#cd74e8;">:: Person -&gt;</span><span style="color:#abb2bf;"> (</span><span style="color:#cd74e8;">Person -&gt; M Proof</span><span style="color:#abb2bf;">) </span><span style="color:#cd74e8;">-&gt; M Proof
-</span><span style="color:#abb2bf;">viaParent p cond </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> viaMother </span><span style="color:#adb7c9;">&lt;|&gt;</span><span style="color:#abb2bf;"> viaFather
-</span><span style="color:#abb2bf;">  </span><span style="color:#cd74e8;">where
-</span><span style="color:#abb2bf;">    via parent </span><span style="color:#adb7c9;">= </span><span style="color:#db9d63;">ViaParent</span><span style="color:#abb2bf;"> (</span><span style="color:#db9d63;">Parent</span><span style="color:#abb2bf;"> parent p) </span><span style="color:#adb7c9;">&lt;$&gt;</span><span style="color:#abb2bf;"> cond (</span><span style="color:#db9d63;">Parent</span><span style="color:#abb2bf;"> parent p)
-</span><span style="color:#abb2bf;">    viaMother </span><span style="color:#adb7c9;">=</span><span style="color:#abb2bf;"> via </span><span style="color:#db9d63;">Mother
-</span><span style="color:#abb2bf;">    viaFather </span><span style="color:#adb7c9;">=
-</span><span style="color:#abb2bf;">      ifThenElse
-</span><span style="color:#abb2bf;">        (evidence (</span><span style="color:#db9d63;">BornAfter 2006</span><span style="color:#abb2bf;"> p))
-</span><span style="color:#abb2bf;">        (via </span><span style="color:#db9d63;">Father</span><span style="color:#abb2bf;">)
-</span><span style="color:#abb2bf;">        (married (</span><span style="color:#db9d63;">Parent Father</span><span style="color:#abb2bf;"> p) (</span><span style="color:#db9d63;">Parent Mother</span><span style="color:#abb2bf;"> p) </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">and</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> via </span><span style="color:#db9d63;">Father</span><span style="color:#abb2bf;">)
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #61AFEF;">viaParent</span><span> ::</span><span style="color: #D19A66;"> Person</span><span> -&gt; (</span><span style="color: #D19A66;">Person</span><span> -&gt;</span><span style="color: #D19A66;"> M Proof</span><span>) -&gt;</span><span style="color: #D19A66;"> M Proof</span></span>
+<span class="giallo-l"><span>viaParent p cond = viaMother &lt;|&gt; viaFather</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">  where</span></span>
+<span class="giallo-l"><span style="color: #C678DD;">    via</span><span> parent =</span><span style="color: #D19A66;"> ViaParent</span><span> (</span><span style="color: #D19A66;">Parent</span><span> parent p) &lt;$&gt; cond (</span><span style="color: #D19A66;">Parent</span><span> parent p)</span></span>
+<span class="giallo-l"><span>    viaMother =</span><span style="color: #C678DD;"> via</span><span style="color: #D19A66;"> Mother</span></span>
+<span class="giallo-l"><span>    viaFather =</span></span>
+<span class="giallo-l"><span>      ifThenElse</span></span>
+<span class="giallo-l"><span>        (evidence (</span><span style="color: #D19A66;">BornAfter 2006</span><span> p))</span></span>
+<span class="giallo-l"><span>        (</span><span style="color: #C678DD;">via</span><span style="color: #D19A66;"> Father</span><span>)</span></span>
+<span class="giallo-l"><span>        (married (</span><span style="color: #D19A66;">Parent Father</span><span> p) (</span><span style="color: #D19A66;">Parent Mother</span><span> p) `and`</span><span style="color: #C678DD;"> via</span><span style="color: #D19A66;"> Father</span><span>)</span></span></code></pre>
 <p>This takes a person, and a <code>cond</code>ition for a parent, and produces a proof of Britishness for <code>p</code> as long as <code>cond</code> can be proved for one of <code>p</code>'s parents. There is an extra complication here relating to laws surrounding "illegitimate" children born before 2006, so an extra check for marriage is required in some cases. There are ways around this not codified here ("registration"). There are other sexist clauses too, about only fathers passing on Britishness in some cases, that I also haven't codified here. It's interesting that even though some of these laws no longer apply, they apply <em>historically</em> when trying to work out if an ancestor was british. That's right, to play <code>Passport Application</code> you need to consult laws from many different times!</p>
 <p>To run the code we <code>evalStateT (observeAllT m) Map.empty</code>, the <code>Map.empty</code> indicating we start with no knowledge. Once a proof has been found we use <code>docs :: Proof -&gt; Logic (Set Document)</code> to produce the needed documents for <em>that path</em> to citizenship. This will mostly list out documents for foundational evidence, and e.g. make sure that when <code>ViaParent</code> is used, a birth certificate linking parent and child is produced.</p>
 <p>Let's run it!</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">ghci&gt; run (brit Applicant)
-</span><span style="color:#abb2bf;">? : Applicant is british
-</span><span style="color:#abb2bf;">y
-</span><span style="color:#abb2bf;">? : Applicant was born in UK
-</span><span style="color:#abb2bf;">n
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Mother is british otherwise than by descent
-</span><span style="color:#abb2bf;">n
-</span><span style="color:#abb2bf;">? : Applicant was born after 2006
-</span><span style="color:#abb2bf;">y
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Father is british otherwise than by descent
-</span><span style="color:#abb2bf;">y
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Father was born in UK
-</span><span style="color:#abb2bf;">y
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Father was born before 1983
-</span><span style="color:#abb2bf;">n
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Father&#39;s Mother is british
-</span><span style="color:#abb2bf;">n
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Father&#39;s Mother was settled at time of birth
-</span><span style="color:#abb2bf;">y
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Father was born after 2006
-</span><span style="color:#abb2bf;">n
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Father&#39;s Father was married to Applicant&#39;s Father&#39;s Mother at time of birth
-</span><span style="color:#abb2bf;">y
-</span><span style="color:#abb2bf;">? : Applicant&#39;s Father&#39;s Father is british
-</span><span style="color:#abb2bf;">...
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>ghci&gt; run (brit Applicant)</span></span>
+<span class="giallo-l"><span>? : Applicant is british</span></span>
+<span class="giallo-l"><span>y</span></span>
+<span class="giallo-l"><span>? : Applicant was born in UK</span></span>
+<span class="giallo-l"><span>n</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Mother is british otherwise than by descent</span></span>
+<span class="giallo-l"><span>n</span></span>
+<span class="giallo-l"><span>? : Applicant was born after 2006</span></span>
+<span class="giallo-l"><span>y</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Father is british otherwise than by descent</span></span>
+<span class="giallo-l"><span>y</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Father was born in UK</span></span>
+<span class="giallo-l"><span>y</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Father was born before 1983</span></span>
+<span class="giallo-l"><span>n</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Father&#39;s Mother is british</span></span>
+<span class="giallo-l"><span>n</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Father&#39;s Mother was settled at time of birth</span></span>
+<span class="giallo-l"><span>y</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Father was born after 2006</span></span>
+<span class="giallo-l"><span>n</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Father&#39;s Father was married to Applicant&#39;s Father&#39;s Mother at time of birth</span></span>
+<span class="giallo-l"><span>y</span></span>
+<span class="giallo-l"><span>? : Applicant&#39;s Father&#39;s Father is british</span></span>
+<span class="giallo-l"><span>...</span></span></code></pre>
 <p>This goes on for quite some questions, 37 in my case. You can answer question like <code>Applicant's Mother is british otherwise than by descent</code> with "dk" (don't know), and in this case it will explore the tree for you, the main use is <em>not</em> exploring this branch if you do know it is futile.</p>
 <p>Once all the citizenship proofs are produced, they are printed and possible document sets are produced:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">Applicant has 3 proof(s) of britishness:
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">-----------
-</span><span style="color:#abb2bf;">Proof 1:
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">• Applicant was born after 2006
-</span><span style="color:#abb2bf;">• Via Applicant&#39;s Father&#39;s britishness:
-</span><span style="color:#abb2bf;">    • Applicant&#39;s Father was born in UK
-</span><span style="color:#abb2bf;">    • Via Applicant&#39;s Father&#39;s Mother&#39;s britishness:
-</span><span style="color:#abb2bf;">        Applicant&#39;s Father&#39;s Mother was settled at time of birth
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">Possible doc sets:
-</span><span style="color:#abb2bf;">• - Birth certificate for Applicant,
-</span><span style="color:#abb2bf;">  - Birth certificate for Applicant&#39;s Father,
-</span><span style="color:#abb2bf;">  - Settled status document for Applicant&#39;s Father&#39;s Mother
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">-----------
-</span><span style="color:#abb2bf;">Proof 2:
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">• Applicant was born after 2006
-</span><span style="color:#abb2bf;">• Via Applicant&#39;s Father&#39;s britishness:
-</span><span style="color:#abb2bf;">    • Applicant&#39;s Father was born in UK
-</span><span style="color:#abb2bf;">    • • Applicant&#39;s Father&#39;s Father was married to Applicant&#39;s Father&#39;s Mother at time of birth
-</span><span style="color:#abb2bf;">      • Via Applicant&#39;s Father&#39;s Father&#39;s britishness:
-</span><span style="color:#abb2bf;">          Via Applicant&#39;s Father&#39;s Father&#39;s Mother&#39;s britishness:
-</span><span style="color:#abb2bf;">            • Applicant&#39;s Father&#39;s Father&#39;s Mother was born in UK
-</span><span style="color:#abb2bf;">            • Applicant&#39;s Father&#39;s Father&#39;s Mother was born before 1983
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">Possible doc sets:
-</span><span style="color:#abb2bf;">• - Birth certificate for Applicant,
-</span><span style="color:#abb2bf;">  - Birth certificate for Applicant&#39;s Father&#39;s Father&#39;s Mother,
-</span><span style="color:#abb2bf;">  - Birth certificate for Applicant&#39;s Father,
-</span><span style="color:#abb2bf;">  - Birth certificate for Applicant&#39;s Father&#39;s Father,
-</span><span style="color:#abb2bf;">  - Marriage certificate for Applicant&#39;s Father&#39;s Father and Applicant&#39;s Father&#39;s Mother
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">-----------
-</span><span style="color:#abb2bf;">Proof 3:
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">• Applicant was born after 2006
-</span><span style="color:#abb2bf;">• Via Applicant&#39;s Father&#39;s britishness:
-</span><span style="color:#abb2bf;">    • Applicant&#39;s Father was born in UK
-</span><span style="color:#abb2bf;">    • • Applicant&#39;s Father&#39;s Father was married to Applicant&#39;s Father&#39;s Mother at time of birth
-</span><span style="color:#abb2bf;">      • Via Applicant&#39;s Father&#39;s Father&#39;s britishness:
-</span><span style="color:#abb2bf;">          • Applicant&#39;s Father&#39;s Father&#39;s Father was married to Applicant&#39;s Father&#39;s Father&#39;s Mother at time of birth
-</span><span style="color:#abb2bf;">          • Via Applicant&#39;s Father&#39;s Father&#39;s Father&#39;s britishness:
-</span><span style="color:#abb2bf;">              • Applicant&#39;s Father&#39;s Father&#39;s Father was born in UK
-</span><span style="color:#abb2bf;">              • Applicant&#39;s Father&#39;s Father&#39;s Father was born before 1983
-</span><span style="color:#abb2bf;">
-</span><span style="color:#abb2bf;">Possible doc sets:
-</span><span style="color:#abb2bf;">• - Birth certificate for Applicant,
-</span><span style="color:#abb2bf;">  - Birth certificate for Applicant&#39;s Father,
-</span><span style="color:#abb2bf;">  - Birth certificate for Applicant&#39;s Father&#39;s Father,
-</span><span style="color:#abb2bf;">  - Birth certificate for Applicant&#39;s Father&#39;s Father&#39;s Father,
-</span><span style="color:#abb2bf;">  - Marriage certificate for Applicant&#39;s Father&#39;s Father and Applicant&#39;s Father&#39;s Mother,
-</span><span style="color:#abb2bf;">  - Marriage certificate for Applicant&#39;s Father&#39;s Father&#39;s Father and Applicant&#39;s Father&#39;s Father&#39;s Mother
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>Applicant has 3 proof(s) of britishness:</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>-----------</span></span>
+<span class="giallo-l"><span>Proof 1:</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>• Applicant was born after 2006</span></span>
+<span class="giallo-l"><span>• Via Applicant&#39;s Father&#39;s britishness:</span></span>
+<span class="giallo-l"><span>    • Applicant&#39;s Father was born in UK</span></span>
+<span class="giallo-l"><span>    • Via Applicant&#39;s Father&#39;s Mother&#39;s britishness:</span></span>
+<span class="giallo-l"><span>        Applicant&#39;s Father&#39;s Mother was settled at time of birth</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>Possible doc sets:</span></span>
+<span class="giallo-l"><span>• - Birth certificate for Applicant,</span></span>
+<span class="giallo-l"><span>  - Birth certificate for Applicant&#39;s Father,</span></span>
+<span class="giallo-l"><span>  - Settled status document for Applicant&#39;s Father&#39;s Mother</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>-----------</span></span>
+<span class="giallo-l"><span>Proof 2:</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>• Applicant was born after 2006</span></span>
+<span class="giallo-l"><span>• Via Applicant&#39;s Father&#39;s britishness:</span></span>
+<span class="giallo-l"><span>    • Applicant&#39;s Father was born in UK</span></span>
+<span class="giallo-l"><span>    • • Applicant&#39;s Father&#39;s Father was married to Applicant&#39;s Father&#39;s Mother at time of birth</span></span>
+<span class="giallo-l"><span>      • Via Applicant&#39;s Father&#39;s Father&#39;s britishness:</span></span>
+<span class="giallo-l"><span>          Via Applicant&#39;s Father&#39;s Father&#39;s Mother&#39;s britishness:</span></span>
+<span class="giallo-l"><span>            • Applicant&#39;s Father&#39;s Father&#39;s Mother was born in UK</span></span>
+<span class="giallo-l"><span>            • Applicant&#39;s Father&#39;s Father&#39;s Mother was born before 1983</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>Possible doc sets:</span></span>
+<span class="giallo-l"><span>• - Birth certificate for Applicant,</span></span>
+<span class="giallo-l"><span>  - Birth certificate for Applicant&#39;s Father&#39;s Father&#39;s Mother,</span></span>
+<span class="giallo-l"><span>  - Birth certificate for Applicant&#39;s Father,</span></span>
+<span class="giallo-l"><span>  - Birth certificate for Applicant&#39;s Father&#39;s Father,</span></span>
+<span class="giallo-l"><span>  - Marriage certificate for Applicant&#39;s Father&#39;s Father and Applicant&#39;s Father&#39;s Mother</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>-----------</span></span>
+<span class="giallo-l"><span>Proof 3:</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>• Applicant was born after 2006</span></span>
+<span class="giallo-l"><span>• Via Applicant&#39;s Father&#39;s britishness:</span></span>
+<span class="giallo-l"><span>    • Applicant&#39;s Father was born in UK</span></span>
+<span class="giallo-l"><span>    • • Applicant&#39;s Father&#39;s Father was married to Applicant&#39;s Father&#39;s Mother at time of birth</span></span>
+<span class="giallo-l"><span>      • Via Applicant&#39;s Father&#39;s Father&#39;s britishness:</span></span>
+<span class="giallo-l"><span>          • Applicant&#39;s Father&#39;s Father&#39;s Father was married to Applicant&#39;s Father&#39;s Father&#39;s Mother at time of birth</span></span>
+<span class="giallo-l"><span>          • Via Applicant&#39;s Father&#39;s Father&#39;s Father&#39;s britishness:</span></span>
+<span class="giallo-l"><span>              • Applicant&#39;s Father&#39;s Father&#39;s Father was born in UK</span></span>
+<span class="giallo-l"><span>              • Applicant&#39;s Father&#39;s Father&#39;s Father was born before 1983</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>Possible doc sets:</span></span>
+<span class="giallo-l"><span>• - Birth certificate for Applicant,</span></span>
+<span class="giallo-l"><span>  - Birth certificate for Applicant&#39;s Father,</span></span>
+<span class="giallo-l"><span>  - Birth certificate for Applicant&#39;s Father&#39;s Father,</span></span>
+<span class="giallo-l"><span>  - Birth certificate for Applicant&#39;s Father&#39;s Father&#39;s Father,</span></span>
+<span class="giallo-l"><span>  - Marriage certificate for Applicant&#39;s Father&#39;s Father and Applicant&#39;s Father&#39;s Mother,</span></span>
+<span class="giallo-l"><span>  - Marriage certificate for Applicant&#39;s Father&#39;s Father&#39;s Father and Applicant&#39;s Father&#39;s Father&#39;s Mother</span></span></code></pre>
 <p>And there it is, in <code>Proof 3</code>:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">Birth certificate for Applicant&#39;s Father&#39;s Father&#39;s Father
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>Birth certificate for Applicant&#39;s Father&#39;s Father&#39;s Father</span></span></code></pre>
 <p>The "Crown Service" status of $\text{father}^3(\text{applicant})$ caused quite some confusion in my case, because $\text{father}^2(\text{applicant})$ was indeed born abroad, causing some amount of recursion. But hilariously the crown service of $\text{father}^3(\text{applicant})$ turns out to be totally irrelevant, indeed the BOTBD status of $\text{father}^1(\text{applicant})$ is already derived from being born in the UK and simple Britishness of $\text{father}^2(\text{applicant})$. But this simple Britishness still needs to be established, so the recursion to $\text{father}^2(\text{applicant})$ still occurs. And the marriage certificate is needed too, for the "legitimacy" of $\text{father}^2(\text{applicant})$; the marital status of my deceased grandparents has suddenly become one of my most important concerns.</p>
 <p>Interestingly, the proof that HMPO has selected for my case is the longest and most complex of the 3, I assume that when there are several choices they send the player down the most complex one, for extra fun. Indeed <code>Proof 1</code> is quite simple, it requires only proving a settled status of one ancestor <em>and that's it</em>. Citizenship via <em>non-british</em> settled ancestors can be much simpler, because these cases are non-recursive<sup class="footnote-reference"><a href="#3">3</a></sup>. <code>Proof 2</code> is also slightly more optimized, because it relies on <code>Birth certificate for Applicant's Father's Father's Mother</code>, which therefore bypasses the need for a marriage certificate, needed in <code>Proof 3</code> to prove "legitimacy" of <code>Applicant's Father's Father</code><sup class="footnote-reference"><a href="#2">4</a></sup>.</p>
-<p>Proofs relying on Britishness bottom out when reaching a person born before 1983 in the UK, the further we get from this date, the longer the proofs become. This applies, at least in theory, <em>even when everyone involved is born in the UK</em>. In practice this doesn't happen because HMPO doesn't actually apply the laws as written in the act, they have their own guidance documents, and act using the principle of <a href="https://www.gov.uk/government/publications/balance-of-probabilities/balance-of-probabilities-accessible">balance of probabilities</a>, and there seems to be guidance indicating that for standard applications from the UK for people born in the UK, one can use "Main Index" (their internal passport database). So you have to play on "hard mode", e.g. birth abroad, which triggers some global "extra scrutiny" flag, which prevents the use of "Main Index" in <em>all recursive calls</em>.</p>
+<p>Proofs relying on Britishness bottom out when reaching a person born before 1983 in the UK, the further we get from this date, the longer the proofs become. This applies, at least in theory, <em>even when everyone involved is born in the UK</em>. In practice this doesn't happen because HMPO doesn't actually apply the laws as written in the act, they have their own guidance documents, and act using the principle of <a rel="external" href="https://www.gov.uk/government/publications/balance-of-probabilities/balance-of-probabilities-accessible">balance of probabilities</a>, and there seems to be guidance indicating that for standard applications from the UK for people born in the UK, one can use "Main Index" (their internal passport database). So you have to play on "hard mode", e.g. birth abroad, which triggers some global "extra scrutiny" flag, which prevents the use of "Main Index" in <em>all recursive calls</em>.</p>
 <h2 id="extra-notes">Extra notes</h2>
 <ul>
 <li>
 <p>There are several places where I have used <code>orElse</code>, but <code>&lt;|&gt;</code> could be used instead. As mentioned above, <code>&lt;|&gt;</code> will explore both branches, but <code>orElse</code> only explores the second branch if the first completely fails. In the case of</p>
-<pre data-lang="haskell" style="background-color:#2b303b;color:#6c7079;" class="language-haskell "><code class="language-haskell" data-lang="haskell"><span style="color:#abb2bf;">brit parent </span><span style="color:#db9d63;">`</span><span style="color:#adb7c9;">orElse</span><span style="color:#db9d63;">`</span><span style="color:#abb2bf;"> settled parent
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span>brit parent `orElse` settled parent</span></span></code></pre>
 <p>this is completely valid, but in some of the other situations it's not so simple. This one for example:</p>
-<pre style="background-color:#2b303b;color:#6c7079;"><code><span style="color:#abb2bf;">britOtbd parent `orElse` and (brit parent) (evidence (Years3LivingInUK parent))
-</span></code></pre>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>britOtbd parent `orElse` and (brit parent) (evidence (Years3LivingInUK parent))</span></span></code></pre>
 <p>really could be an <code>&lt;|&gt;</code>, and in my case it makes for much more proofs of citizenship. But it involves an extra level of bureaucratic process ("Registration"), so it seems HMPO will try to exhaust <code>britOtbd parent</code> before trying the second branch.</p>
 </li>
 <li>
@@ -411,7 +397,7 @@ $$\text{birthCirt}(\text{father}^3(\text{applicant}))$$, then admitted they coul
 </ul>
 <hr />
 <p>I've still not finished my current game of PassportApplication, I'm trying to get through proofs 2 and 3 simultaneously, and failing that will try proof 1.</p>
-<p>(Comments on <a href="https://news.ycombinator.com/item?id=44408872">HackerNews</a>, <a href="https://www.reddit.com/r/haskell/comments/1lmzvus/solving_uk_passport_application_with_haskell/">Reddit</a> and <a href="https://lobste.rs/s/wfz7qh/solving_uk_passport_application_with">Lobste.rs</a>)</p>
+<p>(Comments on <a rel="external" href="https://news.ycombinator.com/item?id=44408872">HackerNews</a>, <a rel="external" href="https://www.reddit.com/r/haskell/comments/1lmzvus/solving_uk_passport_application_with_haskell/">Reddit</a> and <a rel="external" href="https://lobste.rs/s/wfz7qh/solving_uk_passport_application_with">Lobste.rs</a>)</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">2</sup>
 <p>This situation is actually more complex than presented here, you have to prove living in the UK for 3 consecutive years, with absences of not more than 270 consecutive days, and then this launches into another process called "Registration of Minors".</p>
 </div>
@@ -422,7 +408,7 @@ $$\text{birthCirt}(\text{father}^3(\text{applicant}))$$, then admitted they coul
 <p>But it might still be complicated because proving a person is "settled" at some point in time is difficult.</p>
 </div>
 <div class="footnote-definition" id="4"><sup class="footnote-definition-label">1</sup>
-<p>Note they themselves use scare-quotes for <em>‘recognised profession’</em>. Thanks to <a href="https://lobste.rs/s/wfz7qh/solving_uk_passport_application_with#c_wuxnjg">c--</a> for correcting me regarding what this term means.</p>
+<p>Note they themselves use scare-quotes for <em>‘recognised profession’</em>. Thanks to <a rel="external" href="https://lobste.rs/s/wfz7qh/solving_uk_passport_application_with#c_wuxnjg">c--</a> for correcting me regarding what this term means.</p>
 </div>
 
     </div>

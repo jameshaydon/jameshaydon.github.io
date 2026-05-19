@@ -4,8 +4,34 @@
     <link rel="self" type="application/atom+xml" href="https://jameshaydon.github.io/tags/bugs/atom.xml"/>
     <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
-    <updated>2023-09-15T00:00:00+00:00</updated>
+    <updated>2026-05-19T00:00:00+00:00</updated>
     <id>https://jameshaydon.github.io/tags/bugs/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Using algebra and LLMs to verify a flight-plan bug fix in Lean</title>
+        <published>2026-05-19T00:00:00+00:00</published>
+        <updated>2026-05-19T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/agentic-theorem-proving/"/>
+        <id>https://jameshaydon.github.io/agentic-theorem-proving/</id>
+        
+        <summary type="html">&lt;p&gt;Formal verification has, until now, been a very laborious process. Therefore it
+is only considered for critical software, where bugs can cost lives. But LLM
+coding agents may be tipping the scales; formally verifying code might become
+viable for a much larger class of software. To test this, I picked a real bug,
+the &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;2023 UK air traffic control meltdown&lt;&#x2F;a&gt;, and tried to prove a fix
+correct in &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;lean-lang.org&#x2F;&quot;&gt;Lean&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;tl;dr: LLMs are not great at specs, excellent at grinding routine proofs, and
+the whole thing only became tractable once I restated the problem in algebraic terms.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
     <entry xml:lang="en">
         <title>Domain structured programming (UK ATC meltdown)</title>
         <published>2023-09-15T00:00:00+00:00</published>
@@ -53,8 +79,8 @@ code is only meant for flight plans with no duplicate waypoints&lt;&#x2F;strong&
         <summary type="html">&lt;p&gt;This is a short follow-up of my post about the UK air traffic control meltdown.
 You might want to first read &lt;a href=&quot;&#x2F;nats-fail&quot;&gt;part one&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;So my first post got a lot of attention, and that generates a
-&lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;programming&#x2F;comments&#x2F;16fhmuq&#x2F;a_deep_dive_into_the_bug_that_caused_the_uk_air&#x2F;?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&quot;&gt;lot&lt;&#x2F;a&gt;
-of &lt;a href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37461695&quot;&gt;comments&lt;&#x2F;a&gt;. What was most
+&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;programming&#x2F;comments&#x2F;16fhmuq&#x2F;a_deep_dive_into_the_bug_that_caused_the_uk_air&#x2F;?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&quot;&gt;lot&lt;&#x2F;a&gt;
+of &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37461695&quot;&gt;comments&lt;&#x2F;a&gt;. What was most
 discussed was:&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;em&gt;&quot;But really though, what was the one thing that went wrong?&quot;&lt;&#x2F;em&gt;&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;</summary>
         
@@ -75,13 +101,13 @@ discussed was:&lt;&#x2F;p&gt;
         <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/nats-fail/"/>
         <id>https://jameshaydon.github.io/nats-fail/</id>
         
-        <summary type="html">&lt;p&gt;Comments on &lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;programming&#x2F;comments&#x2F;16fhmuq&#x2F;a_deep_dive_into_the_bug_that_caused_the_uk_air&#x2F;?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&quot;&gt;reddit&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37461695&quot;&gt;Hacker News&lt;&#x2F;a&gt;. Other posts: &lt;a href=&quot;&#x2F;what-went-wrong&quot;&gt;part two&lt;&#x2F;a&gt; and &lt;a href=&quot;&#x2F;programming-style-and-bugs&quot;&gt;part
+        <summary type="html">&lt;p&gt;Comments on &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;programming&#x2F;comments&#x2F;16fhmuq&#x2F;a_deep_dive_into_the_bug_that_caused_the_uk_air&#x2F;?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&quot;&gt;reddit&lt;&#x2F;a&gt; and &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=37461695&quot;&gt;Hacker News&lt;&#x2F;a&gt;. Other posts: &lt;a href=&quot;&#x2F;what-went-wrong&quot;&gt;part two&lt;&#x2F;a&gt; and &lt;a href=&quot;&#x2F;programming-style-and-bugs&quot;&gt;part
 three&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;em&gt;UPDATE:&lt;&#x2F;em&gt; The flight plan which triggered the chaos (but was valid) has been
-&lt;a href=&quot;https:&#x2F;&#x2F;chaos.social&#x2F;@russss&#x2F;111048524540643971&quot;&gt;identified&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
+&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;chaos.social&#x2F;@russss&#x2F;111048524540643971&quot;&gt;identified&lt;&#x2F;a&gt;!&lt;&#x2F;p&gt;
 &lt;hr &#x2F;&gt;
 &lt;p&gt;On 28 August 2023 &lt;em&gt;NATS&lt;&#x2F;em&gt;, the UK&#x27;s air traffic control operator, suffered a
-&lt;strong&gt;major&lt;&#x2F;strong&gt; technical incident. The BBC reports that more than &lt;a href=&quot;https:&#x2F;&#x2F;www.bbc.com&#x2F;news&#x2F;uk-66685349&quot;&gt;2000 flights were
+&lt;strong&gt;major&lt;&#x2F;strong&gt; technical incident. The BBC reports that more than &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.bbc.com&#x2F;news&#x2F;uk-66685349&quot;&gt;2000 flights were
 cancelled&lt;&#x2F;a&gt; and the cost has been estimated
 at over &lt;em&gt;£100 million&lt;&#x2F;em&gt; GBP. The incident probably affected hundreds of thousands
 of people.&lt;&#x2F;p&gt;

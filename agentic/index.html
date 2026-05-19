@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  
+  <meta name="description" content="A survey of patterns and some thoughts" />
+  
+  
+
+  <title>
+    
+    What even is agentic programming?
+    
+</title>
+  <link rel="alternate" type="application/atom+xml" title="James Haydon Atom Feed" href="https://jameshaydon.github.io/atom.xml" />
+
+  
+  <link rel="stylesheet" href="https://jameshaydon.github.io/site.css">
+  
+
+  
+  
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X4MP59NZ35"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+
+ gtag('config', 'G-X4MP59NZ35');
+</script>
+
+
+<body class="hack dark main container">
+  
+    
+        
+  
+  <header class="nav-header">
+    <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="navbar">
+      <div class="nav-links">
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io/">
+          <span itemprop="name">Home</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon">
+          <span itemprop="name">GitHub</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//papers">
+          <span itemprop="name">Papers</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//categories">
+          <span itemprop="name">Categories</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://jameshaydon.github.io//tags">
+          <span itemprop="name">Tags</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://imiron.io/">
+          <span itemprop="name">Imiron</span></a>
+        
+        <a itemprop="url"
+          class=""
+          href="https://github.com/jameshaydon/lawvere">
+          <span itemprop="name">lawvere-lang</span></a>
+        
+      </div>
+    </nav>
+    
+
+  </header>
+  
+  
+    
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">What even is agentic programming?</h1>
+        <span class="muted">
+    <svg class="icon i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>14 minute read</span>
+    <svg class="icon i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2026-02-08
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>"Agents", "agentic AI" are all the rage right now, but surprisingly little clarity about what it means from a programming perspective. In this post I want to survey current agentic architectures and patterns, and then try to pin it down as a programming concept. Then I'll speculate on how programming languages will evolve to fit this new paradigm.</p>
+<span id="continue-reading"></span>
+<p>There is a spectrum:</p>
+<ul>
+<li>Who is in control, the program or the LLM?</li>
+<li>How much interaction is there between the LLM and the program?</li>
+<li>How much interaction is there between the LLM and program with user(s)?</li>
+</ul>
+<p>What's been most explored so far are the extremes:</p>
+<ul>
+<li>Programs which remain very much in control, but make calls to LLMs to power some features. For example <a rel="external" title="GitHub" href="https://github.com/appenz/papersort">papersort</a> will automatically sort lots of documents into directories for you, it makes significant <em>use</em> of an LLM, but the program is in control.</li>
+<li>An LLM is the main control flow, possibly with significant access to tools. <em>Claude Code</em> is in this category.</li>
+</ul>
+<p>What I'm calling "agentic programming", is the very interesting middle-ground:</p>
+<blockquote>
+<p>An agentic program is a program in which LLM calls affect the control flow in some significant manner.</p>
+</blockquote>
+<p>In an agentic program, the LLM's output steers the program: choosing which branch to take, which tool to call, whether to loop or halt, what question to ask next. The LLM participates in the logic of the program, not just its data.</p>
+<h2 id="the-basic-llm-api">The Basic LLM API</h2>
+<p>At bottom, the API that LLM providers give you is simple. You send a sequence of messages (a conversation history) and you get back a completion. The completion is either text and/or some structured <em>tool calls</em>: a request to invoke some named function with some arguments.</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span>complete : ([</span><span style="color: #D19A66;">Message</span><span>], [</span><span style="color: #D19A66;">Tool</span><span>]) → (</span><span style="color: #D19A66;">Text</span><span>, [</span><span style="color: #D19A66;">Call</span><span>])</span></span></code></pre>
+<p>where <code>Tool</code> specifies an available tool/function on the client (mostly just the JSON schema of it's input/output), and <code>Call</code> is the tool calls the LLM has decided to execute.</p>
+<p>The <code>Tool</code>s can be thought of the docs of some functions made available to the LLM:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- Get the current location of the robot</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">current_location</span><span> :: () -&gt;</span><span style="color: #D19A66;"> Pos</span></span>
+<span class="giallo-l"><span style="color: #7F848E;font-style: italic;">-- Move the robot</span></span>
+<span class="giallo-l"><span style="color: #61AFEF;">move</span><span> ::</span><span style="color: #D19A66;"> Direction</span><span> -&gt;</span><span style="color: #D19A66;"> Result</span></span></code></pre>
+<p>and the <code>Call</code>s as applications of these functions to some inputs, which the LLM has judged as useful to execute so that it can see the output, of for the side-effects:</p>
+<pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="haskell"><span class="giallo-l"><span>current_location </span><span style="color: #D19A66;">()</span><span style="color: #7F848E;font-style: italic;"> -- (3, 4)</span></span>
+<span class="giallo-l"><span>move </span><span style="color: #D19A66;">Left</span><span style="color: #7F848E;font-style: italic;">           -- Success</span></span></code></pre>
+<p>If the result of a tool call is to be returned back to the LLM, this is done in a message, that is, tool call result form part of the history <code>[Message]</code> sent to the LLM.</p>
+<p>There's a bunch of stuff not mentioned here, streaming, indicating if a tool must be called, specifying a maximum number of tokens for the output, etc.</p>
+<p>(TODO: more stuff not mentioned: Tool Search Tool, )</p>
+<p><em>Programmatic Tool Calling (Beta)</em></p>
+<p>Anthropic has released a new feature <em>Programmatic Tool Calling</em>. When this is enabled, instead of making tool calls directly, the LLM writes a small python script that executes in a sandboxed environment on Anthropic's servers. This functions as a coroutine with the client: whenever a tool call function is used, the script is suspended, and the API call is returned to the client with that tool call. When the client makes a new API call (hopefully with the tool call response), the script is resumed.</p>
+<p>The API is the same, but this is a profound change. The script can combine the results of tool calls with standard python programming. The tools provided by the client can now be <em>composed</em> programatically. If these LLM API requests are part of some program, these ephemeral python programs are now part of the program.</p>
+<p><em>Some Foreshadowing</em></p>
+<p>Right away let's make the remark that inputs to tool calls must be serialisable, since they have to be specified in JSON by the LLM. This is a significant restriction.</p>
+<h2 id="agent-coding-patterns">Agent coding patterns</h2>
+<p>Now let's look at some of the ways people are decided to go about agentic coding. A good guide is <a rel="external" title="Anthropic" href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a> by Anthropic, they make the dichotomy between the LLM being in control, which they call <em>agents</em>, and when the program is in control, which they call <em>workflows</em>.</p>
+<p>One of the striking things is that all of these concepts have existed before, they are just being rediscovered for agentic programming. First we'll look at workflows, which I think it best understood from the lens of categorical programming.</p>
+<h3 id="workflow-pattern-chaining">Workflow pattern: Chaining</h3>
+<blockquote>
+<p>Prompt chaining decomposes a task into a sequence of steps, where each LLM call processes the output of the previous one.</p>
+</blockquote>
+<p>The task to be performed can be split up into well defined steps. The full task is the composition of these steps. Some steps might not use an LLM call at all.</p>
+<p>Example: Answer a natural language question about a specific database.</p>
+<p>The workflow might be:</p>
+<ul>
+<li>Given an LLM the natural language question, and the SQL schema, ask for an SQL query.</li>
+<li>Execute the query.</li>
+<li>Give an LLM the question and the query result, ask for a summary/insight.</li>
+</ul>
+<p>This (categorical) <em>composition</em>. Though note that the composition is not always just composition of functions:</p>
+<ul>
+<li>it might accumulate a single thread of end-user conversation history.</li>
+<li>it might have access to some shared global state.</li>
+<li>it might be streaming: this is particularly useful when composing two LLM steps. The streaming output of one call can feed directly into the next.</li>
+</ul>
+<h3 id="workflow-pattern-routing">Workflow pattern: Routing</h3>
+<blockquote>
+<p>Routing classifies an input and directs it to a specialized followup task. This workflow allows for separation of concerns, and building more specialized prompts.</p>
+</blockquote>
+<p>This means that one LLM is asked to produce a value in some sum type (a coproduct). The next step of the workflow after that is a <a rel="external" title="Wikipedia" href="https://en.wikipedia.org/wiki/Limit_(category_theory)#Colimits">co-cone</a>, which means we are providing a continuation workflow for each variant of the coproduct. In functional programming cocone are realised as pattern matching.</p>
+<h3 id="workflow-pattern-parallelization">Workflow pattern: Parallelization</h3>
+<blockquote>
+<p>LLMs can sometimes work simultaneously on a task and have their outputs aggregated programmatically.</p>
+</blockquote>
+<p>This is <em>cone</em>: a morphism into a product type. In this case several workflows operate on the same input, in parallel, obtaining independent results. These results are aggregated into a product type (a record), for further processing, by the program, or more agentic workflows.</p>
+<h3 id="workflow-pattern-orchestrator-workers">Workflow pattern: Orchestrator-workers</h3>
+<p>In this pattern, a main LLM, the <em>orchestrator</em>, will define tasks which sub-agents work on. A <em>synthesizer</em> (which might be the orchestrator or not) will process the results. This is a common pattern used in Claude Code.</p>
+<h3 id="agents-react-loop">Agents: <code>ReAct</code> loop</h3>
+<p>The <code>ReAct</code> pattern puts the LLM squarely in control of some task. It is free to make tool calls, the results are added to the message history and the LLM is re-invoked. There is no "program" (apart from the code in the tools), the LLM <em>is</em> the control flow.</p>
+<p>This is total <a rel="external" title="Wikipedia" href="https://en.wikipedia.org/wiki/Inversion_of_control">inversion of control</a> (IoC), the program isn't calling the LLM, the LLM is calling the programs provided to it.</p>
+<p>This pattern has already been deployed to great success, but it is limited.</p>
+<p>TODO: fill in limitations:</p>
+<ul>
+<li>wild west: the LLM can go off in unexpected directions, lose focus</li>
+<li>the context can get used up quickly</li>
+<li>the tools aren't combined in a programmatic manner, the composition happens only in text form</li>
+<li>no advanced persistent/structured "memory", etc.</li>
+</ul>
+<h2 id="human-in-the-loop">Human in the Loop</h2>
+<p>Many agentic programs involve a human interactant — a chat interface where a person provides instructions, answers questions, or approves actions. This is "human in the loop."</p>
+<p>From a control flow perspective, the human is another source of nondeterminism, another entity that can steer the program. The program now alternates between three parties: itself, the LLM, and the human. The human might:</p>
+<ul>
+<li>Provide the initial goal.</li>
+<li>Answer clarifying questions from the LLM.</li>
+<li>Approve or reject proposed actions.</li>
+<li>Redirect the agent mid-task.</li>
+</ul>
+<p>Here's a question that I think deserves more attention: <strong>do humans and LLMs have the same interface?</strong></p>
+<p>At the API level, they're both producing messages that get appended to a conversation. Both can, in principle, issue instructions or answer questions. But in practice, their roles are usually asymmetric. The human is typically cast as the "user" — the one with authority and intent — while the LLM is the "assistant" — the one that serves and executes. This asymmetry is baked into the API (the <code>role</code> field in messages) and into the system prompt conventions.</p>
+<p>But it doesn't have to be this way. You could imagine architectures where the human and the LLM have symmetric interfaces, where either one can call tools or delegate to the other. In multi-agent systems, you often see LLMs playing different roles in the same conversation. The "user" and "assistant" distinction starts to look like an implementation detail rather than a fundamental boundary.</p>
+<p>I think there's interesting PLT work to be done here — in designing type systems or protocols that capture the roles and capabilities of different participants in an agentic program, whether they're humans, LLMs, or other services.</p>
+<h2 id="beyond-tool-use-the-code-generation-spectrum">Beyond Tool Use: The Code Generation Spectrum</h2>
+<p>The tool use pattern — LLM chooses from a fixed menu of functions — is the dominant paradigm right now, but it's starting to feel limiting.</p>
+<p>The constraint is this: when the LLM can only make <em>one tool call at a time</em> (or even a batch of independent calls), and the orchestrating program determines what happens between calls, you're limited to patterns that the programmer anticipated. The LLM can't say "call A, then if the result contains X, call B with a modified argument, otherwise call C three times in a loop." That kind of <em>compositional, conditional, iterative</em> use of tools requires the LLM to go back and forth through the agent loop, one call at a time, with the orchestrator faithfully executing each step.</p>
+<p>This works, but it's slow and brittle. Every round trip has latency. The conversation history grows. And the orchestrator has to be designed to handle arbitrary sequences of tool calls, which means it's essentially an interpreter for an implicit language of tool-call sequences — but a very impoverished one.</p>
+<p>The emerging alternative is to let the LLM <em>write code</em> that makes tool calls. Instead of asking the LLM "which tool do you want to call?", you ask it "write a script that accomplishes this task." The script runs in a sandbox, has access to the tools as callable functions, and can use all the standard programming constructs: variables, conditionals, loops, error handling.</p>
+<p>This is a significant shift. The LLM is no longer just picking items from a menu — it's <em>programming</em>. And the spectrum between "agent loop with tool calls" and "LLM writes a complete program" is exactly the interesting design space:</p>
+<table><thead><tr><th></th><th>Tool calls</th><th>Generated code</th></tr></thead><tbody>
+<tr><td><strong>Control</strong></td><td>Orchestrator mediates every step</td><td>LLM writes the full plan</td></tr>
+<tr><td><strong>Composition</strong></td><td>One (or a batch of) call(s) at a time</td><td>Arbitrary composition</td></tr>
+<tr><td><strong>Iteration</strong></td><td>Agent loop (external)</td><td>Loops in generated code</td></tr>
+<tr><td><strong>Flexibility</strong></td><td>Fixed tool schemas</td><td>Full language expressiveness</td></tr>
+<tr><td><strong>Safety</strong></td><td>Easy to validate each call</td><td>Need sandbox/isolation</td></tr>
+<tr><td><strong>Latency</strong></td><td>Round trip per tool call</td><td>One generation, many calls</td></tr>
+</tbody></table>
+<p>Most real systems are somewhere in the middle. An agent might use tool calls for simple operations but generate code for complex multi-step tasks. The question is where to draw the line, and what infrastructure you need at each point on the spectrum.</p>
+<h2 id="same-language-same-environment">Same Language, Same Environment?</h2>
+<p>Here's where it gets really interesting from a PL perspective.</p>
+<p>When an LLM generates code to run in a sandbox, the generated code and the agentic program that invoked the LLM are typically written in different languages, or at least run in different environments. The agentic program might be Python or TypeScript; the generated code might be Python running in a container, or JavaScript in an isolated VM.</p>
+<p>But what if they were the <em>same language</em>, running in the <em>same environment</em>?</p>
+<p>Consider: your agentic program is written in Python. It calls an LLM. The LLM generates Python code. Instead of running that code in a sandbox, you <code>exec</code> it in the same process, with access to the same modules, the same state, the same tools. The generated code isn't just calling predefined tools through a schema — it's calling actual functions in your program, composing them in ways you didn't anticipate, maybe even defining new functions that persist for future LLM calls.</p>
+<p>This is exciting and terrifying in equal measure.</p>
+<p>On the exciting side: the boundary between "the program" and "what the LLM generates" starts to dissolve. The LLM becomes a <em>metaprogramming facility</em> — a way for the program to extend itself at runtime. You get a kind of dynamic self-modification that would be very hard to achieve otherwise. The LLM can inspect the program's own code, generate new components, and wire them together.</p>
+<p>On the terrifying side: you've just given an LLM arbitrary code execution in your process. The safety implications are obvious. But beyond safety, there are deep questions about semantics and reasoning:</p>
+<ul>
+<li><strong>Scope</strong>: What can the generated code see and modify? If it has access to the full environment, how do you reason about what it might do?</li>
+<li><strong>Persistence</strong>: Does generated code persist across LLM calls? Can one generation build on what a previous generation defined? If so, the program's behaviour becomes path-dependent and very hard to analyse.</li>
+<li><strong>Types</strong>: If the host language has a type system, can the generated code be type-checked? This is non-trivial — the code is a string until it's parsed and compiled, and the types it needs to satisfy depend on the runtime context.</li>
+<li><strong>Verification</strong>: Can you make any formal guarantees about a program that includes LLM-generated code? The generated code is, from the program's perspective, <em>adversarial input</em> that happens to be executable. How do you bound its behaviour?</li>
+</ul>
+<p>This connects to questions I've been thinking about in the context of <a rel="external" href="https://en.wikipedia.org/wiki/Policy_as_code">policy-as-code and runtime safety</a> — the idea that you need a formal layer that can reason about and constrain the actions of an agent, whether those actions come from tool calls or generated code. If the LLM can generate arbitrary code in the host language, the "tool schema as safety boundary" approach breaks down entirely, and you need something more expressive.</p>
+<h2 id="where-does-this-leave-us">Where Does This Leave Us?</h2>
+<p>I think "agentic programming" is a genuine new programming paradigm — or at least a genuinely new set of patterns — and it deserves to be studied with the same rigour we apply to concurrent programming, reactive programming, or any other paradigm that introduces a new source of nondeterminism into program execution.</p>
+<p>Some questions I think are worth pursuing:</p>
+<p><strong>Typing and protocols.</strong> Can we design type systems that capture the interaction protocol between a program and an LLM? Something like session types, but for agent loops — specifying what tool calls are valid at each stage, what the expected response shapes are, and how the conversation state evolves.</p>
+<p><strong>Effect systems.</strong> LLM calls are effects — they're nondeterministic, they have latency, they cost money, they can fail. Can we use effect systems to track and manage these, the way we track IO or exceptions?</p>
+<p><strong>Gradual sandboxing.</strong> Rather than a binary choice between "full sandbox" and "same environment," can we design capability-based systems that give generated code <em>precisely</em> the access it needs? This sounds a lot like object-capability security, which has been studied extensively but never achieved mainstream adoption. Maybe LLMs provide the motivation.</p>
+<p><strong>Formal methods for agentic programs.</strong> Can we verify properties of agentic programs despite the nondeterminism of the LLM? Perhaps by treating the LLM as an oracle with specified contracts (preconditions, postconditions), and verifying the rest of the program relative to those contracts.</p>
+<p><strong>Self-modifying programs done right.</strong> The history of self-modifying code is mostly a cautionary tale. But LLMs give us a new form of it — one where the modifications are guided by natural language intent and constrained by the available API surface. Can we learn from past mistakes and design safe, useful forms of LLM-driven metaprogramming?</p>
+<p>We're at the beginning of figuring this out. The current state of agentic programming is roughly where concurrent programming was before we had good abstractions — lots of ad hoc patterns, lots of things that work until they don't, and a pressing need for foundational thinking. I suspect the PL community has a lot to contribute here, if it chooses to engage.</p>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by James Haydon
+                
+                
+                    
+                    in <a href="https://jameshaydon.github.io/categories/programming/">programming</a>
+                
+                
+                    and
+                    tagged
+                    
+                        <a href="https://jameshaydon.github.io/tags/programming/">programming</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/ai/">AI</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/agentic/">agentic</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://jameshaydon.github.io/tags/plt/">PLT</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+            
+            
+        </footer>
+    
+</article>
+
+
+
+  <!-- optional scripts -->
+  
+  
+  <script src="https://jameshaydon.github.io/js/codeblock.js"></script>
+  
+
+  
+<!-- MathJax script for rendering LaTeX math equations -->
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"],
+      ],
+      displayMath: [
+        ["$$", "$$"],
+        ["\\[", "\\]"],
+      ],
+    },
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+
+  
+
+  
+</body>
+
+</html>
