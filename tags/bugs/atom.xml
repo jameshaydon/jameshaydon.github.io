@@ -19,8 +19,8 @@
           </name>
         </author>
         
-        <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/agentic-theorem-proving/"/>
-        <id>https://jameshaydon.github.io/agentic-theorem-proving/</id>
+        <link rel="alternate" type="text/html" href="https://jameshaydon.github.io/algebra-llms-lean-flight-plan/"/>
+        <id>https://jameshaydon.github.io/algebra-llms-lean-flight-plan/</id>
         
         <summary type="html">&lt;p&gt;Formal verification has, until now, been a very laborious process. Therefore it
 is only considered for critical software, where bugs can cost lives or a lot of
