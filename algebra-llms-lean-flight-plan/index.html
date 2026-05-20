@@ -102,7 +102,7 @@
         <circle cx="16" cy="16" r="14"/>
         <path d="M16 8 L16 16 20 20"/>
     </svg>
-    <span>17 minute read</span>
+    <span>16 minute read</span>
     <svg class="icon i-edit" viewBox="0 0 32 32"
          width="16" height="16" fill="none" stroke="currentcolor"
          stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
@@ -385,17 +385,19 @@ last item, and they are equal, then it is a singleton list.</li>
 It's a lot of work for what seems like a simple optimization.</p>
 <h3 id="trimming">Trimming</h3>
 <p>Once we have our hands on the <code>whole</code> reconciled plan, we can iteratively trim
-it down to the least sub-plan covering the UK. So we are maintaining a sub-plan
-<code>current</code> of <code>whole</code> with the invariant that <code>current</code> contains all the UK
-atoms. Of course this holds at the start when <code>current = whole</code>.</p>
+it down to the least sub-plan covering the UK. We maintain a sub-plan <code>current</code>
+of <code>whole</code> with the invariant that <code>current</code> contains all the UK atoms. Of
+course this holds at the start when <code>current = whole</code>.</p>
 <p>At each step we try to shrink it by chopping off a leg from the front, or a leg
 from the back. Iteration terminates in one of two cases: either there are no
 legs to chop off (the sub-plan is a point and minimal), or it is still a
 non-trivial sub-plan, in which case it starts and ends with UK legs:</p>
 <pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="plain"><span class="giallo-l"><span>current = start_uk_leg ≫ a</span></span>
 <span class="giallo-l"><span>current = b ≫ end_uk_leg</span></span></code></pre>
-<p>This is now the least sub-plan covering all the UK atoms. This relies on a
-convexity theorem about sub-plans:</p>
+<p>This is now the least sub-plan covering all the UK atoms because any other
+sub-plan that contains all the UK atoms must contain these legs. This relies on
+a convexity theorem about sub-plans: to contain a sub-plan, it suffices to
+contain the endpoints.</p>
 <pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>-- In a path category, </span><span style="color: #C678DD;">if</span><span> a sub-path contains the endpoints of another, </span><span style="color: #C678DD;">then</span><span> it</span></span>
 <span class="giallo-l"><span>-- contains that whole sub-path.</span></span>
 <span class="giallo-l"><span style="color: #C678DD;">theorem</span><span style="color: #61AFEF;"> subpath_convex</span></span>
@@ -404,12 +406,9 @@ convexity theorem about sub-plans:</p>
 <span class="giallo-l"><span>    {whole : A ⟶ B}</span></span>
 <span class="giallo-l"><span>    {x y : Sub whole}</span></span>
 <span class="giallo-l"><span>    (h : Sub.EndpointsIn x y) :</span></span>
-<span class="giallo-l"><span>    x ≤ y</span></span></code></pre>
-<p>Any smaller sub-plan containing all UK atoms must in particular contain
-<code>start_uk_leg</code> and <code>end_uk_leg</code>, and hence contain <code>current</code>. QED.</p>
-<h2 id="the-concrete-model">The concrete model</h2>
+<span class="giallo-l"><span>    x ≤ y</span></span></code></pre><h2 id="the-concrete-model">The concrete model</h2>
 <p>The whole implementation and proof was coded against an abstract algebraic
-theory. To get something executable out of it, we need to specialise it to a
+theory. To get something executable out of it, we need to instantiate it with a
 concrete model. For this we can use
 <a rel="external" href="https://leanprover-community.github.io/mathlib4_docs/Mathlib/Combinatorics/Quiver/Path.html#Quiver.Path"><code>Quiver.Path</code></a>
 from <code>Mathlib</code>, or just define inductive types directly:</p>
@@ -426,9 +425,8 @@ from <code>Mathlib</code>, or just define inductive types directly:</p>
 all the axioms we assumed. The coding agent was able to do that fully
 autonomously.</p>
 <p>The cons-list model is a convenient first executable model, but it is not the
-only one. I also added a second concrete model just for the extraction phase,
-after reconciliation has already produced a single combined plan.</p>
-<p>In this model the whole combined plan is stored separately, conceptually as two
+only one. I also added a second concrete model just for the extraction phase. In
+this model the whole combined plan is stored separately, conceptually as two
 arrays:</p>
 <pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>points : Fin (n + </span><span style="color: #D19A66;">1</span><span>) -&gt; Point</span></span>
 <span class="giallo-l"><span>legs   : Fin n -&gt; ViaData</span></span></code></pre>
@@ -439,12 +437,10 @@ represented in Lean by the proof <code>i &lt;= j</code>. Composition is therefor
 <p>and the front/back decompositions are just:</p>
 <pre class="giallo" style="color: #ABB2BF; background-color: #282C34;"><code data-lang="lean"><span class="giallo-l"><span>[i, j] = [i, i+</span><span style="color: #D19A66;">1</span><span>] ≫ [i+</span><span style="color: #D19A66;">1</span><span>, j]</span></span>
 <span class="giallo-l"><span>[i, j] = [i, j</span><span style="color: #D19A66;">-1</span><span>] ≫ [j</span><span style="color: #D19A66;">-1</span><span>, j]</span></span></code></pre>
-<p>So composition, length, front chopping, and back chopping are all constant time
-operations on indices. Duplicate waypoint names are also no problem, because
-sub-plans are located by position in the plan, not by waypoint identity. We
-prove that this model satisfies the same <code>FreeFinitePlanSystem</code> interface as the
-cons-list model. The implementation then becomes the efficient "maintain two
-pointers" one, with the same proof of correctness.</p>
+<p>For this model, all the operations are now O(1). We prove that this model
+satisfies the same <code>FreeFinitePlanSystem</code> interface as the cons-list model. The
+implementation then becomes the efficient "maintain two pointers" one, with the
+same proof of correctness.</p>
 <p>It's possible to come up with efficient representations of a reconciliation too,
 but I did not attempt this.</p>
 <h2 id="remarks">Remarks</h2>
